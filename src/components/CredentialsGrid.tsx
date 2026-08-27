@@ -5,13 +5,13 @@ export default function CredentialsGrid() {
   return (
     <section
       aria-labelledby="cred-heading"
-      className="w-full bg-black text-white py-2 md:py-3"
+      className="w-full bg-black text-white py-1 md:py-2"
     >
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <img
           src={credentialsImage}
           alt="Our Credentials"
-          className="w-full h-auto max-h-[360px] object-contain mx-auto"
+          className="w-full h-auto max-h-[140px] md:max-h-[160px] object-contain mx-auto"
         />
       </div>
     </section>

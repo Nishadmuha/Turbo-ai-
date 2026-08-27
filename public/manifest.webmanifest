@@ -9,24 +9,24 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/turbo-ai-logo.png",
-      "sizes": "2172x724",
+      "src": "/turbo-ai-logo-square.png",
+      "sizes": "720x720",
       "type": "image/png"
     },
     {
-      "src": "/turbo-ai-logo.png",
-      "sizes": "2172x724",
+      "src": "/turbo-ai-logo-square.png",
+      "sizes": "720x720",
       "type": "image/png"
     },
     {
-      "src": "/turbo-ai-logo.png",
-      "sizes": "2172x724",
+      "src": "/turbo-ai-logo-square.png",
+      "sizes": "720x720",
       "type": "image/png",
       "purpose": "apple-touch-icon"
     },
     {
-      "src": "/turbo-ai-logo.png",
-      "sizes": "2172x724",
+      "src": "/turbo-ai-logo-square.png",
+      "sizes": "720x720",
       "type": "image/png",
       "purpose": "any maskable"
     }
