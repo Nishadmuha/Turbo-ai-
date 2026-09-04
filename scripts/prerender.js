@@ -71,6 +71,7 @@ async function prerender() {
         '/offshore-development',
         '/cloud-solutions',
         '/quality-engineering',
+        '/industries',
         '/blog',
     ];
 

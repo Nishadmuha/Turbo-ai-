@@ -19,8 +19,9 @@ export default {
         midGray: "#78716C",
       },
       fontFamily: {
-        heading: ["Söhne", "GT America", "Inter", "system-ui"],
-        body: ["Inter", "IBM Plex Sans", "system-ui"],
+        heading: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        body: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
       },
       fontSize: {
         base: "18px",

@@ -87,4 +87,11 @@ export const seoConfig: Record<string, PageSEO> = {
         url: `${baseUrl}/blog`,
         keywords: "AI insights, artificial intelligence blog, digital transformation trends, strategic intelligence articles, Turbo AI blog",
     },
+    industries: {
+        title: "AI Solutions for Energy Intelligence | Turbo AI",
+        description: "Turbo AI empowers energy organizations with real-time intelligence, predictive analytics, and automated decision-making across complex assets and operations.",
+        image: `${baseUrl}/assets/Hero Background.jpg`,
+        url: `${baseUrl}/industries`,
+        keywords: "energy AI, AI solutions for energy, predictive maintenance energy, asset intelligence, energy operational analytics, Calgary energy AI, oil and gas AI Canada",
+    },
 };

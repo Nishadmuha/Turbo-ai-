@@ -4,6 +4,7 @@ import { SectionLink } from "./SectionLink";
 import { Modal } from "./Modal";
 import { PrivacyPolicyContent, TermsOfUseContent } from "./LegalContent";
 import { site, copy, blog } from "../content/turboai";
+import turboAiLogo from "../assets/turbo-ai-logo.jpg";
 
 export function Footer() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
@@ -19,7 +20,7 @@ export function Footer() {
   // Company navigation items should only include actionable top-level links.
   const companyLinks = site.nav.items.filter(
     (item) =>
-      item.href !== "#hero" && item.href !== "#" && !("dropdown" in item),
+      item.href !== "#hero" && item.href !== "/#hero" && item.href !== "#" && !("dropdown" in item),
   );
 
   return (
@@ -31,9 +32,13 @@ export function Footer() {
         <div className="footer-grid">
           {/* Column A: Brand */}
           <div className="footer-column">
-            <div className="text-lg font-heading font-semibold text-emeraldNeon mb-2">
-              {site.meta.siteName}
-            </div>
+            <SectionLink href="/#hero" className="inline-block mb-4 select-none" aria-label="Turbo AI home">
+              <img
+                src={turboAiLogo}
+                alt="Turbo AI"
+                className="h-9 sm:h-11 md:h-12 w-auto object-contain brightness-110 hover:opacity-85 transition-opacity"
+              />
+            </SectionLink>
             <p className="text-sm text-white/70 leading-relaxed">
               {site.meta.description}
             </p>

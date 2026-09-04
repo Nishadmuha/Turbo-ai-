@@ -48,7 +48,7 @@ export const site = {
       },
       {
         label: "Services",
-        href: "#expertise",
+        href: "/#expertise",
         dropdown: [
           { label: "AI Transformation", href: "/ai-transformation" },
           { label: "Strategic Intelligence", href: "/strategic-intelligence" },
@@ -61,10 +61,20 @@ export const site = {
           { label: "Quality Engineering", href: "/quality-engineering" },
         ],
       },
-      { label: "Our Impact", href: "#impact" },
-      { label: "Partners", href: "#partners" },
+      {
+        label: "Industries",
+        href: "#",
+        dropdown: [
+          {
+            label: "AI Energy Solutions – Energy & Oil",
+            href: "/industries",
+          },
+        ],
+      },
+      { label: "Our Impact", href: "/#impact" },
+      { label: "Partners", href: "/#partners" },
       { label: "Perspectives", href: "/blog" },
-      { label: "Connect", href: "#connect" },
+      { label: "Connect", href: "/#connect" },
     ],
   },
 };
@@ -81,8 +91,8 @@ export const tokens = {
     midGray: "#78716C",
   },
   type: {
-    headings: ["Söhne", "GT America", "Inter", "system-ui"],
-    body: ["Inter", "IBM Plex Sans", "system-ui"],
+    headings: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+    body: ["Inter", "system-ui", "-apple-system", "sans-serif"],
     base: 18,
     key: 21,
     line: 1.7,

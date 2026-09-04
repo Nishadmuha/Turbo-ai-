@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Container } from "./Container";
+import { useLocation } from "react-router-dom";
 import { SectionLink } from "./SectionLink";
 import { Dropdown } from "./Dropdown";
 import { MobileDropdown } from "./MobileDropdown";
 import { site, tokens } from "../content/turboai";
+import turboAiLogo from "../assets/turbo-ai-logo.jpg";
 
 export function Header() {
+  const { pathname } = useLocation();
   const [activeSection, setActiveSection] = useState<string>("hero");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -23,12 +25,13 @@ export function Header() {
       });
     }, observerOptions);
 
-    // Observe all sections
+    // Observe all sections on home page
     const sections = [
       "hero",
       "about",
       "credentials",
       "expertise",
+      "industries",
       "impact",
       "perspectives",
       "connect",
@@ -43,7 +46,15 @@ export function Header() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [pathname]);
+
+  const isLinkActive = (href: string) => {
+    if (href.startsWith("/#") || href.startsWith("#")) {
+      const cleanSection = href.replace("/#", "").replace("#", "");
+      return pathname === "/" && activeSection === cleanSection;
+    }
+    return pathname === href || (href !== "/" && pathname.startsWith(href));
+  };
 
   // Close mobile menu when clicking on a link
   const handleLinkClick = () => {
@@ -83,42 +94,43 @@ export function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 bg-charcoal/95 backdrop-blur-md border-b border-emeraldTint/10"
+      className="fixed top-0 left-0 right-0 z-50 bg-charcoal/95 backdrop-blur-md border-b border-emeraldTint/10 h-20 flex items-center"
       style={{ height: `${tokens.layout.headerH}px` }}
       role="banner"
     >
-      <Container className="h-full flex items-center justify-between">
+      <div className="w-full max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-12 h-full flex items-center justify-between">
         {/* Logo */}
-        <SectionLink href="#hero" className="logo" aria-label="Turbo AI home">
-          {site.meta.siteName}
+        <SectionLink
+          href="/#hero"
+          className="flex items-center select-none cursor-pointer py-1"
+          aria-label="Turbo AI home"
+        >
+          <img
+            src={turboAiLogo}
+            alt="Turbo AI"
+            className="h-10 sm:h-12 md:h-14 max-h-[56px] w-auto object-contain brightness-110 hover:opacity-85 transition-opacity"
+          />
         </SectionLink>
 
         {/* Desktop Navigation */}
         <nav
           role="navigation"
           aria-label="Main navigation"
-          className="hidden lg:block"
+          className="hidden lg:flex items-center"
         >
-          <ul className="flex items-center space-x-8">
+          <ul className="flex items-center gap-6 xl:gap-8 2xl:gap-9">
             {site.nav.items.map((item) => (
-              <li key={item.href}>
+              <li key={item.label} className="flex items-center">
                 {item.dropdown ? (
                   <Dropdown label={item.label} items={item.dropdown} />
                 ) : (
                   <SectionLink
                     href={item.href}
-                    className={`nav-link ${activeSection === item.href.replace("#", "")
-                      ? "aria-current"
-                      : ""
-                      }`}
-                    aria-current={
-                      activeSection === item.href.replace("#", "")
-                        ? "page"
-                        : undefined
-                    }
+                    className={`nav-link whitespace-nowrap ${isLinkActive(item.href) ? "aria-current" : ""}`}
+                    aria-current={isLinkActive(item.href) ? "page" : undefined}
                     aria-label={`Navigate to ${item.label} section`}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
                   </SectionLink>
                 )}
               </li>
@@ -181,7 +193,7 @@ export function Header() {
               >
                 <ul className="space-y-0">
                   {site.nav.items.map((item) => (
-                    <li key={item.href}>
+                    <li key={item.label}>
                       {item.dropdown ? (
                         <MobileDropdown
                           label={item.label}
@@ -191,15 +203,10 @@ export function Header() {
                       ) : (
                         <SectionLink
                           href={item.href}
-                          className={`mobile-nav-link ${activeSection === item.href.replace("#", "")
-                            ? "aria-current"
-                            : ""
-                            }`}
+                          className={`mobile-nav-link ${isLinkActive(item.href) ? "aria-current" : ""}`}
                           onClick={handleLinkClick}
                           aria-current={
-                            activeSection === item.href.replace("#", "")
-                              ? "page"
-                              : undefined
+                            isLinkActive(item.href) ? "page" : undefined
                           }
                           aria-label={`Navigate to ${item.label} section`}
                         >
@@ -213,7 +220,7 @@ export function Header() {
             </div>
           </>
         )}
-      </Container>
+      </div>
     </header>
   );
 }

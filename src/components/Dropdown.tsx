@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import type { DropdownItem } from "../content/turboai";
 import { SectionLink } from "./SectionLink";
 
@@ -11,6 +12,11 @@ interface DropdownProps {
 export function Dropdown({ label, items, className = "" }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  const isAnyChildActive = items.some(
+    (item) => !item.external && (location.pathname === item.href || (item.href !== "/" && location.pathname.startsWith(item.href)))
+  );
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -43,15 +49,18 @@ export function Dropdown({ label, items, className = "" }: DropdownProps) {
     <div ref={dropdownRef} className={`relative ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="nav-link flex items-center gap-1 hover:text-emeraldNeon transition-colors duration-200"
+        className={`nav-link inline-flex items-center gap-1.5 whitespace-nowrap hover:text-emeraldNeon transition-colors duration-200 cursor-pointer ${
+          isAnyChildActive ? "aria-current text-emeraldNeon" : ""
+        }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label={`${label} menu`}
       >
-        {label}
+        <span className="leading-none">{label}</span>
         <svg
-          className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
-            }`}
+          className={`w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0 ${
+            isOpen ? "rotate-180" : ""
+          }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -67,13 +76,13 @@ export function Dropdown({ label, items, className = "" }: DropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-48 bg-charcoalDeep/95 backdrop-blur-md border border-emeraldTint/20 rounded-lg shadow-xl z-50">
+        <div className="absolute top-full left-0 mt-2 min-w-[280px] w-max max-w-sm bg-charcoalDeep/95 backdrop-blur-md border border-emeraldTint/20 rounded-lg shadow-xl z-50">
           <div className="py-2">
             {items.map((item, index) => (
               <SectionLink
                 key={index}
                 href={item.href}
-                className="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-emeraldTint/10 transition-colors duration-200"
+                className="block px-4 py-2.5 text-sm text-white/85 hover:text-white hover:bg-emeraldTint/15 transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
                 aria-label={
                   item.external

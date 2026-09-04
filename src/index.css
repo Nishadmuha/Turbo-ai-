@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap");
 
 @tailwind base;
@@ -34,7 +34,7 @@
         transparent 24px);
     background-size: cover, 24px 24px;
     background-attachment: fixed;
-    font-family: Inter, "IBM Plex Sans", system-ui, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
     font-size: clamp(16px, 1.125vw, 18px);
     line-height: 1.7;
     color: #ffffff;
@@ -53,7 +53,7 @@
   h4,
   h5,
   h6 {
-    font-family: Söhne, "GT America", Inter, system-ui, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
     color: #3b82f6;
     letter-spacing: -0.02em;
     text-shadow: 0 0 4px rgba(59, 130, 246, 0.3),
@@ -519,8 +519,17 @@
   }
 
   .nav-link:hover::after,
-  .nav-link[aria-current="true"]::after {
+  .nav-link[aria-current="true"]::after,
+  .nav-link[aria-current="page"]::after,
+  .nav-link.aria-current::after {
     transform: scaleX(1);
+  }
+
+  .nav-link.aria-current,
+  .nav-link[aria-current="page"],
+  .nav-link[aria-current="true"] {
+    color: #3b82f6;
+    font-weight: 500;
   }
 
   .cta-link {
@@ -1081,6 +1090,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .line-clamp-3 {
@@ -1088,6 +1098,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   .line-clamp-none {
@@ -1095,6 +1106,7 @@
     display: block;
     -webkit-box-orient: horizontal;
     -webkit-line-clamp: none;
+    line-clamp: none;
   }
 }
 

@@ -32,9 +32,9 @@ export function SectionLink({
       return;
     }
 
-    // Check if it's a hash link
-    if (href.startsWith("#")) {
-      const sectionId = href.replace("#", "");
+    // Check if it's a hash link (e.g., "#about" or "/#about")
+    if (href.startsWith("#") || href.startsWith("/#")) {
+      const sectionId = href.replace("/#", "").replace("#", "");
 
       // If we are on the home page, scroll to section
       if (location.pathname === "/") {
@@ -50,16 +50,25 @@ export function SectionLink({
 
           // Update URL hash without triggering scroll
           setTimeout(() => {
-            history.pushState(null, "", href);
+            history.pushState(null, "", `#${sectionId}`);
+          }, 100);
+        } else if (sectionId === "hero") {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+          setTimeout(() => {
+            history.pushState(null, "", window.location.pathname);
           }, 100);
         }
       } else {
         // If not on home page, navigate to home with hash
-        // The App component will handle the scrolling on mount/update
-        navigate(`/${href}`);
+        navigate(`/#${sectionId}`);
       }
+      onClick?.();
+      return;
     } else {
-      // It's an internal route (e.g., /ai-transformation)
+      // It's an internal route (e.g., /industries, /blog)
       navigate(href);
       window.scrollTo(0, 0);
     }
