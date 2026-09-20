@@ -4,7 +4,7 @@ import { SectionLink } from "./SectionLink";
 import { Dropdown } from "./Dropdown";
 import { MobileDropdown } from "./MobileDropdown";
 import { site, tokens } from "../content/turboai";
-import turboAiLogo from "../assets/turbo-ai-logo.jpg";
+import turboAiLogo from "../assets/turbo-ai-logo.png";
 
 export function Header() {
   const { pathname } = useLocation();
@@ -118,7 +118,7 @@ export function Header() {
           aria-label="Main navigation"
           className="hidden lg:flex items-center"
         >
-          <ul className="flex items-center gap-6 xl:gap-8 2xl:gap-9">
+          <ul className="flex items-center gap-3 xl:gap-5 2xl:gap-6">
             {site.nav.items.map((item) => (
               <li key={item.label} className="flex items-center">
                 {item.dropdown ? (

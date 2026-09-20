@@ -13,6 +13,18 @@ import { OffshoreDevelopment } from "./pages/OffshoreDevelopment";
 import { CloudSolutions } from "./pages/CloudSolutions";
 import { QualityEngineering } from "./pages/QualityEngineering";
 import { Industries } from "./pages/Industries";
+import { GenerativeAgenticAI } from "./pages/GenerativeAgenticAI";
+import { DataEngineeringAIFoundations } from "./pages/DataEngineeringAIFoundations";
+import { AIEngineeringSoftwareDevelopment } from "./pages/AIEngineeringSoftwareDevelopment";
+import { AIGovernanceCybersecurity } from "./pages/AIGovernanceCybersecurity";
+import { CloudInfrastructureAICompute } from "./pages/CloudInfrastructureAICompute";
+import { IndustriesWeServe } from "./pages/IndustriesWeServe";
+import { EnterpriseAISolutions } from "./pages/EnterpriseAISolutions";
+import { ProductsIndex } from "./pages/ProductsIndex";
+import { DCI360 } from "./pages/DCI360";
+import { ILakehouse } from "./pages/ILakehouse";
+import { ADRS } from "./pages/ADRS";
+import { AboutTurboAI } from "./pages/AboutTurboAI";
 import { BlogList } from "./pages/BlogList";
 import { BlogPost } from "./pages/BlogPost";
 import { tokens } from "./content/turboai";
@@ -68,6 +80,18 @@ function App() {
         <Route path="/offshore-development" element={<OffshoreDevelopment />} />
         <Route path="/cloud-solutions" element={<CloudSolutions />} />
         <Route path="/quality-engineering" element={<QualityEngineering />} />
+        <Route path="/generative-ai-agentic-ai" element={<GenerativeAgenticAI />} />
+        <Route path="/data-engineering-ai-foundations" element={<DataEngineeringAIFoundations />} />
+        <Route path="/ai-engineering-software-development" element={<AIEngineeringSoftwareDevelopment />} />
+        <Route path="/ai-governance-cybersecurity" element={<AIGovernanceCybersecurity />} />
+        <Route path="/cloud-infrastructure-ai-compute" element={<CloudInfrastructureAICompute />} />
+        <Route path="/industries-we-serve" element={<IndustriesWeServe />} />
+        <Route path="/enterprise-ai-solutions" element={<EnterpriseAISolutions />} />
+        <Route path="/products" element={<ProductsIndex />} />
+        <Route path="/products/dci-360" element={<DCI360 />} />
+        <Route path="/products/i-lakehouse" element={<ILakehouse />} />
+        <Route path="/products/adrs" element={<ADRS />} />
+        <Route path="/about" element={<AboutTurboAI />} />
         <Route path="/industries" element={<Industries />} />
         <Route path="/industries/energy" element={<Industries />} />
         <Route path="/blog" element={<BlogList />} />

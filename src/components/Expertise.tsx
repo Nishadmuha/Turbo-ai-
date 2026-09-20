@@ -54,7 +54,7 @@ export function Expertise() {
                   <div className="flex-1">
                     {"slug" in item ? (
                       <SectionLink
-                        href={(item as any).slug}
+                        href={`/${item.slug}`}
                         className="group inline-block"
                         aria-label={`Learn more about ${item.title}`}
                       >

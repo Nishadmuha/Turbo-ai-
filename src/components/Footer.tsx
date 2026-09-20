@@ -4,7 +4,7 @@ import { SectionLink } from "./SectionLink";
 import { Modal } from "./Modal";
 import { PrivacyPolicyContent, TermsOfUseContent } from "./LegalContent";
 import { site, copy, blog } from "../content/turboai";
-import turboAiLogo from "../assets/turbo-ai-logo.jpg";
+import turboAiLogo from "../assets/turbo-ai-logo.png";
 
 export function Footer() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);

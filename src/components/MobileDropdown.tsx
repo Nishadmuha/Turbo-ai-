@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { DropdownItem } from "../content/turboai";
+import { SectionLink } from "./SectionLink";
 
 interface MobileDropdownProps {
   label: string;
@@ -53,11 +54,9 @@ export function MobileDropdown({
       {isOpen && (
         <div className="pl-4 py-2 bg-charcoalDeep/50">
           {items.map((item, index) => (
-            <a
+            <SectionLink
               key={index}
               href={item.href}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
               className="block py-2 px-4 text-sm text-white/80 hover:text-white transition-colors duration-200"
               onClick={handleItemClick}
               aria-label={
@@ -85,7 +84,7 @@ export function MobileDropdown({
                   </svg>
                 )}
               </div>
-            </a>
+            </SectionLink>
           ))}
         </div>
       )}

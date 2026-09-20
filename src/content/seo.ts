@@ -1,3 +1,6 @@
+import dciImage from "../assets/dci-data-center.webp";
+import lakehouseImage from "../assets/i-lakehouse-infrastructure.webp";
+import adrsImage from "../assets/adrs-security-operations-center.webp";
 
 export interface PageSEO {
     title: string;
@@ -15,7 +18,7 @@ export const seoConfig: Record<string, PageSEO> = {
         description: "Looking for AI consulting companies in Calgary, Canada? Our expert AI consultants deliver custom AI strategies and enterprise-ready solutions.",
         image: `${baseUrl}/home-og.png`,
         url: baseUrl,
-        keywords: "AI transformation, artificial intelligence consulting, machine learning, enterprise AI, digital transformation, strategic intelligence, AI architecture, cyber security, cloud solutions, data analytics, offshore development, AI consulting UK, AI consulting Canada, enterprise intelligence, technology consulting, AI implementation, AI strategy",
+        keywords: "AI transformation, artificial intelligence consulting, machine learning, enterprise AI, digital transformation, strategic intelligence, AI architecture, cyber security, cloud solutions, data analytics, AI consulting UK, AI consulting Canada, enterprise intelligence, technology consulting, AI implementation, AI strategy",
     },
     aiTransformation: {
         title: "AI Transformation Services in Canada",
@@ -93,5 +96,89 @@ export const seoConfig: Record<string, PageSEO> = {
         image: `${baseUrl}/assets/Hero Background.jpg`,
         url: `${baseUrl}/industries`,
         keywords: "energy AI, AI solutions for energy, predictive maintenance energy, asset intelligence, energy operational analytics, Calgary energy AI, oil and gas AI Canada",
+    },
+    generativeAgenticAI: {
+        title: "Generative & Agentic AI Services | Turbo AI",
+        description: "Enterprise generative AI, copilots, knowledge assistants, RAG, AI agents, orchestration, evaluation, and human-in-the-loop workflows.",
+        image: `${baseUrl}/assets/ai-trans-networkinglines.jpg`,
+        url: `${baseUrl}/generative-ai-agentic-ai`,
+        keywords: "generative AI, agentic AI, enterprise AI assistants, AI copilots, RAG, AI agents, MCP integrations",
+    },
+    dataFoundations: {
+        title: "Data Engineering & AI Foundations | Turbo AI",
+        description: "Data engineering, lakehouse, governance, metadata, quality, lineage, streaming, MLOps, i-Lakehouse, and ADRS foundations for enterprise AI.",
+        image: `${baseUrl}/assets/ai-data-insights-hero.png`,
+        url: `${baseUrl}/data-engineering-ai-foundations`,
+        keywords: "data engineering, AI foundations, data lakehouse, data governance, MLOps, i-Lakehouse, ADRS",
+    },
+    aiEngineering: {
+        title: "AI Engineering & Software Development | Turbo AI",
+        description: "Engineering enterprise AI applications, SaaS platforms, AI copilots, RAG applications, intelligent automation, and modern software systems.",
+        image: `${baseUrl}/assets/digital-architecture-hero.png`,
+        url: `${baseUrl}/ai-engineering-software-development`,
+        keywords: "AI engineering, software development, enterprise AI applications, SaaS platforms, RAG applications, intelligent automation",
+    },
+    governanceCybersecurity: {
+        title: "AI Governance & Cybersecurity | Turbo AI",
+        description: "AI governance, responsible AI, model lifecycle controls, LLM security, application security, API security, and cybersecurity assessment.",
+        image: `${baseUrl}/assets/cyber-security-hero.png`,
+        url: `${baseUrl}/ai-governance-cybersecurity`,
+        keywords: "AI governance, AI cybersecurity, LLM security, responsible AI, model governance, prompt injection assessment",
+    },
+    cloudCompute: {
+        title: "Cloud, Infrastructure & AI Compute | Turbo AI",
+        description: "Cloud architecture, hybrid cloud, multi-cloud, Kubernetes, infrastructure automation, observability, optimization, and AI compute architecture.",
+        image: `${baseUrl}/assets/cloud-solutions-hero.png`,
+        url: `${baseUrl}/cloud-infrastructure-ai-compute`,
+        keywords: "cloud architecture, AI compute, infrastructure automation, Kubernetes, platform engineering, observability",
+    },
+    industriesWeServe: {
+        title: "Industries We Serve | Enterprise AI for the Real Economy | Turbo AI",
+        description: "Explore how Turbo AI applies AI, data, software, cloud, and governance capabilities across energy, finance, healthcare, manufacturing, government, and more.",
+        image: `${baseUrl}/assets/Hero Background.jpg`,
+        url: `${baseUrl}/industries-we-serve`,
+        keywords: "AI industries, enterprise AI by industry, energy AI, finance AI, manufacturing AI, healthcare AI, government AI",
+    },
+    enterpriseSolutions: {
+        title: "Enterprise AI Solutions | Turbo AI",
+        description: "AI solutions organized by business problem, including customer intelligence, document processing, predictive maintenance, automation, fraud detection, and supply-chain intelligence.",
+        image: `${baseUrl}/assets/Insight Visualization.jpg`,
+        url: `${baseUrl}/enterprise-ai-solutions`,
+        keywords: "enterprise AI solutions, customer intelligence, document processing, predictive maintenance, intelligent automation, anomaly detection",
+    },
+    turboAIProducts: {
+        title: "Products | Seismic AI, DCI 360, i-Lakehouse and ADRS | Turbo AI",
+        description: "Explore Turbo AI products: Seismic AI, DCI 360, i-Lakehouse, and ADRS. Open each product page for current information and contact options.",
+        image: `${baseUrl}/home-og.png`,
+        url: `${baseUrl}/products`,
+        keywords: "Turbo AI products, Seismic AI, DCI 360, i-Lakehouse, ADRS, proprietary AI platforms",
+    },
+    dci360: {
+        title: "DCI 360 | Intelligent Data Center Infrastructure Management | Turbo AI",
+        description: "DCI 360 brings data center monitoring, assets, power, cooling and capacity planning into one operational view for infrastructure teams.",
+        image: new URL(dciImage, baseUrl).href,
+        url: `${baseUrl}/products/dci-360`,
+        keywords: "DCI 360, DCIM, data center infrastructure management, data center monitoring, capacity planning, power and cooling",
+    },
+    iLakehouse: {
+        title: "i-Lakehouse | Hybrid-Native Intelligent Data Platform | Turbo AI",
+        description: "i-Lakehouse unifies DataOps, AI/ML and governed data across cloud, hybrid, on-premise and edge environments with open data standards.",
+        image: new URL(lakehouseImage, baseUrl).href,
+        url: `${baseUrl}/products/i-lakehouse`,
+        keywords: "i-Lakehouse, hybrid-native data platform, data lakehouse, DataOps, AI ML, open data formats, data governance",
+    },
+    adrs: {
+        title: "ADRS | Autonomous Detection & Response System | Turbo AI",
+        description: "ADRS connects detection, analysis, risk identification, alerts and response in a clear security-operations workflow.",
+        image: new URL(adrsImage, baseUrl).href,
+        url: `${baseUrl}/products/adrs`,
+        keywords: "ADRS, autonomous detection and response system, security operations, risk identification, security alerts",
+    },
+    aboutTurboAI: {
+        title: "About Turbo AI | Building the Intelligent Enterprise",
+        description: "Learn about Turbo AI's mission, vision, approach, and principles for building credible enterprise AI, data, software, security, and cloud capabilities.",
+        image: `${baseUrl}/assets/Canadian Context Map.jpg`,
+        url: `${baseUrl}/about`,
+        keywords: "About Turbo AI, enterprise AI company, AI strategy, intelligent enterprise, technology partner",
     },
 };
