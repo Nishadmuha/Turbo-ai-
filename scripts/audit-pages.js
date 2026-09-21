@@ -81,8 +81,9 @@ try {
         pageTitles.set(title, route);
       }
       console.log(`${width} ${route}: ${issues.length ? issues.join('; ') : 'OK'}`);
-      if (['/products', '/industries-we-serve', '/ai-transformation'].includes(route)) {
-        const filename = `turbo-${width}-${route.slice(1)}.png`;
+      if (['/products', '/products/dci-360', '/industries-we-serve', '/ai-transformation'].includes(route)) {
+        const routeName = route.slice(1).replaceAll('/', '-');
+        const filename = `turbo-${width}-${routeName}.png`;
         await page.screenshot({ path: path.join(os.tmpdir(), filename) });
         if (route === '/ai-transformation') {
           const insights = await page.$('#service-insights');
@@ -93,7 +94,7 @@ try {
         if (width === 1440 && route !== '/ai-transformation') {
           await page.evaluate(() => window.scrollTo(0, 650));
           await new Promise((resolve) => setTimeout(resolve, 500));
-          await page.screenshot({ path: path.join(os.tmpdir(), `turbo-${width}-${route.slice(1)}-section.png`) });
+          await page.screenshot({ path: path.join(os.tmpdir(), `turbo-${width}-${routeName}-section.png`) });
         }
       }
     }
