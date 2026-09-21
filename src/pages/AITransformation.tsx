@@ -6,7 +6,7 @@ import processImage from "../assets/ai-trans-img1.jpg";
 import networkingImage from "../assets/ai-trans-networkinglines.jpg";
 import { SEO } from "../components/SEO";
 import { Connect } from "../components/Connect";
-import { RelatedInsights } from "../components/LandingSEOSections";
+import { EnergyStyleInsights } from "../components/LandingSEOSections";
 
 const transformationFaqs = [
     { question: "What is the difference between AI implementation and AI transformation?", answer: "AI implementation is about putting tools in place. AI transformation goes a step further. It weaves intelligence into how decisions are made, how work flows, and how the business actually runs, day to day." },
@@ -411,7 +411,7 @@ export function AITransformation() {
                 ["AI Governance & Cybersecurity", "/ai-governance-cybersecurity", "Build oversight and security into the transformation lifecycle."],
             ].map(([title, href, body]) => <SectionLink key={href} href={href} className="border-t border-blue-400/50 p-5"><h3 className="text-xl font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/70">{body}</p></SectionLink>)}</div></Container></Section>
 
-            <RelatedInsights slugs={["what-is-ai-transformation-in-business", "ai-adoption-in-enterprises-2025", "ai-roi-for-enterprises"]} title="AI strategy and transformation insights" intro="Explore readiness, adoption, and value decisions before moving from ambition to implementation." />
+            <EnergyStyleInsights slugs={["what-is-ai-transformation-in-business", "ai-adoption-in-enterprises-2025", "ai-roi-for-enterprises"]} title="From Our Blog" intro="Explore readiness, adoption, and value decisions before moving from ambition to implementation." />
 
             {/* CTA */}
             <Section className="bg-emeraldNeon/10 py-24 text-center">

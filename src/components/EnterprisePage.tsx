@@ -4,7 +4,7 @@ import { Container, Section } from "./Container";
 import { SectionLink } from "./SectionLink";
 import { SEO } from "./SEO";
 import { Connect } from "./Connect";
-import { LandingFAQ, RelatedInsights } from "./LandingSEOSections";
+import { EnergyStyleInsights, LandingFAQ } from "./LandingSEOSections";
 import { useReveal } from "../hooks/useReveal";
 import { blogPosts } from "../content/blog";
 import type { Diagram, EnterprisePageContent } from "../content/enterprisePages";
@@ -303,9 +303,9 @@ export function EnterprisePage({ content }: EnterprisePageProps) {
         </Section>
       )}
 
-      {journey && <RelatedInsights slugs={journey.insightSlugs} title={`Insights connected to ${content.title.toLowerCase()}`} intro="Practical guidance for the data, workflow, architecture, and governance decisions behind this service." />}
-
       {journey && <LandingFAQ title={`${content.title} questions`} intro="Answers to common questions about scope, implementation, controls, and operational fit." items={journey.faqs} />}
+
+      {journey && <EnergyStyleInsights slugs={journey.insightSlugs} title="From Our Blog" intro={`Practical guidance for the data, workflow, architecture, and governance decisions behind ${content.title.toLowerCase()}.`} />}
 
       <Section className="bg-gradient-to-r from-blue-950 via-[#051225] to-cyan-950">
         <Container>

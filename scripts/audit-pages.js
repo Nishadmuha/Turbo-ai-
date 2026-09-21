@@ -84,6 +84,12 @@ try {
       if (['/products', '/industries-we-serve', '/ai-transformation'].includes(route)) {
         const filename = `turbo-${width}-${route.slice(1)}.png`;
         await page.screenshot({ path: path.join(os.tmpdir(), filename) });
+        if (route === '/ai-transformation') {
+          const insights = await page.$('#service-insights');
+          if (insights) {
+            await insights.screenshot({ path: path.join(os.tmpdir(), `turbo-${width}-service-insights.png`) });
+          }
+        }
         if (width === 1440 && route !== '/ai-transformation') {
           await page.evaluate(() => window.scrollTo(0, 650));
           await new Promise((resolve) => setTimeout(resolve, 500));

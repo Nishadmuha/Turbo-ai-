@@ -34,6 +34,15 @@ const routes = [
 
 const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
 let failures = 0;
+const serviceRoutes = new Set([
+  "/ai-transformation",
+  "/generative-ai-agentic-ai",
+  "/data-engineering-ai-foundations",
+  "/ai-engineering-software-development",
+  "/ai-governance-cybersecurity",
+  "/cloud-infrastructure-ai-compute",
+  "/enterprise-ai-solutions",
+]);
 
 try {
   for (const route of routes) {
@@ -41,7 +50,7 @@ try {
     await page.goto(`${base}${route}`, { waitUntil: "domcontentloaded" });
     await page.waitForSelector("h1", { timeout: 5000 });
 
-    const result = await page.evaluate(({ isAbout, isEnergy }) => {
+    const result = await page.evaluate(({ isAbout, isEnergy, isService }) => {
       const sections = [...document.querySelectorAll("main section")];
       const bodyText = document.body.innerText.replace(/\s+/g, " ");
       const sectionIndex = (section) => sections.indexOf(section);
@@ -66,6 +75,8 @@ try {
         blog: Boolean(insightSection),
         faq: isAbout || faqPresent,
         form: Boolean(connectSection?.querySelector("form")),
+        serviceImages: !isService || document.querySelectorAll("main img").length >= 4,
+        serviceInsightLayout: !isService || document.querySelectorAll("#service-insights article img").length === 3,
         finalOrder: Boolean(
           insightSection
           && connectSection
@@ -74,7 +85,7 @@ try {
           && connectSection.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING
         ),
       };
-    }, { isAbout: route === "/about", isEnergy: route === "/industries/energy" });
+    }, { isAbout: route === "/about", isEnergy: route === "/industries/energy", isService: serviceRoutes.has(route) });
 
     const missing = Object.entries(result)
       .filter(([, passed]) => !passed)

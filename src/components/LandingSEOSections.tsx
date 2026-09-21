@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { ArrowLeftIcon, ArrowRightIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { Container, Section } from "./Container";
 import { SectionLink } from "./SectionLink";
 import { blogPosts } from "../content/blog";
@@ -66,6 +68,91 @@ export function RelatedInsights({ slugs, title = "Insights for the next decision
               <span className="mt-5 inline-block font-semibold text-cyan-200">Read insight <span aria-hidden="true">→</span></span>
             </SectionLink>
           ))}
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+export function EnergyStyleInsights({ slugs, title, intro }: { slugs: string[]; title: string; intro: string }) {
+  const posts = slugs
+    .map((slug) => blogPosts.find((post) => post.slug === slug))
+    .filter((post): post is NonNullable<typeof post> => Boolean(post));
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  if (!posts.length) return null;
+
+  const showPrevious = () => setActiveIndex((current) => (current - 1 + posts.length) % posts.length);
+  const showNext = () => setActiveIndex((current) => (current + 1) % posts.length);
+
+  return (
+    <Section id="service-insights" className="border-b border-white/5 bg-[#020617] py-20 sm:py-28">
+      <Container>
+        <div className="mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div>
+            <p className="mb-3 font-mono text-xs font-bold uppercase tracking-widest text-blue-500 sm:text-sm">Latest Insights</p>
+            <h2 id="service-insights-heading" className="mb-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">{title}</h2>
+            <p className="max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">{intro}</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={showPrevious}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-transparent text-white transition hover:border-blue-500 hover:text-blue-400 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Previous insight"
+              disabled={posts.length < 2}
+            >
+              <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={showNext}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Next insight"
+              disabled={posts.length < 2}
+            >
+              <ArrowRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {posts.map((_, index) => {
+            const post = posts[(index + activeIndex) % posts.length];
+            const category = post.tags?.[0] || "Insight";
+            return (
+              <article key={post.slug}>
+                <SectionLink href={`/blog/${post.slug}`} className="group block transition duration-300 hover:-translate-y-1">
+                  <div className="mb-6 aspect-[16/10] overflow-hidden rounded-3xl bg-[#050B16] shadow-xl">
+                    <img
+                      src={post.image || "/enterprise/ai-team.jpg"}
+                      alt={post.imageAlt || `${post.title} insight`}
+                      width={640}
+                      height={400}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div className="mb-4 flex flex-wrap items-center gap-3">
+                    <span className="rounded-md border border-blue-500/30 bg-[#0C152B] px-3 py-1 font-mono text-xs font-bold uppercase text-blue-400">
+                      {category}
+                    </span>
+                    <time dateTime={post.date} className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                      <CalendarDaysIcon className="h-4 w-4" aria-hidden="true" />
+                      {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
+                    </time>
+                  </div>
+                  <h3 className="mb-3 text-xl font-extrabold leading-tight text-white transition-colors group-hover:text-blue-400 sm:text-2xl">{post.title}</h3>
+                  <p className="mb-6 text-sm leading-relaxed text-slate-400">{post.excerpt}</p>
+                  <span className="inline-flex items-center gap-2 text-sm font-bold text-white transition-colors group-hover:text-blue-400">
+                    Read More <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                </SectionLink>
+              </article>
+            );
+          })}
         </div>
       </Container>
     </Section>
