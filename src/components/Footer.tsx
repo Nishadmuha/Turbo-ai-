@@ -183,6 +183,7 @@ export function Footer() {
             </div>
             {/* Legal Links */}
             <div className="flex gap-6 text-xs">
+              <a href="/image-credits.html" className="text-midGray hover:text-white transition-colors duration-200">Image Credits</a>
               <button
                 onClick={() => setIsPrivacyModalOpen(true)}
                 className="text-midGray hover:text-white transition-colors duration-200"

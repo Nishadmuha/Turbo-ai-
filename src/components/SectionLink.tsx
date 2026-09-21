@@ -32,8 +32,23 @@ export function SectionLink({
       return;
     }
 
-    // Check if it's a hash link (e.g., "#about" or "/#about")
-    if (href.startsWith("#") || href.startsWith("/#")) {
+    // A local hash stays on the current page when that section exists.
+    if (href.startsWith("#")) {
+      const sectionId = href.slice(1);
+      const targetElement = document.getElementById(sectionId);
+      if (targetElement) {
+        const headerHeight = tokens.layout.headerH;
+        window.scrollTo({ top: targetElement.offsetTop - headerHeight, behavior: "smooth" });
+        setTimeout(() => history.pushState(null, "", `${location.pathname}#${sectionId}`), 100);
+      } else if (location.pathname !== "/") {
+        navigate(`/#${sectionId}`);
+      }
+      onClick?.();
+      return;
+    }
+
+    // A root hash explicitly links to a section on the homepage.
+    if (href.startsWith("/#")) {
       const sectionId = href.replace("/#", "").replace("#", "");
 
       // If we are on the home page, scroll to section

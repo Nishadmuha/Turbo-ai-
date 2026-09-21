@@ -1,4 +1,5 @@
 import b1 from "../assets/blog/b1.jpg";
+import { industryInsights } from "./industryInsights";
 import b2 from "../assets/blog/b2.jpg";
 import b3 from "../assets/blog/b3.png";
 import b4 from "../assets/blog/b4.jpg";
@@ -38,11 +39,13 @@ export interface BlogPost {
   date: string;
   author: string;
   image?: string;
+  imageAlt?: string;
   body: string; // HTML string
   tags?: string[];
 }
 
 export const blogPosts: BlogPost[] = [
+  ...industryInsights,
   {
     slug: "leveraging-ai-expand-customer-base",
     title: "Leveraging AI to Expand Your Customer Base: Insights from Practice",
@@ -578,7 +581,6 @@ export const blogPosts: BlogPost[] = [
         <li>Remote Infrastructure Management</li>
         <li>Cyber Security Solutions</li>
         <li>AI & Data Insights</li>
-        <li>Offshore Development</li>
         <li>Cloud Solutions</li>
         <li>Quality Engineering</li>
       </ul>
@@ -795,7 +797,7 @@ export const blogPosts: BlogPost[] = [
       <p>Talent shortfall: The demand for AI engineers, data scientists, and ML operations specialists far outpaces supply.</p>
       <p>Infrastructure debt: Legacy systems are not architected to support the data throughput and latency requirements of modern AI.</p>
       <p>Governance maturity: Without clear accountability for AI decisions, organisations face regulatory and reputational risk.</p>
-      <p>Turbo AI addresses the talent gap directly through its <a href="/offshore-development">Offshore Development</a> model, delivering skilled engineering teams that integrate with enterprise workflows without the overhead of in-house hiring.</p>
+      <p>Turbo AI addresses the talent gap through <a href="/ai-engineering-software-development">AI engineering and software development</a>, connecting strategy with the technical skills needed to build and operate production systems.</p>
       <h2>What the Next Wave Looks Like</h2>
       <p>The enterprises positioned to lead the next wave share several characteristics: they have invested in modern data infrastructure, they have established AI governance frameworks, and they are deploying AI not just for efficiency but as a driver of new business models.</p>
       <p>Underpinning all of this is cloud agility. Turbo AI's <a href="/cloud-solutions">Cloud Solutions</a> practice ensures that the infrastructure enterprises need to scale AI is flexible, resilient, and cost-optimised.</p>
@@ -830,7 +832,7 @@ export const blogPosts: BlogPost[] = [
       <p>Any AI engagement is fundamentally a data engagement. A firm that rushes past data readiness — quality, governance, access, and integration — is likely to produce AI models that underperform in production.</p>
       <p>Questions to ask: How do you assess data readiness at the start of an engagement? What is your approach to data governance and compliance? How do you handle data that spans multiple systems or geographies?</p>
       <h2>Understand Their Delivery Model</h2>
-      <p>Some AI consulting firms operate as pure advisory shops. Others, like Turbo AI, combine strategic counsel with hands-on engineering — including <a href="/offshore-development">Offshore Development</a> delivery models that provide enterprise-grade talent at competitive cost structures.</p>
+      <p>Some AI consulting firms operate as pure advisory shops. Others, like Turbo AI, combine strategic counsel with <a href="/ai-engineering-software-development">hands-on engineering</a> to turn a roadmap into dependable software and operational workflows.</p>
       <p>Be explicit about what you need: strategic direction only, technical implementation, or end-to-end ownership. Make sure the firm's delivery model matches your expectations.</p>
       <h2>Review Their Infrastructure Capabilities</h2>
       <p>AI doesn't operate in isolation. It requires robust infrastructure — cloud platforms, data pipelines, monitoring systems, and security frameworks. A consulting firm that cannot speak credibly to <a href="/cloud-solutions">Cloud Solutions</a> architecture and <a href="/remote-infrastructure-management">Remote Infrastructure Management</a> is likely to hand off a solution that works in demo conditions but fails at scale.</p>
@@ -921,7 +923,7 @@ export const blogPosts: BlogPost[] = [
       <p>This list highlights seven AI consulting companies in Canada that are delivering measurable results for enterprise clients in 2025, with a focus on what differentiates each.</p>
       <h2>1. Turbo AI (Calgary, AB)</h2>
       <p><a href="/">Turbo AI</a> is a focused team of engineers and strategists building intelligent systems for enterprises navigating complexity. With core team members working from institutions including Oxford University, IIT Bombay, and Fortune 500 organisations, Turbo AI brings rare depth across <a href="/ai-transformation">AI Transformation services</a>, <a href="/cyber-security-solutions">Cyber Security Solutions</a>, <a href="/digital-architecture">Digital Architecture</a>, and <a href="/ai-data-insights">AI & Data Insights</a>.</p>
-      <p>What sets Turbo AI apart is its combination of strategic intelligence and engineering execution — not just advising on AI strategy, but building and running the systems that deliver outcomes. Case studies including fraud detection transformation and LLM-powered claims triage demonstrate a track record of high-impact delivery.</p>
+      <p>Turbo AI brings strategic intelligence and engineering execution together. The fraud-review and claims-triage scenarios on this site illustrate possible approaches; they are not verified client case studies or measured delivery results.</p>
       <h2>2. Element AI (Montreal, QC)</h2>
       <p>Acquired by ServiceNow in 2020, Element AI's legacy continues to influence the Canadian AI ecosystem. Originally founded by AI pioneers including Yoshua Bengio, the organisation focused on applied AI research and enterprise deployment, particularly in regulated industries.</p>
       <h2>3. Paladin AI (Toronto, ON)</h2>
@@ -972,7 +974,7 @@ export const blogPosts: BlogPost[] = [
       <h2>The Security Layer</h2>
       <p>AI fraud detection is a subset of the broader enterprise security posture. For a holistic approach that covers both AI-driven fraud prevention and wider cyber threat management, Turbo AI's <a href="/cyber-security-solutions">Cyber Security Solutions</a> practice provides the enterprise-grade security framework within which fraud detection operates.</p>
       <h2>Next Steps</h2>
-      <p>If your organisation is relying on rule-based fraud detection and experiencing growing false negative rates or operational overhead, an AI-powered system is likely to deliver significant and measurable returns. <a href="/">Turbo AI</a> has hands-on experience delivering fraud detection transformation programmes. Contact us to explore what that could look like for your business.</p>
+      <p>If rule-based fraud monitoring creates growing review workload, an AI-assisted approach may be worth evaluating against the existing process. Results depend on data quality, controls, and investigator adoption. <a href="/#connect">Contact Turbo AI</a> to discuss a bounded assessment.</p>
     `
   },
   {
@@ -1146,7 +1148,7 @@ export const blogPosts: BlogPost[] = [
       <p>Scope flexibility: The ability to start small with a focused pilot, rather than committing to a large multi-year engagement.</p>
       <p>Clear communication: Technical concepts explained in business terms, without jargon.</p>
       <p>Speed: SMBs cannot afford 12-month implementation timelines. Look for partners who can deliver working solutions in weeks.</p>
-      <p>Turbo AI's <a href="/offshore-development">Offshore Development</a> delivery model and <a href="/quality-engineering">Quality Engineering</a> engineering practice make it possible to deliver enterprise-grade AI solutions at SMB-appropriate timelines and budgets.</p>
+      <p>Turbo AI's <a href="/ai-engineering-software-development">AI engineering</a> and <a href="/quality-engineering">Quality Engineering</a> practices connect implementation with testing and ongoing reliability for smaller organisations.</p>
       <h2>Where Cloud Fits In</h2>
       <p>For SMBs, cloud is almost always the right infrastructure choice for AI — avoiding capital investment while providing the flexibility to scale as AI usage grows. Turbo AI's <a href="/cloud-solutions">Cloud Solutions</a> services are designed to be right-sized for SMB environments, not just scaled-down enterprise solutions.</p>
       <h2>Is AI Consulting Worth It for Your SMB?</h2>

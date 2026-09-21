@@ -63,7 +63,7 @@ export function PartnersMarqueeMobile() {
       <div
         className="overflow-x-hidden"
         ref={containerRef}
-        style={{ width: "100vw", marginLeft: "auto", marginRight: "auto" }}
+        style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
       >
         <div
           ref={contentRef}

@@ -1,10 +1,19 @@
 import { Container, Section } from "../components/Container";
+import { Helmet } from "react-helmet-async";
 import { useReveal } from "../hooks/useReveal";
 import { SectionLink } from "../components/SectionLink";
-import heroImage from "../assets/ai-trans-hero.png";
 import processImage from "../assets/ai-trans-img1.jpg";
 import networkingImage from "../assets/ai-trans-networkinglines.jpg";
 import { SEO } from "../components/SEO";
+import { Connect } from "../components/Connect";
+import { RelatedInsights } from "../components/LandingSEOSections";
+
+const transformationFaqs = [
+    { question: "What is the difference between AI implementation and AI transformation?", answer: "AI implementation is about putting tools in place. AI transformation goes a step further. It weaves intelligence into how decisions are made, how work flows, and how the business actually runs, day to day." },
+    { question: "Do we need advanced data infrastructure to get started?", answer: "Not necessarily. We start by looking at what you already have. From there, we suggest approaches that make sense, whether you're just beginning or already sitting on a lot of data." },
+    { question: "Is AI transformation only for large enterprises?", answer: "Not at all. In fact, mid-sized organizations often move faster because there's less red tape and fewer legacy systems to work around." },
+    { question: "How do you handle responsible AI and compliance?", answer: "We build AI with care from the start. That means being clear about how it works, keeping an eye on performance, and making sure it fits within the rules your organization needs to follow." },
+];
 
 export function AITransformation() {
     const { addElement } = useReveal(40);
@@ -17,33 +26,34 @@ export function AITransformation() {
                 {/* Background Image with Overlay */}
                 <div className="absolute inset-0 z-0">
                     <img
-                        src={heroImage}
-                        alt="AI Transformation Background"
-                        className="w-full h-full object-cover opacity-40"
+                        src="/enterprise/strategy-meeting.jpg"
+                        alt="Technology team discussing priorities around a meeting table"
+                        className="w-full h-full object-cover opacity-75"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-charcoalDeep/80 via-charcoalDeep/60 to-charcoalDeep" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-charcoalDeep/50 via-charcoalDeep/60 to-charcoalDeep" />
                 </div>
 
                 <div className="absolute inset-0 bg-gradient-to-b from-emerald/10 to-charcoal pointer-events-none z-0" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)] opacity-60" />
 
                 <Container className="relative z-10 w-full">
                     <div className="max-w-5xl mx-auto text-center md:text-left">
-                        <div ref={addElement} className="inline-block px-4 py-1.5 rounded-full border border-emeraldNeon/30 bg-emeraldNeon/10 text-emeraldNeon text-sm font-medium mb-8">
+                        <div className="inline-block px-4 py-1.5 rounded-full border border-emeraldNeon/30 bg-emeraldNeon/10 text-emeraldNeon text-sm font-medium mb-8">
                             Service Overview
                         </div>
                         <h1
-                            ref={addElement}
-                            className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 tracking-tight leading-none"
+                            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-8 tracking-tight leading-tight"
                         >
-                            AI Transformation <span className="text-emeraldNeon block mt-2">Canada</span>
+                            AI Strategy &amp; <span className="text-emeraldNeon block mt-2">Enterprise Transformation</span>
                         </h1>
                         <p
-                            ref={addElement}
                             className="text-xl md:text-2xl lg:text-3xl text-white/80 max-w-3xl leading-relaxed"
                         >
-                            End-to-end design, build, and operationalization of intelligent systems that deliver real results.
+                            From AI Ambition to Enterprise Capability
                         </p>
+                        <p className="mt-6 max-w-3xl text-base leading-relaxed text-white/80 md:text-lg">
+                            We help leadership teams identify valuable AI opportunities, assess readiness, and connect data, software, security, and operations into a practical path to production.
+                        </p>
+                        <SectionLink href="#connect" className="mt-8 inline-flex min-h-12 items-center rounded-md bg-blue-500 px-6 py-3 font-bold text-white transition hover:bg-blue-400">Schedule a Consultation</SectionLink>
                     </div>
                 </Container>
             </section>
@@ -165,7 +175,7 @@ export function AITransformation() {
                 <Container>
                     <div className="text-center mb-16">
                         <h2 ref={addElement} className="text-3xl md:text-4xl font-heading font-semibold text-white mb-6">
-                            Our End-to-End Approach
+                            From Assessment to Transformation
                         </h2>
                         <div ref={addElement} className="max-w-4xl mx-auto mb-12">
                             <img
@@ -184,28 +194,33 @@ export function AITransformation() {
                         {[
                             {
                                 num: "01",
-                                title: "Strategy & Readiness Assessment",
-                                content: "We start by understanding your organization, not your tech stack. Together, we identify high-value opportunities where AI can make a measurable difference. This phase results in a clear, realistic roadmap tied directly to business outcomes."
+                                title: "Discover",
+                                content: "We examine business objectives, operational challenges, technology, and the decisions where AI may create measurable value."
                             },
                             {
                                 num: "02",
-                                title: "Solution Design That Fits Your Organization",
-                                content: "We model AI based on how your teams already operate. Whether it's intelligent automation that reduces repetitive operations or GenAI to assist research, we design purpose-specific workflows that respect your compliance requirements so it actually works."
+                                title: "Assess",
+                                content: "We evaluate readiness across data, infrastructure, security, governance, applications, people, and operating processes."
                             },
                             {
                                 num: "03",
-                                title: "Build, Test, and Validate",
-                                content: "We do not use idealised examples to train and test models, but your real data. We address reliability, bias, and clarity at the very beginning. The aim is simple: confidence for leadership and technical teams alike."
+                                title: "Prioritise",
+                                content: "We separate high-value opportunities from experiments with limited operational or commercial benefit."
                             },
                             {
                                 num: "04",
-                                title: "Integration & Operationalization",
-                                content: "AI only matters once it fits naturally into how work already happens. We pay close attention to usability, ownership, and accountability so AI doesn’t become 'someone else’s tool' that no one really owns."
+                                title: "Architect",
+                                content: "We establish the data, AI, application, integration, infrastructure, and security architecture required for the intended outcome."
                             },
                             {
                                 num: "05",
-                                title: "Continuous Improvement & Measurable Outcomes",
-                                content: "AI is not a standstill. After systems are operational, we remain concerned about what comes next. We refine models, scale what works, and ensure AI remains pertinent as business requirements shift."
+                                title: "Implement",
+                                content: "We develop, test, integrate, and deploy the selected capabilities with clear ownership and validation."
+                            },
+                            {
+                                num: "06",
+                                title: "Evolve",
+                                content: "We monitor outcomes and improve AI capabilities as technology and business requirements develop."
                             }
                         ].map((step, i) => (
                             <div key={i} ref={addElement} className={`relative flex flex-col lg:flex-row gap-8 lg:gap-24 items-center ${i % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
@@ -224,6 +239,49 @@ export function AITransformation() {
                                 <div className="flex-1 hidden lg:block" />
                             </div>
                         ))}
+                    </div>
+                </Container>
+            </Section>
+
+            <Section className="border-y border-white/10 bg-charcoalDeep">
+                <Container>
+                    <div className="mb-10 max-w-3xl">
+                        <p className="text-sm font-bold uppercase text-blue-300">Enterprise Readiness</p>
+                        <h2 className="mt-3 text-3xl font-bold text-white md:text-5xl">AI Readiness Assessment</h2>
+                        <p className="mt-5 text-lg leading-relaxed text-white/70">Useful AI depends on more than model access. We examine the foundations that determine whether an initiative can be trusted, adopted, and maintained.</p>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        {[
+                            ["Data Readiness", "Quality, accessibility, ownership, and lineage of the information AI will use."],
+                            ["Technology Readiness", "Applications, integration points, and the condition of existing systems."],
+                            ["AI Maturity", "Current use cases, evaluation practices, and capacity to move beyond pilots."],
+                            ["Security Readiness", "Identity, access, privacy, and protection against new AI threat surfaces."],
+                            ["Governance", "Decision rights, policies, auditability, and human oversight."],
+                            ["Infrastructure", "Compute, storage, networking, reliability, and deployment options."],
+                            ["Talent & Skills", "The abilities teams need to build, operate, and use AI responsibly."],
+                            ["Operating Model", "Ownership, workflows, change management, and measures of success."],
+                        ].map(([title, description], index) => (
+                            <article key={title} className="border-t-2 border-blue-400 bg-[#07111F] p-6">
+                                <p className="text-xs font-bold text-blue-300">0{index + 1}</p>
+                                <h3 className="mt-4 text-xl font-bold text-white">{title}</h3>
+                                <p className="mt-3 text-sm leading-relaxed text-white/70">{description}</p>
+                            </article>
+                        ))}
+                    </div>
+                </Container>
+            </Section>
+
+            <Section className="bg-charcoal">
+                <Container>
+                    <p className="text-sm font-bold uppercase text-blue-300">Transformation Use Cases</p>
+                    <h2 className="mt-3 max-w-3xl text-3xl font-bold text-white md:text-5xl">Where strategy becomes an operating decision</h2>
+                    <div className="mt-10 grid gap-6 md:grid-cols-2">
+                        {[
+                            ["AI readiness and investment planning", "Assess data, technology, security, skills, governance, and operating ownership before committing to a major programme."],
+                            ["Opportunity portfolio", "Compare candidate use cases by business value, evidence, feasibility, decision impact, adoption, and delivery risk."],
+                            ["Enterprise AI roadmap", "Sequence foundation work, pilots, architecture, governance, capability building, and production releases around realistic dependencies."],
+                            ["Transformation governance", "Create decision rights, measures, review forums, and lifecycle controls so initiatives remain aligned after launch."],
+                        ].map(([title, body]) => <article key={title} className="border-t border-emeraldNeon/50 pt-5"><h3 className="text-xl font-bold text-white">{title}</h3><p className="mt-3 leading-relaxed text-white/70">{body}</p></article>)}
                     </div>
                 </Container>
             </Section>
@@ -312,6 +370,7 @@ export function AITransformation() {
                 </Container>
             </Section>
 
+            <Helmet><script type="application/ld+json">{JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: transformationFaqs.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })) })}</script></Helmet>
             {/* FAQ */}
             <Section className="bg-charcoalDeep border-t border-white/5">
                 <Container>
@@ -346,6 +405,14 @@ export function AITransformation() {
                 </Container>
             </Section>
 
+            <Section className="border-y border-white/10 bg-[#07111F]"><Container><p className="text-sm font-bold uppercase text-blue-300">Related Services and Platforms</p><h2 className="mt-3 text-3xl font-bold text-white md:text-5xl">Move from roadmap to enabling capability</h2><div className="mt-8 grid gap-5 md:grid-cols-3">{[
+                ["Data Engineering & AI Foundations", "/data-engineering-ai-foundations", "Prepare reliable, governed data for prioritized use cases."],
+                ["AI Engineering & Software Development", "/ai-engineering-software-development", "Turn validated concepts into maintained applications."],
+                ["AI Governance & Cybersecurity", "/ai-governance-cybersecurity", "Build oversight and security into the transformation lifecycle."],
+            ].map(([title, href, body]) => <SectionLink key={href} href={href} className="border-t border-blue-400/50 p-5"><h3 className="text-xl font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/70">{body}</p></SectionLink>)}</div></Container></Section>
+
+            <RelatedInsights slugs={["what-is-ai-transformation-in-business", "ai-adoption-in-enterprises-2025", "ai-roi-for-enterprises"]} title="AI strategy and transformation insights" intro="Explore readiness, adoption, and value decisions before moving from ambition to implementation." />
+
             {/* CTA */}
             <Section className="bg-emeraldNeon/10 py-24 text-center">
                 <Container>
@@ -365,6 +432,7 @@ export function AITransformation() {
                     </div>
                 </Container>
             </Section>
+            <Connect />
         </main>
     );
 }

@@ -82,6 +82,10 @@ export function Hero() {
               {copy.hero.cta.label}
             </SectionLink>
           </div>
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase text-white/70">
+            <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+            Made in Canada
+          </p>
 
           {/* Divider */}
           {copy.hero.divider && (

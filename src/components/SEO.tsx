@@ -51,7 +51,9 @@ export function SEO({ pageKey, title, description, image, url, keywords, type = 
         ],
         "address": {
             "@type": "PostalAddress",
-            "addressCountry": "GB"
+            "addressLocality": "Calgary",
+            "addressRegion": "Alberta",
+            "addressCountry": "CA"
         },
         "contactPoint": [
             {
@@ -98,6 +100,26 @@ export function SEO({ pageKey, title, description, image, url, keywords, type = 
         "description": meta.description
     } : null;
 
+    const pageSchema = type !== "article" ? {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": meta.url,
+        "url": meta.url,
+        "name": meta.title,
+        "description": meta.description,
+        "isPartOf": { "@type": "WebSite", "name": "Turbo AI", "url": siteUrl },
+        "publisher": { "@type": "Organization", "name": "Turbo AI", "url": siteUrl }
+    } : null;
+    const websiteSchema = pageKey === "home" ? {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        "name": "Turbo AI",
+        "url": siteUrl,
+        "inLanguage": "en-CA",
+        "publisher": { "@type": "Organization", "name": "Turbo AI", "url": siteUrl }
+    } : null;
+
     return (
         <Helmet defer={false} prioritizeSeoTags>
             <title>{meta.title}</title>
@@ -137,7 +159,7 @@ export function SEO({ pageKey, title, description, image, url, keywords, type = 
 
             {/* Structured Data (JSON-LD) */}
             <script type="application/ld+json">
-                {JSON.stringify(type === "article" ? articleSchema : organizationSchema)}
+                {JSON.stringify(type === "article" ? articleSchema : [organizationSchema, pageSchema, ...(websiteSchema ? [websiteSchema] : [])])}
             </script>
         </Helmet>
     );

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Home } from "./pages/Home";
@@ -9,7 +9,6 @@ import { RemoteInfrastructureManagement } from "./pages/RemoteInfrastructureMana
 import { DigitalArchitecture } from "./pages/DigitalArchitecture";
 import { CyberSecuritySolutions } from "./pages/CyberSecuritySolutions";
 import { AIDataInsights } from "./pages/AIDataInsights";
-import { OffshoreDevelopment } from "./pages/OffshoreDevelopment";
 import { CloudSolutions } from "./pages/CloudSolutions";
 import { QualityEngineering } from "./pages/QualityEngineering";
 import { Industries } from "./pages/Industries";
@@ -19,6 +18,7 @@ import { AIEngineeringSoftwareDevelopment } from "./pages/AIEngineeringSoftwareD
 import { AIGovernanceCybersecurity } from "./pages/AIGovernanceCybersecurity";
 import { CloudInfrastructureAICompute } from "./pages/CloudInfrastructureAICompute";
 import { IndustriesWeServe } from "./pages/IndustriesWeServe";
+import { IndustryDetail } from "./pages/IndustryDetail";
 import { EnterpriseAISolutions } from "./pages/EnterpriseAISolutions";
 import { ProductsIndex } from "./pages/ProductsIndex";
 import { DCI360 } from "./pages/DCI360";
@@ -77,7 +77,6 @@ function App() {
         <Route path="/remote-infrastructure-management" element={<RemoteInfrastructureManagement />} />
         <Route path="/cyber-security-solutions" element={<CyberSecuritySolutions />} />
         <Route path="/ai-data-insights" element={<AIDataInsights />} />
-        <Route path="/offshore-development" element={<OffshoreDevelopment />} />
         <Route path="/cloud-solutions" element={<CloudSolutions />} />
         <Route path="/quality-engineering" element={<QualityEngineering />} />
         <Route path="/generative-ai-agentic-ai" element={<GenerativeAgenticAI />} />
@@ -92,8 +91,9 @@ function App() {
         <Route path="/products/i-lakehouse" element={<ILakehouse />} />
         <Route path="/products/adrs" element={<ADRS />} />
         <Route path="/about" element={<AboutTurboAI />} />
-        <Route path="/industries" element={<Industries />} />
+        <Route path="/industries" element={<Navigate to="/industries/energy" replace />} />
         <Route path="/industries/energy" element={<Industries />} />
+        <Route path="/industries/:slug" element={<IndustryDetail />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
       </Routes>

@@ -23,13 +23,13 @@ export function IndustriesWeServe() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/90 to-[#020617]/30" />
         <Container className="relative z-10 flex min-h-[560px] items-center">
           <div className="max-w-4xl">
-            <p ref={addElement} className="kicker text-blue-200">
+            <p className="kicker text-blue-200">
               {industriesHero.eyebrow}
             </p>
-            <h1 ref={addElement} className="text-4xl font-extrabold leading-tight text-white sm:text-5xl md:text-7xl">
+            <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl md:text-7xl">
               {industriesHero.title}
             </h1>
-            <p ref={addElement} className="mt-5 text-2xl font-semibold text-blue-200 md:text-3xl">
+            <p className="mt-5 text-2xl font-semibold text-blue-200 md:text-3xl">
               {industriesHero.subtitle}
             </p>
             <p ref={addElement} className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-200">
@@ -43,9 +43,9 @@ export function IndustriesWeServe() {
         <Container>
           <div className="mb-12 max-w-3xl">
             <p className="kicker text-cyan-200">Real Economy AI</p>
-            <h2 className="text-3xl font-bold text-white md:text-5xl">Industry contexts, not keyword lists</h2>
+            <h2 className="text-3xl font-bold text-white md:text-5xl">AI shaped by industry realities</h2>
             <p className="mt-4 text-slate-300">
-              Each sector has different data, risk, process, and adoption realities. These pages point visitors to the most relevant Turbo AI capabilities without inventing unsupported claims.
+              Each sector has distinct data, operational, and adoption needs. Explore where Turbo AI can connect enterprise systems, strengthen decisions, and support practical AI deployment.
             </p>
           </div>
 
@@ -79,6 +79,7 @@ export function IndustriesWeServe() {
                   </div>
                   <SectionLink
                     href={industry.href}
+                    aria-label={`Explore ${industry.name}`}
                     className="mt-6 inline-flex items-center text-sm font-bold text-blue-300 transition hover:text-white"
                   >
                     Explore Industry

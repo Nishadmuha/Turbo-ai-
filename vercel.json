@@ -5,6 +5,13 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
+  "redirects": [
+    {
+      "source": "/industries",
+      "destination": "/industries/energy",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

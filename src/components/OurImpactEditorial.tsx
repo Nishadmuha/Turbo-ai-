@@ -120,6 +120,7 @@ function CaseModal({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden bg-neutral-950 border border-white/10 p-6 md:p-8 text-left align-middle shadow-xl transition-all">
+                <p className="mb-4 text-xs text-blue-300">Illustrative scenario; not a verified client result.</p>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     {caseStudy.kicker && (
@@ -195,6 +196,7 @@ function CaseModal({
 function InlineExpansion({ caseStudy }: { caseStudy: CaseStudy }) {
   return (
     <div className="border-t border-white/10 bg-neutral-950/50 p-5 md:p-6">
+      <p className="mb-4 text-xs text-blue-300">Illustrative scenario; not a verified client result.</p>
       <div className="grid gap-4">
         <div>
           <h4 className="text-xs font-semibold text-blue-400 uppercase">
@@ -267,10 +269,10 @@ export default function OurImpactEditorial({
               id="impact-heading"
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16"
             >
-              Our Impact
+              Application Scenarios
             </h2>
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              Selected programs and outcomes.
+              Illustrative scenarios, not verified customer results.
             </p>
           </div>
         </div>
@@ -298,6 +300,7 @@ export default function OurImpactEditorial({
             ></div>
 
             <div className="relative p-6 md:p-10">
+              <p className="mb-3 text-xs font-semibold uppercase text-blue-300">Illustrative scenario</p>
               {hero.kicker && (
                 <div className="text-[11px] uppercase tracking-wide text-blue-300">
                   {hero.kicker}
@@ -314,7 +317,7 @@ export default function OurImpactEditorial({
                 onClick={() => openCase(hero)}
                 className="mt-6 inline-flex items-center text-sm font-medium text-blue-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60 transition-colors duration-300"
               >
-                Read full story
+                Explore scenario
                 <span className="ml-1 inline-block translate-y-[1px] transition-transform group-hover:translate-x-0.5">
                   →
                 </span>
@@ -356,6 +359,7 @@ export default function OurImpactEditorial({
                 ></div>
 
                 <div className="relative p-5 md:p-6">
+                  <p className="mb-2 text-xs font-semibold uppercase text-blue-300">Illustrative scenario</p>
                   <div className="text-[10px] uppercase tracking-wide text-blue-300/80">
                     {cs.industry || cs.kicker}
                   </div>
@@ -370,7 +374,7 @@ export default function OurImpactEditorial({
                     onClick={() => openCase(cs)}
                     className="mt-4 inline-flex items-center text-sm font-medium text-blue-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60 transition-colors duration-300"
                   >
-                    Read full story
+                    Explore scenario
                     <span className="ml-1 inline-block translate-y-[1px] transition-transform group-hover:translate-x-0.5">
                       →
                     </span>

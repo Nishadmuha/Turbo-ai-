@@ -1,6 +1,7 @@
 import { ArrowLongRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Helmet } from "react-helmet-async";
 import { seoConfig } from "../content/seo";
+import { SEO } from "./SEO";
 import { Container } from "./Container";
 import { SectionLink } from "./SectionLink";
 
@@ -8,33 +9,21 @@ type ProductPageKey = "dci360" | "iLakehouse" | "adrs";
 
 export function ProductSEO({ pageKey }: { pageKey: ProductPageKey }) {
   const meta = seoConfig[pageKey];
+  const siteUrl = import.meta.env.VITE_BASE_URL || "https://turbo-ai.ca";
   const schema = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: meta.title,
-    description: meta.description,
-    url: meta.url,
-    image: meta.image,
-    isPartOf: { "@type": "WebSite", name: "Turbo AI", url: new URL(meta.url || "https://turbo-ai.ca").origin },
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Products", item: `${siteUrl}/products` },
+      { "@type": "ListItem", position: 3, name: pageKey === "dci360" ? "DCI 360" : pageKey === "iLakehouse" ? "i-Lakehouse" : "ADRS", item: meta.url },
+    ],
   };
 
   return (
     <>
-      <Helmet><title>{meta.title}</title></Helmet>
-      <meta name="description" content={meta.description} />
-      <meta name="keywords" content={meta.keywords} />
-      <link rel="canonical" href={meta.url} />
-      <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Turbo AI" />
-      <meta property="og:url" content={meta.url} />
-      <meta property="og:title" content={meta.title} />
-      <meta property="og:description" content={meta.description} />
-      <meta property="og:image" content={meta.image} />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={meta.title} />
-      <meta name="twitter:description" content={meta.description} />
-      <meta name="twitter:image" content={meta.image} />
-      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+      <SEO pageKey={pageKey} />
+      <Helmet><script type="application/ld+json">{JSON.stringify(schema)}</script></Helmet>
     </>
   );
 }
@@ -73,8 +62,14 @@ export function ProductRelatedLinks({ links }: { links: RelatedLink[] }) {
 }
 
 export function ProductFAQ({ title, intro, items }: { title: string; intro: string; items: ProductQuestion[] }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })),
+  };
   return (
     <section className="product-section product-faq">
+      <Helmet><script type="application/ld+json">{JSON.stringify(schema)}</script></Helmet>
       <Container className="product-faq-layout">
         <div>
           <p className="product-eyebrow">FREQUENTLY ASKED QUESTIONS</p>

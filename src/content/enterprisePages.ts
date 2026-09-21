@@ -1,20 +1,6 @@
-import aiStrategyImage from "../assets/ai-trans-hero.png";
-import agenticImage from "../assets/ai-trans-networkinglines.jpg";
-import dataImage from "../assets/ai-data-insights-hero.png";
-import engineeringImage from "../assets/digital-architecture-hero.png";
-import governanceImage from "../assets/cyber-security-hero.png";
-import cloudImage from "../assets/cloud-solutions-hero.png";
-import industriesImage from "../assets/Hero Background.jpg";
-import solutionsImage from "../assets/Insight Visualization.jpg";
-import productsImage from "../assets/energy-hero-platform.jpg";
-import aboutImage from "../assets/Canadian Context Map.jpg";
-import energyImage from "../assets/smarter-operations-pipes.jpg";
-import financeImage from "../assets/blog-grid-analytics.jpg";
-import maintenanceImage from "../assets/blog-predictive-maintenance.jpg";
-import hydrogenImage from "../assets/blog-hydrogen-facility.jpg";
-import remoteImage from "../assets/remote-infrastructure-hero.png";
-import qualityImage from "../assets/quality-engineering-hero.png";
-import cloudHeroImage from "../assets/cloud-solutions-hero.png";
+import energyImage from "../assets/energy-hero-platform.jpg";
+
+const photo = (name: string) => `/enterprise/${name}`;
 
 export interface Diagram {
   title: string;
@@ -27,6 +13,15 @@ export interface ContentBlock {
   title: string;
   body: string;
   items?: string[];
+  image?: string;
+  imageAlt?: string;
+}
+
+export interface DetailSection {
+  eyebrow?: string;
+  title: string;
+  intro: string;
+  items: { title: string; body: string }[];
 }
 
 export interface EnterprisePageContent {
@@ -39,6 +34,7 @@ export interface EnterprisePageContent {
   heroAlt: string;
   diagrams?: Diagram[];
   blocks: ContentBlock[];
+  detailSections?: DetailSection[];
   technologies?: string[];
   ctaTitle: string;
   ctaBody: string;
@@ -51,6 +47,9 @@ export interface IndustryCard {
   alt: string;
   applications: string[];
   href: string;
+  relatedHref: string;
+  foundation: string;
+  outcome: string;
 }
 
 export interface ProductCard {
@@ -70,8 +69,8 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "From AI That Answers to AI That Acts",
     intro:
       "Turbo AI helps organizations move from isolated generative AI experiments to secure, integrated systems that support knowledge work, automate workflows, and stay accountable to human oversight.",
-    heroImage: agenticImage,
-    heroAlt: "Professional team reviewing enterprise technology architecture screens",
+    heroImage: photo("ai-team.jpg"),
+    heroAlt: "Engineers collaborating at a technology workshop",
     diagrams: [
       {
         title: "Traditional Software",
@@ -125,6 +124,18 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
         ],
       },
     ],
+    detailSections: [
+      {
+        eyebrow: "Enterprise Applications",
+        title: "Where generative and agentic AI fit",
+        intro: "Generative systems help people work with information. Agents can carry out bounded steps across approved tools, with permissions and review matched to the risk of each action.",
+        items: [
+          { title: "Knowledge and document work", body: "Ground answers in approved enterprise sources, show evidence, and route uncertain results to a person." },
+          { title: "Service workflows", body: "Assist with triage, drafting, and next steps while keeping customer records and decisions under controlled access." },
+          { title: "Tool-using agents", body: "Give agents narrow tool permissions, clear goals, audit trails, and a human approval point before consequential actions." },
+        ],
+      },
+    ],
     technologies: ["OpenAI", "Anthropic", "Microsoft", "Google", "NVIDIA"],
     ctaTitle: "Design AI that can be trusted in the workflow.",
     ctaBody: "Start with a bounded use case, a clear control model, and a path to production.",
@@ -136,8 +147,8 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "Building the Data Foundation for Intelligence",
     intro:
       "Enterprise AI depends on reliable data movement, governed data products, and operational pipelines that can support analytics, automation, and machine learning in production.",
-    heroImage: dataImage,
-    heroAlt: "Enterprise data and analytics platform visualization",
+    heroImage: photo("data-centre-operations.jpg"),
+    heroAlt: "Server infrastructure supporting enterprise data workloads",
     diagrams: [
       {
         title: "Enterprise Data Architecture",
@@ -187,7 +198,20 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
         eyebrow: "Detection and Response",
         title: "Autonomous Detection & Response System",
         body:
-          "ADRS is communicated through a careful workflow model: detection, analysis, risk identification, alerting, and response. The page avoids claiming fully autonomous operation beyond the evidence available in the supplied requirements.",
+          "ADRS brings detection, assessment, and response into a connected workflow. Teams can review signals in context, identify emerging risks, and coordinate the next action with greater clarity.",
+      },
+    ],
+    detailSections: [
+      {
+        eyebrow: "Data Foundation",
+        title: "From fragmented sources to usable data",
+        intro: "AI depends on reliable movement, quality, ownership, and access to data. Modernization begins with the systems and decisions that matter most, then expands through governed data products.",
+        items: [
+          { title: "Integrate and modernize", body: "Connect existing applications, files, and event streams without assuming every workload must move at once." },
+          { title: "Quality and lineage", body: "Validate critical fields, document transformations, and make the origin of important data inspectable." },
+          { title: "i-Lakehouse", body: "Organize open, governed data for analytics and AI across cloud, hybrid, on-premise, and edge environments." },
+          { title: "ADRS", body: "Feed detection and risk-identification workflows with dependable signals; response remains subject to defined controls and oversight." },
+        ],
       },
     ],
     technologies: ["Apache Iceberg", "Databricks", "Snowflake", "Apache Spark", "NVIDIA"],
@@ -201,8 +225,8 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "Engineering Intelligence Into Enterprise Applications",
     intro:
       "Turbo AI combines product thinking, software engineering, and applied AI delivery to build applications that move from prototype to production with discipline.",
-    heroImage: engineeringImage,
-    heroAlt: "Software engineering architecture displayed across technical workstations",
+    heroImage: photo("software-engineering.jpg"),
+    heroAlt: "Software engineers working together at laptops",
     diagrams: [
       {
         title: "AI Engineering Lifecycle",
@@ -237,6 +261,35 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
           "AI delivery succeeds when the software around the model is strong: architecture, testing, deployment, monitoring, and continuous improvement are treated as part of the product.",
       },
     ],
+    detailSections: [
+      {
+        eyebrow: "Delivery Lifecycle",
+        title: "From requirement to reliable operation",
+        intro: "Each stage has a clear output and a decision point so promising prototypes do not become unowned production systems.",
+        items: [
+          { title: "Business requirement", body: "Define the user workflow, measurable objective, constraints, and who will own the result." },
+          { title: "Architecture", body: "Select data, application, model, integration, and security patterns that fit the existing environment." },
+          { title: "Prototype", body: "Test the highest-risk assumptions with representative data and a bounded user journey." },
+          { title: "Validation", body: "Evaluate quality, reliability, failure modes, accessibility, and human review before wider release." },
+          { title: "Engineering", body: "Build tested interfaces, APIs, pipelines, and deployment automation around the model or workflow." },
+          { title: "Production", body: "Release with access controls, monitoring, support ownership, and rollback procedures." },
+          { title: "Continuous improvement", body: "Review feedback, drift, incidents, and cost; update the system when needs and evidence change." },
+        ],
+      },
+      {
+        eyebrow: "Engineering Capabilities",
+        title: "Software that makes AI usable",
+        intro: "The model is one part of a dependable enterprise application. The surrounding software determines whether people can trust and operate it.",
+        items: [
+          { title: "Enterprise AI applications", body: "Connect AI functions to roles, business rules, records, and existing work rather than isolating them in demos." },
+          { title: "SaaS and product engineering", body: "Design usable interfaces and scalable services with clear tenancy, security, and maintenance boundaries." },
+          { title: "Copilots and RAG", body: "Build assistants around governed retrieval, cited answers, evaluation, and appropriate human oversight." },
+          { title: "Intelligent automation", body: "Orchestrate repetitive steps with validation, exception paths, and accountable approvals." },
+          { title: "Application modernization", body: "Improve existing systems and integrations incrementally while preserving operational continuity." },
+          { title: "MLOps and LLMOps", body: "Version data and models, automate testing and deployment, and monitor behavior after release." },
+        ],
+      },
+    ],
     technologies: ["Python", "GitHub", "Docker", "Kubernetes", "Terraform"],
     ctaTitle: "Turn AI prototypes into usable enterprise software.",
     ctaBody: "Bring us a workflow, application idea, or stalled pilot and we will help shape the delivery path.",
@@ -248,8 +301,8 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "Innovation Requires Trust",
     intro:
       "Turbo AI helps organizations establish the policies, controls, security practices, and oversight needed to adopt AI responsibly in complex enterprise environments.",
-    heroImage: governanceImage,
-    heroAlt: "Security operations center with analysts monitoring enterprise systems",
+    heroImage: photo("security-operations.jpg"),
+    heroAlt: "Analysts collaborating in a cyber operations centre",
     blocks: [
       {
         eyebrow: "AI Governance",
@@ -287,6 +340,18 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
         ],
       },
     ],
+    detailSections: [
+      {
+        eyebrow: "Operating Controls",
+        title: "Governance across the AI lifecycle",
+        intro: "Controls should be proportionate to the use case, the data it touches, and the impact of a wrong or unauthorized result. Frameworks can guide assessment; listing them does not claim certification.",
+        items: [
+          { title: "Risk and responsibility", body: "Document intended use, owners, evaluation criteria, escalation paths, and the human decisions that must remain explicit." },
+          { title: "Identity and data access", body: "Apply least privilege to users, tools, APIs, and retrieval sources; inspect how sensitive information moves." },
+          { title: "Monitoring and response", body: "Observe model behavior and security events, investigate anomalies, and maintain a practical incident-response process." },
+        ],
+      },
+    ],
     technologies: ["NIST", "ISO 27001", "ISO 42001", "SOC 2"],
     ctaTitle: "Build confidence before AI scales.",
     ctaBody: "We can help review governance, security, and operational risk for your AI initiatives.",
@@ -298,8 +363,8 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "Infrastructure for the Intelligent Enterprise",
     intro:
       "AI workloads need cloud architecture, data platforms, compute planning, observability, and automation that can support both experimentation and production demand.",
-    heroImage: cloudImage,
-    heroAlt: "Enterprise data centre and cloud infrastructure environment",
+    heroImage: photo("data-centre.jpg"),
+    heroAlt: "Rows of server racks inside a data centre",
     diagrams: [
       {
         title: "AI Infrastructure Architecture",
@@ -327,6 +392,19 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
         ],
       },
     ],
+    detailSections: [
+      {
+        eyebrow: "AI Compute",
+        title: "Infrastructure matched to model workloads",
+        intro: "Training, tuning, retrieval, and inference place different demands on compute, storage, networking, latency, and cost. The right architecture starts with the workload and the data it needs.",
+        items: [
+          { title: "Accelerated compute", body: "Plan GPU and other accelerator capacity around model size, utilization, scheduling, and the economics of each workload." },
+          { title: "Data and compute placement", body: "Keep data movement, locality, privacy, and network throughput visible when choosing cloud, hybrid, or on-premise deployment." },
+          { title: "Reliable deployment", body: "Use repeatable infrastructure, monitoring, access controls, and recovery practices so services remain observable in production." },
+          { title: "Scale with evidence", body: "Measure latency, throughput, resilience, and cost before expanding capacity or changing deployment patterns." },
+        ],
+      },
+    ],
     technologies: ["AWS", "Microsoft Azure", "Google Cloud", "NVIDIA", "Kubernetes"],
     ctaTitle: "Prepare your infrastructure for enterprise AI.",
     ctaBody: "We can help map workloads, risks, and platform requirements before major investment.",
@@ -338,40 +416,56 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "Turning Business Problems Into Intelligent Systems",
     intro:
       "Turbo AI frames AI around business problems first, then designs the data, models, integrations, and governance needed to turn them into reliable enterprise systems.",
-    heroImage: solutionsImage,
-    heroAlt: "Enterprise insight visualization used for business decision support",
+    heroImage: photo("manufacturing.png"),
+    heroAlt: "Industrial production line where operational data informs decisions",
     blocks: [
       {
         title: "Customer Intelligence",
         body: "Business problem: fragmented customer signals. AI approach: unify behavioral, transactional, and service data. Enterprise application: next-best-action, segmentation, and service prioritization. Expected value: clearer decisions and more relevant customer experiences.",
+        image: photo("retail.jpg"),
+        imageAlt: "Retail store where customer and demand data can inform service",
       },
       {
         title: "Intelligent Document Processing",
         body: "Business problem: high-volume manual document handling. AI approach: extraction, classification, validation, and human review. Enterprise application: claims, contracts, invoices, onboarding, and compliance workflows. Expected value: faster throughput and fewer manual bottlenecks.",
+        image: photo("insurance.jpg"),
+        imageAlt: "Professionals reviewing documents in an office",
       },
       {
         title: "Knowledge Intelligence",
         body: "Business problem: expertise trapped across documents and teams. AI approach: governed retrieval, semantic search, and knowledge assistants. Enterprise application: internal support, research, policy lookup, and decision preparation. Expected value: faster access to trusted information.",
+        image: photo("ai-team.jpg"),
+        imageAlt: "Technology teams collaborating around shared knowledge",
       },
       {
         title: "Predictive Maintenance",
         body: "Business problem: unplanned downtime and limited asset visibility. AI approach: telemetry analysis, anomaly detection, and maintenance prioritization. Enterprise application: industrial asset monitoring and work-order intelligence. Expected value: better planning and reduced operational disruption.",
+        image: photo("manufacturing.png"),
+        imageAlt: "Manufacturing production line with equipment to monitor",
       },
       {
         title: "Decision Intelligence",
         body: "Business problem: slow decisions across complex operating data. AI approach: signal aggregation, scenario analysis, and decision support. Enterprise application: executive dashboards, operational command centers, and planning workflows. Expected value: decisions with more context and traceability.",
+        image: photo("strategy-meeting.jpg"),
+        imageAlt: "Team reviewing decisions together in a meeting room",
       },
       {
         title: "Intelligent Automation",
         body: "Business problem: repetitive processes that strain teams. AI approach: workflow automation with validation and exception handling. Enterprise application: service operations, finance workflows, and back-office processes. Expected value: more consistent execution and better use of skilled staff time.",
+        image: photo("automotive.jpg"),
+        imageAlt: "Automotive production line illustrating coordinated workflows",
       },
       {
         title: "Fraud & Anomaly Detection",
         body: "Business problem: risks hidden in high-volume transaction patterns. AI approach: anomaly detection, behavioral modeling, and alert triage. Enterprise application: payment monitoring, claims review, and security operations. Expected value: earlier detection and more focused investigation.",
+        image: photo("finance.jpg"),
+        imageAlt: "Financial services environment where risk signals are reviewed",
       },
       {
         title: "Supply-Chain Intelligence",
         body: "Business problem: limited visibility across demand, inventory, and logistics. AI approach: forecasting, event detection, and decision support. Enterprise application: logistics planning, inventory risk review, and supplier monitoring. Expected value: better resilience and coordination.",
+        image: photo("logistics.jpg"),
+        imageAlt: "Workers and forklifts in a logistics warehouse",
       },
     ],
     ctaTitle: "Start with the problem worth solving.",
@@ -385,144 +479,192 @@ export const industriesWeServe: IndustryCard[] = [
     description:
       "Energy operators work across capital-intensive assets, remote environments, and safety-critical workflows. Turbo AI applies data engineering and AI to improve asset intelligence, operational visibility, and decision support.",
     image: energyImage,
-    alt: "Industrial energy pipeline infrastructure",
+    alt: "Offshore oil and gas production platform at sea",
     applications: ["Asset intelligence", "Predictive maintenance", "Operational analytics"],
     href: "/industries/energy",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Connect field, asset, and maintenance data while retaining the controls required for safety-critical operations.",
+    outcome: "Give operations teams a clearer basis for maintenance prioritization and production decisions.",
   },
   {
     name: "Financial Services",
     description:
       "Financial institutions need secure, explainable intelligence across risk, operations, customers, and compliance. AI can support better prioritization, document workflows, fraud detection, and decision intelligence.",
-    image: financeImage,
-    alt: "Financial operations analytics screen",
+    image: photo("finance.jpg"),
+    alt: "Interior of a financial services office",
     applications: ["Fraud detection", "Document intelligence", "Customer analytics"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/financial-services",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Bring transaction, customer, and risk data into governed pipelines with traceable access and review.",
+    outcome: "Help analysts prioritize exceptions and serve customers with more relevant context.",
   },
   {
     name: "Insurance",
     description:
       "Insurance teams manage high document volume, risk assessment, claims complexity, and regulatory expectations. AI can help accelerate review while keeping human oversight in the loop.",
-    image: solutionsImage,
-    alt: "Insurance and enterprise analytics visualization",
+    image: photo("insurance.jpg"),
+    alt: "Two professionals reviewing documents in an office",
     applications: ["Claims triage", "Policy intelligence", "Anomaly detection"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/insurance",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Organize policy, claims, and correspondence data so reviewers can find the right evidence without losing oversight.",
+    outcome: "Reduce repetitive document work while keeping consequential decisions with accountable teams.",
   },
   {
     name: "Healthcare",
     description:
       "Healthcare organizations require careful, privacy-aware technology that supports clinicians, administrators, and patients. AI can improve knowledge access, operations, and document-heavy workflows when governed properly.",
-    image: qualityImage,
-    alt: "Healthcare technology and quality engineering environment",
+    image: photo("healthcare.jpg"),
+    alt: "Healthcare professionals working together in a clinical setting",
     applications: ["Knowledge assistants", "Operations analytics", "Document processing"],
-    href: "/ai-governance-cybersecurity",
+    href: "/industries/healthcare",
+    relatedHref: "/ai-governance-cybersecurity",
+    foundation: "Design privacy-aware access to clinical and administrative information before introducing assistants or analytics.",
+    outcome: "Support faster knowledge access and more consistent operations without replacing clinical judgment.",
   },
   {
     name: "Manufacturing",
     description:
       "Manufacturers depend on equipment uptime, quality, supply continuity, and production visibility. AI can connect operational data to practical decision support across plants and teams.",
-    image: maintenanceImage,
-    alt: "Industrial equipment used for maintenance operations",
+    image: photo("manufacturing.png"),
+    alt: "Manufacturing assembly line inside a production facility",
     applications: ["Predictive maintenance", "Quality intelligence", "Production analytics"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/manufacturing",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Unify production, quality, and equipment signals in data products that engineers can trust.",
+    outcome: "Improve planning around maintenance, throughput, and quality exceptions.",
   },
   {
     name: "Construction",
     description:
       "Construction programs involve moving schedules, site conditions, documents, suppliers, and equipment. AI can support planning visibility, risk identification, and project knowledge management.",
-    image: remoteImage,
-    alt: "Remote infrastructure and field operations technology",
+    image: photo("construction.jpg"),
+    alt: "Workers coordinating activity on a construction site",
     applications: ["Project intelligence", "Safety analytics", "Equipment monitoring"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/construction",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Connect schedules, site reports, equipment records, and project documents across delivery teams.",
+    outcome: "Surface emerging project risks earlier and make field knowledge easier to act on.",
   },
   {
     name: "Automotive & Mobility",
     description:
       "Mobility businesses manage connected operations across manufacturing, service, logistics, and customer experience. AI can support quality, forecasting, service intelligence, and operational automation.",
-    image: engineeringImage,
-    alt: "Engineering architecture for mobility systems",
+    image: photo("automotive.jpg"),
+    alt: "Automotive assembly line in a vehicle factory",
     applications: ["Quality analytics", "Service copilots", "Supply forecasting"],
-    href: "/ai-engineering-software-development",
+    href: "/industries/automotive-mobility",
+    relatedHref: "/ai-engineering-software-development",
+    foundation: "Join manufacturing, service, and supply data across the vehicle lifecycle with reliable integration.",
+    outcome: "Give teams stronger quality signals and more responsive service workflows.",
   },
   {
     name: "Retail",
     description:
       "Retail teams work across demand, inventory, pricing, service, and digital commerce. AI can strengthen customer intelligence and automate knowledge-heavy operational workflows.",
-    image: hydrogenImage,
-    alt: "Modern commercial and operations environment",
+    image: photo("retail.jpg"),
+    alt: "Interior of a retail store with merchandise displays",
     applications: ["Customer intelligence", "Demand signals", "Service automation"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/retail",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Connect store, commerce, inventory, and service signals without treating customers as a single data point.",
+    outcome: "Improve demand decisions and help teams respond to customers with useful context.",
   },
   {
     name: "Supply Chain & Logistics",
     description:
       "Supply-chain networks require better visibility across inventory, transportation, facilities, and disruption signals. AI can improve forecasting, exception handling, and decision support.",
-    image: cloudHeroImage,
-    alt: "Enterprise infrastructure supporting supply-chain systems",
+    image: photo("logistics.jpg"),
+    alt: "Warehouse workers moving goods with forklifts",
     applications: ["Logistics intelligence", "Inventory risk", "Route and demand analysis"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/supply-chain-logistics",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Link inventory, shipment, supplier, and demand data into a timely operational view.",
+    outcome: "Spot exceptions sooner and improve coordination across planning and fulfillment.",
   },
   {
     name: "Telecommunications",
     description:
       "Telecommunications providers operate distributed networks, service workflows, customer data, and infrastructure programs. AI can support network operations, customer service, and field intelligence.",
-    image: agenticImage,
-    alt: "Network technology visualization for enterprise operations",
+    image: photo("telecom.jpg"),
+    alt: "Telecommunications towers supporting a distributed network",
     applications: ["Network operations", "Customer assistants", "Incident triage"],
-    href: "/cloud-infrastructure-ai-compute",
+    href: "/industries/telecommunications",
+    relatedHref: "/cloud-infrastructure-ai-compute",
+    foundation: "Bring network telemetry, incident records, and customer-service signals together with appropriate access controls.",
+    outcome: "Help operators triage incidents and plan interventions across distributed assets.",
   },
   {
     name: "Utilities",
     description:
       "Utilities balance asset reliability, regulatory duties, demand shifts, and field operations. AI can support grid analytics, outage intelligence, and maintenance planning.",
-    image: financeImage,
-    alt: "Grid analytics and operational data screen",
+    image: photo("utilities.jpg"),
+    alt: "Electrical power substation serving a utility network",
     applications: ["Grid intelligence", "Asset analytics", "Outage support"],
-    href: "/enterprise-ai-solutions",
+    href: "/industries/utilities",
+    relatedHref: "/enterprise-ai-solutions",
+    foundation: "Combine grid, asset, weather, and field-service information within governed operational systems.",
+    outcome: "Support outage response and maintenance planning with clearer evidence.",
   },
   {
     name: "Government",
     description:
       "Public-sector organizations need secure, accessible, and accountable technology. AI can improve citizen service, knowledge access, records workflows, and program operations when deployed with governance.",
-    image: aboutImage,
-    alt: "Canadian context map for public-sector technology work",
+    image: photo("government.jpg"),
+    alt: "Centre Block on Parliament Hill in Ottawa",
     applications: ["Knowledge systems", "Document intelligence", "Service operations"],
-    href: "/ai-governance-cybersecurity",
+    href: "/industries/government",
+    relatedHref: "/ai-governance-cybersecurity",
+    foundation: "Establish accessible, auditable information flows before deploying AI into public-service workflows.",
+    outcome: "Make records and policy knowledge easier to use while preserving human accountability.",
   },
   {
     name: "Defence & Intelligence",
     description:
       "Defence and intelligence environments require careful controls, secure architectures, and human oversight. AI can help structure information, detect signals, and support analysis workflows.",
-    image: governanceImage,
-    alt: "Secure operations center for mission-critical environments",
+    image: photo("defence.jpg"),
+    alt: "Personnel in a mission command operations centre",
     applications: ["Signal triage", "Knowledge intelligence", "Secure workflow automation"],
-    href: "/ai-governance-cybersecurity",
+    href: "/industries/defence-intelligence",
+    relatedHref: "/ai-governance-cybersecurity",
+    foundation: "Apply least-privilege access, traceability, and human review to sensitive information workflows.",
+    outcome: "Help authorized analysts identify relevant signals without weakening operational controls.",
   },
   {
     name: "Semiconductors",
     description:
       "Semiconductor operations involve complex engineering, supply chains, quality demands, and specialized data. AI can support process insight, engineering knowledge, and operational decision support.",
-    image: aiStrategyImage,
-    alt: "Advanced technology architecture for semiconductor operations",
+    image: photo("semiconductors.jpg"),
+    alt: "Technician working inside a semiconductor clean room",
     applications: ["Engineering intelligence", "Quality analytics", "Supply risk"],
-    href: "/data-engineering-ai-foundations",
+    href: "/industries/semiconductors",
+    relatedHref: "/data-engineering-ai-foundations",
+    foundation: "Organize process, quality, and equipment data with lineage that engineers can inspect.",
+    outcome: "Improve investigation of production variation and supply risk.",
   },
   {
     name: "Technology & SaaS",
     description:
       "Technology companies need to ship reliable products while integrating AI into user workflows. Turbo AI supports product architecture, AI engineering, observability, and secure delivery.",
-    image: engineeringImage,
-    alt: "Software engineering and SaaS product architecture",
+    image: photo("software-engineering.jpg"),
+    alt: "Software developers collaborating around laptops",
     applications: ["AI copilots", "SaaS engineering", "Product analytics"],
-    href: "/ai-engineering-software-development",
+    href: "/industries/technology-saas",
+    relatedHref: "/ai-engineering-software-development",
+    foundation: "Design product telemetry, data access, and AI integration alongside secure software delivery.",
+    outcome: "Ship AI features that can be tested, monitored, and improved after launch.",
   },
   {
     name: "Data Centres",
     description:
       "Data centres sit at the foundation of modern AI and cloud operations. AI can support infrastructure monitoring, energy optimization, capacity planning, and incident response.",
-    image: cloudImage,
-    alt: "Data centre infrastructure for AI compute",
+    image: photo("data-centre.jpg"),
+    alt: "Server racks in a data centre",
     applications: ["Infrastructure monitoring", "Capacity planning", "Energy analytics"],
-    href: "/cloud-infrastructure-ai-compute",
+    href: "/industries/data-centres",
+    relatedHref: "/cloud-infrastructure-ai-compute",
+    foundation: "Bring power, cooling, capacity, and incident signals into an integrated infrastructure view.",
+    outcome: "Give infrastructure teams a better basis for capacity planning and response.",
   },
 ];
 
@@ -598,8 +740,8 @@ export const productCards: ProductCard[] = [
 ];
 
 export const productsHero = {
-  image: productsImage,
-  alt: "Offshore energy technology platform used as a professional product architecture backdrop",
+  image: photo("data-centre.jpg"),
+  alt: "Server infrastructure supporting enterprise data platforms",
 };
 
 export const aboutTurboAI = {
@@ -607,19 +749,21 @@ export const aboutTurboAI = {
   eyebrow: "About Turbo AI",
   title: "About Turbo AI",
   subtitle: "Building the Intelligent Enterprise",
-  image: aboutImage,
-  alt: "Canadian enterprise technology context map",
+  image: photo("ai-team.jpg"),
+  alt: "Technology professionals collaborating at a workshop",
+  introduction: "Turbo AI is an enterprise technology company connecting AI strategy with data engineering, software delivery, security, and infrastructure. We focus on practical systems that teams can use, govern, and improve over time.",
   mission: "To help organisations transform intelligence into measurable enterprise capability.",
   vision:
     "To become a trusted technology partner for organisations building the intelligent enterprise.",
   approach: "Strategy With the Capacity to Become Reality",
+  approachBody: "We start with the operating problem, assess the data and technology environment, and design a delivery path that joins AI with software engineering, cloud infrastructure, security, and governance. This keeps transformation grounded in what an organisation can deploy and sustain.",
   principles: [
-    "Purpose Before Technology",
-    "Data as the Foundation",
-    "Security by Design",
-    "Human + Machine Intelligence",
-    "Engineering Over Hype",
-    "Outcomes Over Novelty",
+    { title: "Purpose Before Technology", body: "Define the business decision or workflow before choosing a model, platform, or tool." },
+    { title: "Data as the Foundation", body: "Make quality, ownership, and access to data part of the solution from the beginning." },
+    { title: "Security by Design", body: "Plan identity, privacy, and controls as core engineering requirements, not late additions." },
+    { title: "Human + Machine Intelligence", body: "Use AI to support people, with oversight appropriate to the stakes of each decision." },
+    { title: "Engineering Over Hype", body: "Favor tested integrations, reliability, and maintainable systems over isolated demonstrations." },
+    { title: "Outcomes Over Novelty", body: "Evaluate work by its operational value and ability to improve over time." },
   ],
 };
 
@@ -628,6 +772,6 @@ export const industriesHero = {
   eyebrow: "Industries We Serve",
   title: "Industries We Serve",
   subtitle: "AI Applied to the Real Economy",
-  image: industriesImage,
-  alt: "Enterprise technology environment representing applied AI across industries",
+  image: photo("manufacturing.png"),
+  alt: "Manufacturing production line representing practical AI applications across industries",
 };

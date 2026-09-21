@@ -34,6 +34,7 @@ export const site = {
   nav: {
     items: [
       { label: "Home", href: "#hero" },
+      { label: "About", href: "/about" },
       {
         label: "Services",
         href: "/#expertise",
@@ -72,7 +73,6 @@ export const site = {
         ],
       },
       { label: "Perspectives", href: "/blog" },
-      { label: "About", href: "/about" },
       { label: "Connect", href: "/#connect" },
     ],
   },
@@ -131,9 +131,9 @@ export const tokens = {
 export const copy = {
   hero: {
     id: "hero",
-    title: "Architecting Intelligence.",
+    title: "AI Consulting. Architecting Intelligence.",
     subhead:
-      "We design and deploy intelligent systems for enterprises navigating complexity.",
+      "From Calgary, we design and deploy intelligent systems for enterprises navigating complexity.",
     micro: "Trusted by leaders across finance, retail, and technology.",
     cta: { label: "See Our Impact →", href: "#impact" },
     divider: true,

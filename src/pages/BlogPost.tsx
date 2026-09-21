@@ -4,6 +4,7 @@ import { SEO } from "../components/SEO";
 import { Container, Section, Divider } from "../components/Container";
 import { blogPosts } from "../content/blog";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 export function BlogPost() {
     const { slug } = useParams();
@@ -53,7 +54,8 @@ export function BlogPost() {
     if (!post) return null;
 
     // Use a default image if none provided
-    const ogImage = post.image || "https://turbo-ai.ca/home-og.png";
+    const siteUrl = import.meta.env.VITE_BASE_URL || "https://turbo-ai.ca";
+    const ogImage = post.image ? new URL(post.image, siteUrl).href : `${siteUrl}/home-og.png`;
 
     return (
         <>
@@ -61,6 +63,7 @@ export function BlogPost() {
                 title={`${post.title} | Turbo AI`}
                 description={post.excerpt}
                 image={ogImage}
+                url={`${siteUrl}/blog/${post.slug}`}
                 keywords={post.keywords}
                 type="article"
                 articleMeta={{
@@ -69,6 +72,15 @@ export function BlogPost() {
                     tags: post.tags
                 }}
             />
+            <Helmet><script type="application/ld+json">{JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+                    { "@type": "ListItem", position: 2, name: "Perspectives", item: `${siteUrl}/blog` },
+                    { "@type": "ListItem", position: 3, name: post.title, item: `${siteUrl}/blog/${post.slug}` },
+                ],
+            })}</script></Helmet>
 
             <main className="min-h-screen bg-charcoal" ref={containerRef}>
                 <article>
@@ -79,7 +91,7 @@ export function BlogPost() {
                             <motion.div style={{ y }} className="absolute inset-0">
                                 <img
                                     src={post.image}
-                                    alt={post.title}
+                                    alt={post.imageAlt || post.title}
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-charcoal/40 mix-blend-multiply" />

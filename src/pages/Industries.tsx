@@ -90,7 +90,7 @@ export function Industries() {
 
   return (
     <main className="bg-charcoal text-white selection:bg-emeraldNeon selection:text-white" role="main">
-      <SEO pageKey="industries" />
+      <SEO pageKey="energy" />
 
       {/* =========================================================================
           SECTION 1: HERO SECTION

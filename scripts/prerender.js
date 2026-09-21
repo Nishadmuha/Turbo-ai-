@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { spawn } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
@@ -68,7 +68,6 @@ async function prerender() {
         '/digital-architecture',
         '/cyber-security-solutions',
         '/ai-data-insights',
-        '/offshore-development',
         '/cloud-solutions',
         '/quality-engineering',
         '/generative-ai-agentic-ai',
@@ -83,30 +82,39 @@ async function prerender() {
         '/products/i-lakehouse',
         '/products/adrs',
         '/about',
-        '/industries',
         '/industries/energy',
+        '/industries/financial-services',
+        '/industries/insurance',
+        '/industries/healthcare',
+        '/industries/manufacturing',
+        '/industries/construction',
+        '/industries/automotive-mobility',
+        '/industries/retail',
+        '/industries/supply-chain-logistics',
+        '/industries/telecommunications',
+        '/industries/utilities',
+        '/industries/government',
+        '/industries/defence-intelligence',
+        '/industries/semiconductors',
+        '/industries/technology-saas',
+        '/industries/data-centres',
         '/blog',
     ];
 
-    // Dynamic blog routes (extract from src/content/blog.ts)
+    // Dynamic blog routes from the authored post collections.
     const blogRoutes = [];
     try {
-        const blogContentPath = path.resolve('src', 'content', 'blog.ts');
-        if (fs.existsSync(blogContentPath)) {
-            const content = fs.readFileSync(blogContentPath, 'utf-8');
-            // Regex to match: slug: "some-slug-string"
-            const slugMatches = content.match(/slug:\s*"([^"]+)"/g);
-
-            if (slugMatches) {
-                slugMatches.forEach(match => {
-                    const slug = match.match(/slug:\s*"([^"]+)"/)[1];
-                    if (slug) {
-                        blogRoutes.push(`/blog/${slug}`);
-                    }
-                });
-                console.log(`Found ${blogRoutes.length} blog posts to prerender.`);
-            }
+        for (const filename of ['blog.ts', 'industryInsights.ts']) {
+          const blogContentPath = path.resolve('src', 'content', filename);
+          if (!fs.existsSync(blogContentPath)) continue;
+          const content = fs.readFileSync(blogContentPath, 'utf-8');
+          const slugMatches = content.match(/slug:\s*"([^"]+)"/g) || [];
+          slugMatches.forEach(match => {
+            const slug = match.match(/slug:\s*"([^"]+)"/)[1];
+            blogRoutes.push(`/blog/${slug}`);
+          });
         }
+        console.log(`Found ${blogRoutes.length} blog posts to prerender.`);
     } catch (e) {
         console.warn('Could not auto-discover blog posts:', e);
     }
@@ -192,14 +200,14 @@ ${routes.map(route => `  <url>
 
     } catch (err) {
         console.error('Error during pre-rendering:', err);
-        process.exit(1);
+        process.exitCode = 1;
     } finally {
         await browser.close();
-        preview.kill();
         if (process.platform === 'win32' && preview.pid) {
-            spawn("taskkill", ["/pid", preview.pid.toString(), '/f', '/t']);
+            spawnSync('taskkill', ['/pid', preview.pid.toString(), '/f', '/t']);
+        } else {
+            preview.kill();
         }
-        process.exit(0);
     }
 }
 
