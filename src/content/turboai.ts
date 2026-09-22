@@ -131,9 +131,9 @@ export const tokens = {
 export const copy = {
   hero: {
     id: "hero",
-    title: "AI Consulting. Architecting Intelligence.",
+    title: "Architecting Intelligence.",
     subhead:
-      "From Calgary, we design and deploy intelligent systems for enterprises navigating complexity.",
+      "We design and deploy intelligent systems for enterprises navigating complexity.",
     micro: "Trusted by leaders across finance, retail, and technology.",
     cta: { label: "See Our Impact →", href: "#impact" },
     divider: true,
