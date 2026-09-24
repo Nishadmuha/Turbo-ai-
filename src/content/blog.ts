@@ -1,15 +1,4 @@
-import b1 from "../assets/blog/b1.jpg";
 import { industryInsights } from "./industryInsights";
-import b2 from "../assets/blog/b2.jpg";
-import b3 from "../assets/blog/b3.png";
-import b4 from "../assets/blog/b4.jpg";
-import b5 from "../assets/blog/b5.jpg";
-import b6 from "../assets/blog/b6.jpg";
-import b7 from "../assets/blog/b7.jpg";
-import b8 from "../assets/blog/b8.jpg";
-import b9 from "../assets/blog/b9.jpg";
-import b10 from "../assets/blog/b10.jpg";
-import mapImg from "../assets/Canadian Context Map.jpg";
 import altaImg from "../assets/blog/companies/ALTA-Consulting.jpeg";
 import evolvousImg from "../assets/blog/companies/Evolvous.jpeg";
 import gestisoftImg from "../assets/blog/companies/Gestisoft.jpeg";
@@ -17,18 +6,31 @@ import insightImg from "../assets/blog/companies/Insight-Canada.jpeg";
 import kpmgImg from "../assets/blog/companies/KPMG-Canada.jpeg";
 import rsmImg from "../assets/blog/companies/rsm-canada.jpeg";
 import turboAiImg from "../assets/blog/companies/turbo-ai.jpeg";
-import b11 from "../assets/blog/b11.png";
-import b12 from "../assets/blog/b12.png";
-import b13 from "../assets/blog/b13.png";
-import b14 from "../assets/blog/b14.png";
-import b15 from "../assets/blog/b15.png";
-import b16 from "../assets/blog/b16.png";
-import b17 from "../assets/blog/b17.png";
-import b18 from "../assets/blog/b18.png";
-import b19 from "../assets/blog/b19.png";
-import b20 from "../assets/blog/b20.png";
-import b21 from "../assets/blog/b21.png";
-import b22 from "../assets/blog/b22.png";
+
+// Fresh, page-exclusive real photographs for the blog. These paths are not used elsewhere in the site.
+const b1 = "/blog/fresh/01-customer-growth.jpg";
+const b2 = "/blog/fresh/02-enterprise-ai.jpg";
+const b3 = "/blog/fresh/03-ecommerce.jpg";
+const b4 = "/blog/fresh/04-governance.jpg";
+const b5 = "/blog/fresh/05-transformation.jpg";
+const b6 = "/blog/fresh/06-technology-economics.jpg";
+const b7 = "/blog/fresh/07-business-forecast.jpg";
+const b8 = "/blog/fresh/08-agentic-ai.jpg";
+const b9 = "/blog/fresh/09-infrastructure.jpg";
+const b10 = "/blog/fresh/10-adoption.jpg";
+const b11 = "/blog/fresh/11-ai-transformation.jpg";
+const b12 = "/blog/fresh/12-ai-enterprises.jpg";
+const b13 = "/blog/fresh/13-consulting-firm.jpg";
+const b14 = "/blog/fresh/14-ai-roi.jpg";
+const b15 = "/blog/fresh/15-compute-investment.jpg";
+const b16 = "/blog/fresh/16-canadian-tech.jpg";
+const b17 = "/blog/fresh/17-fraud-detection.jpg";
+const b18 = "/blog/fresh/18-llm-integration.jpg";
+const b19 = "/blog/fresh/19-cybersecurity.jpg";
+const b20 = "/blog/fresh/20-digital-architecture.jpg";
+const b21 = "/blog/fresh/21-remote-infrastructure.jpg";
+const b22 = "/blog/fresh/22-small-business.jpg";
+const freshBlogImage = (name: string) => `/blog/fresh/${name}.jpg`;
 
 
 export interface BlogPost {
@@ -524,7 +526,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: "Discover the top 7 artificial intelligence consulting companies in Canada. Learn how enterprise AI firms like Turbo AI design scalable, secure, and outcome-driven intelligent systems.",
     date: "2026-02-15",
     author: "Turbo AI",
-    image: mapImg,
+    image: freshBlogImage("25-data-operations"),
     tags: ["AI Consulting", "Canada", "Enterprise AI", "Strategy"],
     body: `
       <p>From fraud detection and claims automation to cloud modernization and predictive analytics, AI is now deeply embedded in how organizations operate. However, successful AI adoption requires more than tools. It demands architectural rigor, governance, domain expertise, and long-term accountability.</p>

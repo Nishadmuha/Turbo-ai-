@@ -2,7 +2,6 @@ import puppeteer from "puppeteer";
 
 const base = process.env.AUDIT_BASE_URL || "http://localhost:5173";
 const routes = [
-  "/industries/energy",
   "/industries/financial-services",
   "/industries/insurance",
   "/industries/healthcare",
@@ -50,7 +49,7 @@ try {
     await page.goto(`${base}${route}`, { waitUntil: "domcontentloaded" });
     await page.waitForSelector("h1", { timeout: 5000 });
 
-    const result = await page.evaluate(({ isAbout, isEnergy, isService }) => {
+    const result = await page.evaluate(({ isAbout, isService }) => {
       const sections = [...document.querySelectorAll("main section")];
       const bodyText = document.body.innerText.replace(/\s+/g, " ");
       const sectionIndex = (section) => sections.indexOf(section);
@@ -71,7 +70,7 @@ try {
         process: /delivery approach|our approach|how .* works?|from .* to|workflow/i.test(bodyText),
         technology: /technology|architecture|deployment|platform/i.test(bodyText),
         outcomes: /outcomes?|impact|results?|business value/i.test(bodyText),
-        related: isEnergy || /related|explore more|services and platforms|capabilities and expertise|modules|built for/i.test(bodyText),
+        related: /related|explore more|services and platforms|capabilities and expertise|modules|built for/i.test(bodyText),
         blog: Boolean(insightSection),
         faq: isAbout || faqPresent,
         form: Boolean(connectSection?.querySelector("form")),
@@ -85,7 +84,7 @@ try {
           && connectSection.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING
         ),
       };
-    }, { isAbout: route === "/about", isEnergy: route === "/industries/energy", isService: serviceRoutes.has(route) });
+    }, { isAbout: route === "/about", isService: serviceRoutes.has(route) });
 
     const missing = Object.entries(result)
       .filter(([, passed]) => !passed)

@@ -4,7 +4,7 @@ import { SectionLink } from "./SectionLink";
 import { Dropdown } from "./Dropdown";
 import { MobileDropdown } from "./MobileDropdown";
 import { site, tokens } from "../content/turboai";
-import turboAiLogo from "../assets/turbo-ai-logo.png";
+import turboAiLogo from "../assets/turbo-ai-logo-removebg-preview.png";
 
 export function Header() {
   const { pathname } = useLocation();

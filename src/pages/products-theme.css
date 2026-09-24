@@ -213,7 +213,7 @@
 @media (max-width: 650px) { .dci-domain { border-color: #496080; }.dci-hero-shade { background: linear-gradient(90deg, rgba(4, 12, 29, .86), rgba(4, 12, 29, .5)), linear-gradient(0deg, rgba(4, 12, 29, .85), transparent 45%); }.adrs-hero-layout { padding-top: 60px; padding-bottom: 55px; }.adrs-hero h1 { font-size: clamp(3.8rem, 17vw, 6rem); }.adrs-flow { grid-template-columns: repeat(2, 1fr); }.adrs-flow li { min-height: 160px; }.adrs-radar-caption { gap: 8px; font-size: .5rem; } }
 @media (max-width: 400px) { .adrs-radar { width: min(100%, 270px); }.adrs-flow { grid-template-columns: 1fr; }.adrs-flow li { min-height: 125px; }.adrs-flow-top { flex-direction: row; align-items: center; }.adrs-flow h3 { margin-top: 12px; } }
 
-/* Match the Energy & Oil page's navy canvas without changing its styles. */
+/* Match the industries page's navy canvas without changing its styles. */
 .product-page,
 .product-page > .product-section,
 .product-page > .product-cta,

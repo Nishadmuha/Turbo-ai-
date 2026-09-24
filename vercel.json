@@ -8,7 +8,7 @@
   "redirects": [
     {
       "source": "/industries",
-      "destination": "/industries/energy",
+      "destination": "/industries-we-serve",
       "permanent": true
     }
   ],

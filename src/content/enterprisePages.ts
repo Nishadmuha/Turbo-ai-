@@ -1,4 +1,7 @@
-import energyImage from "../assets/energy-hero-platform.jpg";
+import blogGridImage from "../assets/blog-grid-analytics.jpg";
+import blogMaintenanceImage from "../assets/blog-predictive-maintenance.jpg";
+import blogHydrogenImage from "../assets/blog-hydrogen-facility.jpg";
+import dciImage from "../assets/dci-data-center.webp";
 
 const photo = (name: string) => `/enterprise/${name}`;
 
@@ -416,56 +419,56 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
     subtitle: "Turning Business Problems Into Intelligent Systems",
     intro:
       "Turbo AI frames AI around business problems first, then designs the data, models, integrations, and governance needed to turn them into reliable enterprise systems.",
-    heroImage: photo("manufacturing.png"),
-    heroAlt: "Industrial production line where operational data informs decisions",
+    heroImage: photo("data-centre-operations.jpg"),
+    heroAlt: "Enterprise data-centre operations supporting intelligent systems",
     blocks: [
       {
         title: "Customer Intelligence",
         body: "Business problem: fragmented customer signals. AI approach: unify behavioral, transactional, and service data. Enterprise application: next-best-action, segmentation, and service prioritization. Expected value: clearer decisions and more relevant customer experiences.",
-        image: photo("retail.jpg"),
-        imageAlt: "Retail store where customer and demand data can inform service",
+        image: photo("security-operations.jpg"),
+        imageAlt: "Operations team reviewing enterprise signals and customer context",
       },
       {
         title: "Intelligent Document Processing",
         body: "Business problem: high-volume manual document handling. AI approach: extraction, classification, validation, and human review. Enterprise application: claims, contracts, invoices, onboarding, and compliance workflows. Expected value: faster throughput and fewer manual bottlenecks.",
-        image: photo("insurance.jpg"),
-        imageAlt: "Professionals reviewing documents in an office",
+        image: photo("ai-team.jpg"),
+        imageAlt: "Technology team collaborating on an intelligent workflow",
       },
       {
         title: "Knowledge Intelligence",
         body: "Business problem: expertise trapped across documents and teams. AI approach: governed retrieval, semantic search, and knowledge assistants. Enterprise application: internal support, research, policy lookup, and decision preparation. Expected value: faster access to trusted information.",
-        image: photo("ai-team.jpg"),
-        imageAlt: "Technology teams collaborating around shared knowledge",
+        image: photo("strategy-meeting.jpg"),
+        imageAlt: "Team reviewing information together in a meeting room",
       },
       {
         title: "Predictive Maintenance",
         body: "Business problem: unplanned downtime and limited asset visibility. AI approach: telemetry analysis, anomaly detection, and maintenance prioritization. Enterprise application: industrial asset monitoring and work-order intelligence. Expected value: better planning and reduced operational disruption.",
-        image: photo("manufacturing.png"),
-        imageAlt: "Manufacturing production line with equipment to monitor",
+        image: blogMaintenanceImage,
+        imageAlt: "Technician inspecting industrial equipment for maintenance planning",
       },
       {
         title: "Decision Intelligence",
         body: "Business problem: slow decisions across complex operating data. AI approach: signal aggregation, scenario analysis, and decision support. Enterprise application: executive dashboards, operational command centers, and planning workflows. Expected value: decisions with more context and traceability.",
-        image: photo("strategy-meeting.jpg"),
-        imageAlt: "Team reviewing decisions together in a meeting room",
+        image: blogGridImage,
+        imageAlt: "Operations control room with live performance dashboards",
       },
       {
         title: "Intelligent Automation",
         body: "Business problem: repetitive processes that strain teams. AI approach: workflow automation with validation and exception handling. Enterprise application: service operations, finance workflows, and back-office processes. Expected value: more consistent execution and better use of skilled staff time.",
-        image: photo("automotive.jpg"),
-        imageAlt: "Automotive production line illustrating coordinated workflows",
+        image: blogHydrogenImage,
+        imageAlt: "Engineer working beside industrial process equipment",
       },
       {
         title: "Fraud & Anomaly Detection",
         body: "Business problem: risks hidden in high-volume transaction patterns. AI approach: anomaly detection, behavioral modeling, and alert triage. Enterprise application: payment monitoring, claims review, and security operations. Expected value: earlier detection and more focused investigation.",
-        image: photo("finance.jpg"),
-        imageAlt: "Financial services environment where risk signals are reviewed",
+        image: dciImage,
+        imageAlt: "Data-centre infrastructure monitored for operational anomalies",
       },
       {
         title: "Supply-Chain Intelligence",
         body: "Business problem: limited visibility across demand, inventory, and logistics. AI approach: forecasting, event detection, and decision support. Enterprise application: logistics planning, inventory risk review, and supplier monitoring. Expected value: better resilience and coordination.",
-        image: photo("logistics.jpg"),
-        imageAlt: "Workers and forklifts in a logistics warehouse",
+        image: photo("enterprise-supply-chain.jpg"),
+        imageAlt: "Container terminal at the Port of Montreal supporting supply-chain operations",
       },
     ],
     ctaTitle: "Start with the problem worth solving.",
@@ -474,18 +477,6 @@ export const enterprisePages: Record<string, EnterprisePageContent> = {
 };
 
 export const industriesWeServe: IndustryCard[] = [
-  {
-    name: "Energy & Oil and Gas",
-    description:
-      "Energy operators work across capital-intensive assets, remote environments, and safety-critical workflows. Turbo AI applies data engineering and AI to improve asset intelligence, operational visibility, and decision support.",
-    image: energyImage,
-    alt: "Offshore oil and gas production platform at sea",
-    applications: ["Asset intelligence", "Predictive maintenance", "Operational analytics"],
-    href: "/industries/energy",
-    relatedHref: "/enterprise-ai-solutions",
-    foundation: "Connect field, asset, and maintenance data while retaining the controls required for safety-critical operations.",
-    outcome: "Give operations teams a clearer basis for maintenance prioritization and production decisions.",
-  },
   {
     name: "Financial Services",
     description:
@@ -574,8 +565,8 @@ export const industriesWeServe: IndustryCard[] = [
     name: "Supply Chain & Logistics",
     description:
       "Supply-chain networks require better visibility across inventory, transportation, facilities, and disruption signals. AI can improve forecasting, exception handling, and decision support.",
-    image: photo("logistics.jpg"),
-    alt: "Warehouse workers moving goods with forklifts",
+    image: photo("supply-chain-logistics.jpg"),
+    alt: "Forklift loading palletized cargo into a shipping container",
     applications: ["Logistics intelligence", "Inventory risk", "Route and demand analysis"],
     href: "/industries/supply-chain-logistics",
     relatedHref: "/enterprise-ai-solutions",
@@ -598,8 +589,8 @@ export const industriesWeServe: IndustryCard[] = [
     name: "Utilities",
     description:
       "Utilities balance asset reliability, regulatory duties, demand shifts, and field operations. AI can support grid analytics, outage intelligence, and maintenance planning.",
-    image: photo("utilities.jpg"),
-    alt: "Electrical power substation serving a utility network",
+    image: photo("utilities-substation-canada.jpg"),
+    alt: "Industrial utility facility on the waterfront in North Vancouver, Canada",
     applications: ["Grid intelligence", "Asset analytics", "Outage support"],
     href: "/industries/utilities",
     relatedHref: "/enterprise-ai-solutions",
@@ -740,8 +731,8 @@ export const productCards: ProductCard[] = [
 ];
 
 export const productsHero = {
-  image: photo("data-centre.jpg"),
-  alt: "Server infrastructure supporting enterprise data platforms",
+  image: photo("semiconductors.jpg"),
+  alt: "Semiconductor manufacturing equipment representing intelligent technology platforms",
 };
 
 export const aboutTurboAI = {
@@ -749,8 +740,8 @@ export const aboutTurboAI = {
   eyebrow: "About Turbo AI",
   title: "About Turbo AI",
   subtitle: "Building the Intelligent Enterprise",
-  image: photo("ai-team.jpg"),
-  alt: "Technology professionals collaborating at a workshop",
+  image: photo("government.jpg"),
+  alt: "Canadian public institution representing responsible technology and enterprise partnership",
   introduction: "Turbo AI is an enterprise technology company connecting AI strategy with data engineering, software delivery, security, and infrastructure. We focus on practical systems that teams can use, govern, and improve over time.",
   mission: "To help organisations transform intelligence into measurable enterprise capability.",
   vision:
@@ -772,6 +763,6 @@ export const industriesHero = {
   eyebrow: "Industries We Serve",
   title: "Industries We Serve",
   subtitle: "AI Applied to the Real Economy",
-  image: photo("manufacturing.png"),
-  alt: "Manufacturing production line representing practical AI applications across industries",
+  image: photo("industries-ontario-factory.jpg"),
+  alt: "Aerial view of an industrial factory complex in Ontario, Canada",
 };

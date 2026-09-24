@@ -10,7 +10,7 @@ const routes = [
   '/ai-governance-cybersecurity', '/cloud-infrastructure-ai-compute',
   '/industries-we-serve', '/enterprise-ai-solutions', '/products', '/about',
   '/products/dci-360', '/products/i-lakehouse', '/products/adrs',
-  '/industries/energy', '/blog/retail-demand-customer-intelligence',
+  '/blog/retail-demand-customer-intelligence',
   '/industries/financial-services', '/industries/insurance', '/industries/healthcare',
   '/industries/manufacturing', '/industries/construction', '/industries/automotive-mobility',
   '/industries/retail', '/industries/supply-chain-logistics', '/industries/telecommunications',

@@ -1,7 +1,6 @@
 import dciImage from "../assets/dci-data-center.webp";
 import lakehouseImage from "../assets/i-lakehouse-infrastructure.webp";
 import adrsImage from "../assets/adrs-security-operations-center.webp";
-import energyImage from "../assets/energy-hero-platform.jpg";
 import strategyImage from "../assets/Hero Background.jpg";
 import digitalImage from "../assets/digital-architecture-hero.png";
 import cyberImage from "../assets/cyber-security-hero.png";
@@ -91,13 +90,6 @@ export const seoConfig: Record<string, PageSEO> = {
         url: `${baseUrl}/blog`,
         keywords: "AI insights, artificial intelligence blog, digital transformation trends, strategic intelligence articles, Turbo AI blog",
     },
-    energy: {
-        title: "AI for Energy and Oil & Gas Operations | Turbo AI",
-        description: "Explore AI for energy operations, from asset intelligence and predictive maintenance to governed analytics across complex oil and gas infrastructure.",
-        image: new URL(energyImage, baseUrl).href,
-        url: `${baseUrl}/industries/energy`,
-        keywords: "energy AI, AI solutions for energy, predictive maintenance energy, asset intelligence, energy operational analytics, Calgary energy AI, oil and gas AI Canada",
-    },
     generativeAgenticAI: {
         title: "Generative & Agentic AI Services | Turbo AI",
         description: "Enterprise generative AI, copilots, knowledge assistants, RAG, AI agents, orchestration, evaluation, and human-in-the-loop workflows.",
@@ -135,22 +127,22 @@ export const seoConfig: Record<string, PageSEO> = {
     },
     industriesWeServe: {
         title: "Industries We Serve | Enterprise AI for the Real Economy | Turbo AI",
-        description: "Explore how Turbo AI applies AI, data, software, cloud, and governance capabilities across energy, finance, healthcare, manufacturing, government, and more.",
-        image: `${baseUrl}/enterprise/manufacturing.png`,
+        description: "Explore how Turbo AI applies AI, data, software, cloud, and governance capabilities across finance, healthcare, manufacturing, government, and more.",
+        image: `${baseUrl}/enterprise/industries-ontario-factory.jpg`,
         url: `${baseUrl}/industries-we-serve`,
-        keywords: "AI industries, enterprise AI by industry, energy AI, finance AI, manufacturing AI, healthcare AI, government AI",
+        keywords: "AI industries, enterprise AI by industry, finance AI, manufacturing AI, healthcare AI, government AI",
     },
     enterpriseSolutions: {
         title: "Enterprise AI Solutions | Turbo AI",
         description: "AI solutions organized by business problem, including customer intelligence, document processing, predictive maintenance, automation, fraud detection, and supply-chain intelligence.",
-        image: `${baseUrl}/enterprise/manufacturing.png`,
+        image: `${baseUrl}/enterprise/data-centre-operations.jpg`,
         url: `${baseUrl}/enterprise-ai-solutions`,
         keywords: "enterprise AI solutions, customer intelligence, document processing, predictive maintenance, intelligent automation, anomaly detection",
     },
     turboAIProducts: {
         title: "Turbo AI Platforms | i-Lakehouse and ADRS",
         description: "Explore Turbo AI platforms: i-Lakehouse for governed enterprise data and AI, and ADRS for detection-to-response workflows. View architecture, capabilities, and use cases.",
-        image: `${baseUrl}/home-og.png`,
+        image: `${baseUrl}/enterprise/semiconductors.jpg`,
         url: `${baseUrl}/products`,
         keywords: "Turbo AI products, Seismic AI, DCI 360, i-Lakehouse, ADRS, proprietary AI platforms",
     },
@@ -178,7 +170,7 @@ export const seoConfig: Record<string, PageSEO> = {
     aboutTurboAI: {
         title: "About Turbo AI | Building the Intelligent Enterprise",
         description: "Learn about Turbo AI's mission, vision, approach, and principles for building credible enterprise AI, data, software, security, and cloud capabilities.",
-        image: `${baseUrl}/enterprise/ai-team.jpg`,
+        image: `${baseUrl}/enterprise/government.jpg`,
         url: `${baseUrl}/about`,
         keywords: "About Turbo AI, enterprise AI company, AI strategy, intelligent enterprise, technology partner",
     },

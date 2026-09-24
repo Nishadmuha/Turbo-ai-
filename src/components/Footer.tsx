@@ -4,7 +4,7 @@ import { SectionLink } from "./SectionLink";
 import { Modal } from "./Modal";
 import { PrivacyPolicyContent, TermsOfUseContent } from "./LegalContent";
 import { site, copy, blog } from "../content/turboai";
-import turboAiLogo from "../assets/turbo-ai-logo.png";
+import turboAiLogo from "../assets/turbo-ai-logo-removebg-preview.png";
 
 export function Footer() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
@@ -31,7 +31,7 @@ export function Footer() {
       <Container>
         <div className="footer-grid">
           {/* Column A: Brand */}
-          <div className="footer-column">
+          <div className="footer-column footer-brand-column">
             <SectionLink href="/#hero" className="inline-block mb-4 select-none" aria-label="Turbo AI home">
               <img
                 src={turboAiLogo}
@@ -131,11 +131,11 @@ export function Footer() {
 
         {/* Footer meta */}
         <div className="rule-hairline mt-12"></div>
-        <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+        <div className="footer-meta flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
           <div className="text-xs text-midGray">
             © {currentYear} {site.meta.siteName}. All rights reserved.
           </div>
-          <div className="flex items-center gap-6">
+          <div className="footer-meta-actions flex items-center gap-6">
             {/* Social Media Links */}
             <div className="flex gap-4">
               {blog.posts.map((post) => (

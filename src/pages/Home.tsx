@@ -5,6 +5,7 @@ import { Expertise } from "../components/Expertise";
 import { Impact } from "../components/Impact.tsx";
 import { Partners } from "../components/PartnersMarquee";
 import { PartnersMarqueeMobile } from "../components/PartnersMarqueeMobile";
+import { TechnologyEcosystem } from "../components/TechnologyEcosystem";
 import { Perspectives } from "../components/Perspectives";
 import { Connect } from "../components/Connect";
 import { SEO } from "../components/SEO";
@@ -25,6 +26,7 @@ export function Home() {
                 <div className="block md:hidden">
                     <PartnersMarqueeMobile />
                 </div>
+                <TechnologyEcosystem />
                 <Perspectives />
                 <Connect />
             </main>

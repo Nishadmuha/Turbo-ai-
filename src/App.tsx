@@ -11,7 +11,6 @@ import { CyberSecuritySolutions } from "./pages/CyberSecuritySolutions";
 import { AIDataInsights } from "./pages/AIDataInsights";
 import { CloudSolutions } from "./pages/CloudSolutions";
 import { QualityEngineering } from "./pages/QualityEngineering";
-import { Industries } from "./pages/Industries";
 import { GenerativeAgenticAI } from "./pages/GenerativeAgenticAI";
 import { DataEngineeringAIFoundations } from "./pages/DataEngineeringAIFoundations";
 import { AIEngineeringSoftwareDevelopment } from "./pages/AIEngineeringSoftwareDevelopment";
@@ -91,8 +90,7 @@ function App() {
         <Route path="/products/i-lakehouse" element={<ILakehouse />} />
         <Route path="/products/adrs" element={<ADRS />} />
         <Route path="/about" element={<AboutTurboAI />} />
-        <Route path="/industries" element={<Navigate to="/industries/energy" replace />} />
-        <Route path="/industries/energy" element={<Industries />} />
+        <Route path="/industries" element={<Navigate to="/industries-we-serve" replace />} />
         <Route path="/industries/:slug" element={<IndustryDetail />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogPost />} />

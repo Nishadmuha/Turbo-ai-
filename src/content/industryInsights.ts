@@ -1,8 +1,6 @@
 import type { BlogPost } from "./blog";
 import { industryInsightChecks, industryInsightDetails, industryInsightFollowUps } from "./industryInsightDetails";
 
-const image = (name: string) => `/enterprise/${name}`;
-
 const insightDrafts: BlogPost[] = [
   {
     slug: "energy-ai-asset-intelligence-foundations",
@@ -10,14 +8,14 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Learn how energy teams can connect field data, asset records, and maintenance decisions with quality checks, human review, and measurable operational feedback.",
     date: "2026-09-20",
     author: "Turbo AI",
-    image: "/smarter-operations-pipes.jpg",
+    image: "/blog/fresh/23-network-operations.jpg",
     tags: ["Energy", "Asset Intelligence", "Data Engineering"],
     keywords: "energy asset intelligence, AI for energy operations, predictive maintenance data",
     body: `<p>Energy operators already collect a large volume of equipment, inspection, and field data. The challenge is connecting those records to a decision that a maintenance or operations team can make with confidence.</p>
       <h2>Start with an operational question</h2><p>Choose a bounded question such as which assets need inspection first. Identify the data owners, the decision maker, and the evidence required before any model is built. This prevents a dashboard from becoming another isolated destination for information.</p>
       <h2>Build a dependable signal path</h2><p>Join telemetry to asset registers, maintenance history, and operating context. Check completeness, timestamps, and changes in equipment configuration. A predictive signal without this context can be misleading.</p>
       <h2>Keep the team in control</h2><p>Use analytics to rank and explain exceptions, then let qualified people validate the recommendation. Monitor false alerts and missed events after deployment. The value comes from better planning and traceable action, not from claiming that a model can replace field judgment.</p>
-      <p>Explore <a href="/industries/energy">energy intelligence</a> and <a href="/data-engineering-ai-foundations">data foundations</a>.</p>`,
+      <p>Explore <a href="/industries-we-serve">industry intelligence</a> and <a href="/data-engineering-ai-foundations">data foundations</a>.</p>`,
   },
   {
     slug: "financial-services-ai-fraud-review",
@@ -25,7 +23,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "A practical framework for AI-assisted fraud review: governed transaction signals, explainable alert priority, investigator feedback, and accountable customer decisions.",
     date: "2026-09-19",
     author: "Turbo AI",
-    image: image("finance.jpg"),
+    image: "/blog/fresh/24-industrial-ai.jpg",
     tags: ["Financial Services", "Fraud", "Governance"],
     keywords: "AI fraud review, financial services anomaly detection, governed AI",
     body: `<p>Fraud teams need to identify unusual activity without overwhelming investigators with weak alerts. AI can help prioritize work, but a useful system must fit the institution's controls and review process.</p>
@@ -40,7 +38,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Explore source-linked extraction, exception queues, and reviewer oversight for insurance claims documents without automating consequential coverage decisions.",
     date: "2026-09-18",
     author: "Turbo AI",
-    image: image("insurance.jpg"),
+    image: "/blog/fresh/26-ai-team.jpg",
     tags: ["Insurance", "Documents", "Human Oversight"],
     keywords: "insurance document intelligence, AI claims triage, document processing",
     body: `<p>Claims workflows bring together forms, correspondence, images, policies, and external evidence. When that material is scattered, reviewers spend time locating facts instead of assessing the claim.</p>
@@ -55,7 +53,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "How healthcare teams can use cited, permission-aware knowledge retrieval for staff guidance while protecting privacy and keeping clinical judgment with professionals.",
     date: "2026-09-17",
     author: "Turbo AI",
-    image: image("healthcare.jpg"),
+    image: "/blog/fresh/27-business-planning.jpg",
     tags: ["Healthcare", "Knowledge", "Responsible AI"],
     keywords: "healthcare AI knowledge access, governed retrieval, responsible AI healthcare",
     body: `<p>Healthcare organizations manage policies, care pathways, operating procedures, and administrative guidance across many systems. Finding the current, authorized answer can be difficult even before AI enters the picture.</p>
@@ -70,7 +68,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Connect machine telemetry, operating context, technician validation, and work orders to make predictive maintenance useful in real manufacturing workflows.",
     date: "2026-09-16",
     author: "Turbo AI",
-    image: image("manufacturing.png"),
+    image: "/blog/fresh/28-customer-service.jpg",
     tags: ["Manufacturing", "Maintenance", "Operations"],
     keywords: "manufacturing predictive maintenance, equipment analytics, industrial AI",
     body: `<p>A model can detect unusual machine behavior, but an operations team needs to know what to inspect, when, and why. Predictive maintenance succeeds when data and work orders meet in the same process.</p>
@@ -85,7 +83,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Bring construction schedules, site reports, current documents, and equipment constraints into reviewable project decisions and better team handoffs.",
     date: "2026-09-15",
     author: "Turbo AI",
-    image: image("construction.jpg"),
+    image: "/blog/fresh/29-supply-chain.jpg",
     tags: ["Construction", "Project Intelligence", "Data"],
     keywords: "construction project intelligence, AI construction planning, site data",
     body: `<p>Construction teams make decisions from schedules, site observations, supplier updates, and documents that often live in separate tools. Better intelligence begins with a shared view of what changed and who needs to respond.</p>
@@ -100,7 +98,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Explore how retailers can connect demand, inventory, returns, and service signals while preserving local context, customer privacy, and human decisions.",
     date: "2026-09-14",
     author: "Turbo AI",
-    image: image("retail.jpg"),
+    image: "/blog/fresh/30-telecom.jpg",
     tags: ["Retail", "Customer Intelligence", "Forecasting"],
     keywords: "retail demand intelligence, AI inventory forecasting, customer analytics",
     body: `<p>Retail decisions span stores, digital channels, stock, promotions, and service. A forecast or recommendation has value only when teams understand the conditions behind it.</p>
@@ -115,7 +113,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "A practical exception-management workflow for logistics teams that connects shipment events, inventory, and commitments to prioritized human action.",
     date: "2026-09-13",
     author: "Turbo AI",
-    image: image("logistics.jpg"),
+    image: "/blog/fresh/31-engineering.jpg",
     tags: ["Logistics", "Supply Chain", "Decision Support"],
     keywords: "logistics exception management, supply chain AI, shipment analytics",
     body: `<p>Supply-chain teams encounter delays, stock imbalances, and supplier changes throughout the day. The goal of AI is not to produce more alerts; it is to make the most consequential exceptions easier to understand and resolve.</p>
@@ -130,7 +128,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Turn telecom alarms, topology, and service-impact data into a reviewable incident timeline with operator validation and controlled response.",
     date: "2026-09-12",
     author: "Turbo AI",
-    image: image("telecom.jpg"),
+    image: "/blog/fresh/32-document-workflow.jpg",
     tags: ["Telecommunications", "Network Operations", "AI"],
     keywords: "telecom incident triage, AI network operations, network telemetry analytics",
     body: `<p>Telecom operators manage a distributed network where one issue can create many downstream alarms. Intelligent triage helps teams identify the likely service impact before they spend time on repetitive investigation.</p>
@@ -145,7 +143,7 @@ const insightDrafts: BlogPost[] = [
     excerpt: "Learn how data-centre teams can assess usable capacity across racks, power, cooling, assets, and planned workloads with traceable engineering review.",
     date: "2026-09-11",
     author: "Turbo AI",
-    image: image("data-centre.jpg"),
+    image: "/blog/fresh/33-insight-operations.jpg",
     tags: ["Data Centres", "Infrastructure", "DCI 360"],
     keywords: "data centre capacity intelligence, DCIM analytics, power cooling planning",
     body: `<p>Capacity decisions depend on more than a count of empty racks. Power, cooling, equipment age, and planned workloads all shape whether space is genuinely available.</p>

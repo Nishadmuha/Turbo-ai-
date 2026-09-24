@@ -82,7 +82,6 @@ async function prerender() {
         '/products/i-lakehouse',
         '/products/adrs',
         '/about',
-        '/industries/energy',
         '/industries/financial-services',
         '/industries/insurance',
         '/industries/healthcare',

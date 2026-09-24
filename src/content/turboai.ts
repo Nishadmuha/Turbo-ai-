@@ -55,10 +55,6 @@ export const site = {
             label: "Industries We Serve",
             href: "/industries-we-serve",
           },
-          {
-            label: "Energy & Oil & Gas",
-            href: "/industries/energy",
-          },
         ],
       },
       { label: "Solutions", href: "/enterprise-ai-solutions" },
