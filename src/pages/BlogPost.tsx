@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { SEO } from "../components/SEO";
 import { Container, Section, Divider } from "../components/Container";
@@ -13,18 +13,15 @@ import { CmsNotFound, CmsUnavailable } from "../cms/CmsContentPage";
 
 export function BlogPost() {
     const { slug } = useParams();
-    const { entry: cmsEntry, loading, failed } = usePublishedEntry("blog", slug);
+    const { entry: cmsEntry, loading, failed, retry } = usePublishedEntry("blog", slug);
     const legacyPost = blogPosts.find((p) => p.slug === slug);
     const post = cmsPublicEnabled
         ? cmsEntry ? { slug: cmsEntry.slug, title: cmsEntry.title, excerpt: cmsEntry.summary,
             date: cmsEntry.published_at || cmsEntry.created_at, author: cmsEntry.author,
             image: cmsEntry.hero_image, tags: cmsEntry.tags, keywords: cmsEntry.seo_keywords, body: cmsEntry.body } : undefined
         : legacyPost;
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
+    // Loading and missing posts have no article element to attach a scroll ref.
+    const { scrollYProgress } = useScroll();
 
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
     const [copied, setCopied] = useState(false);
@@ -56,7 +53,7 @@ export function BlogPost() {
     }, [slug]);
 
     if (loading) return <main data-cms-loading className="min-h-screen bg-charcoal pt-40 text-center text-slate-300">Loading post…</main>;
-    if (failed) return <CmsUnavailable />;
+    if (failed) return <CmsUnavailable retry={retry} />;
     if (!post) return <CmsNotFound />;
 
     // Use a default image if none provided
@@ -88,7 +85,7 @@ export function BlogPost() {
                 ],
             })}</script></Helmet>
 
-            <main className="min-h-screen bg-charcoal" ref={containerRef}>
+            <main className="min-h-screen bg-charcoal">
                 <article>
                     {/* Hero Section */}
                     <div className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">

@@ -1,59 +1,63 @@
-# Turbo AI CMS setup
+# Turbo AI blog CMS
 
-The CMS is an optional layer on the existing Vite site. With `VITE_CMS_ENABLED=false` (the default), authored pages and routes render as before. `/admin` shows setup instructions until a Supabase URL and publishable key are configured. No production service has been changed by these files.
+The CMS manages **blog posts only**. The SEO team can edit article text, excerpts, authors, categories, tags, featured images, search metadata, social previews, canonical URLs, indexing, and draft/published status. The main website, services, industries, solutions, and product pages are authored in the website project and render independently of the CMS API.
 
-## Architecture and access
+The admin navigation contains Dashboard, Blog Posts, Media, and, for administrators, Settings and Team. Former page/product/industry/solution editor URLs no longer open editors. Existing non-blog database records are retained; they are not used as website content or exposed through the MongoDB blog entry endpoints.
 
-- React keeps the existing layouts and structural components. Supabase Postgres stores Pages, Products, Industries, Solutions, and Blog entries. Supabase Storage holds uploaded images. Supabase Auth handles administrator passwords and sessions.
-- Browser code receives only the project URL and **publishable** key. Row Level Security (RLS) limits public reads to published entries and CMS writes to members of `cms_admins`.
-- Markdown is rendered without raw HTML. Image uploads accept PNG, JPEG, WebP, AVIF, and GIF up to 8 MB. The media bucket is public; never upload private files.
-- The checked-in seed at `supabase/seed/cms-entries.json` is a snapshot of the authored content. The original TypeScript content remains in the repo. The import script only inserts missing `(kind,slug)` pairs and leaves CMS edits unchanged on repeat runs.
+## Start locally
 
-## Activate a new project
+1. Configure the ignored `.env.local` file using `.env.example` as a guide:
+   - `VITE_CMS_PROVIDER=mongodb`
+   - `VITE_CMS_ENABLED=true` to use published CMS blog posts
+   - `VITE_CMS_API_URL=/api/cms`
+   - `MONGODB_URI` set to your MongoDB or Atlas connection string
+   - `MONGODB_DB=turbo_ai_cms`
+2. Run `npm run cms:create-admin` once to create your first administrator. Enter an email and a unique 12–128 character password at the hidden prompt. There is no default password or public registration. This command does not overwrite existing accounts.
+3. Run `npm run cms:seed:mongo` to import missing authored blog posts. Existing blog edits and other records are preserved. The command uses the database configured in `.env.local`, including Atlas when configured.
+4. Run `npm run dev`. It starts the website and MongoDB blog API together. Open `http://localhost:5173/admin/login` and sign in.
 
-1. Create a Supabase project. In its SQL editor, run `supabase/migrations/202609290001_cms.sql`. Review the policies in your project before enabling the public CMS.
-2. Create one administrator in Supabase Auth. Find that user's UUID and add it in the SQL editor:
+Vite proxies `/api/cms` to the API at `127.0.0.1:4100`. Keep the development command running while editing blog posts. `npm run dev:site` starts only Vite if you are working on the authored website without the CMS. `npm run cms:server` starts the API separately when needed. `npm run preview` uses the same API proxy on port 4173; start the API separately when previewing a build.
 
-   ```sql
-   insert into public.cms_admins(user_id) values ('YOUR_AUTH_USER_UUID');
-   ```
+The MongoDB connection string stays in the Node server. Never put it in a `VITE_` variable, frontend source, or Git. Optional `CMS_ADMIN_EMAIL` and `CMS_ADMIN_PASSWORD` variables are available for scripted account creation; remove them after use.
 
-   The dashboard has no public registration flow. Additional administrators require the same explicit membership step.
-3. Regenerate the local seed after authored content changes: `npm run cms:export`. Import it once, using environment variables **only in your local shell**:
+## Blog publishing
 
-   ```powershell
-   $env:CMS_SUPABASE_URL='https://YOUR_PROJECT.supabase.co'
-   $env:CMS_SUPABASE_SECRET_KEY='YOUR_SECRET_KEY'
-   npm run cms:import
-   Remove-Item Env:CMS_SUPABASE_SECRET_KEY
-   ```
+1. Open **Blog Posts**, create a post or edit an existing one, and enter its title, slug, excerpt, Markdown article, featured image, and article details.
+2. Use **Media** to upload an image, then select it in the post editor. Uploads accept PNG, JPEG, WebP, AVIF, and GIF, up to 8 MB. Add descriptive alt text when uploading.
+3. Review the Markdown preview and **Search & social** fields. Leaving the SEO title or description blank uses the post title or excerpt. Raw HTML in Markdown is not rendered.
+4. Save as **Draft** while preparing the post. Choose **Published** and **Save & publish** when ready. Only published posts are available through the public blog API; the editor preview is not a public draft URL.
+5. Refresh the static build after publishing, unpublishing, deleting, changing a slug, or updating SEO. Administrators can use **Settings → Refresh blog search pages** when `CMS_ALLOW_LOCAL_BUILD=true` is set on the server. Otherwise, run `npm run build` locally.
 
-   The secret key is for this local import only. Do not put it in a `VITE_` variable, browser code, `.env`, hosting frontend variables, or Git.
-4. Copy `.env.example` to a local `.env` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Keep `VITE_CMS_ENABLED=false` while you sign in at `/admin/login` and review imported entries. Set it to `true` only after the migration and seed are complete. Restart Vite after changing env values.
-5. Build with `npm run build`. When CMS mode is enabled, the build fetches published entries, prerenders those routes, and creates a sitemap containing only indexable published records. A CMS connection or content error fails the build rather than publishing an incomplete sitemap. `/admin` is excluded from the sitemap and disallowed in `robots.txt`. The build also generates `404.html`; the supplied Netlify and Vercel routing configurations serve published prerendered pages, rewrite `/admin/*` to the app, and return HTTP 404 for unknown direct URLs.
+Publishing changes the blog API immediately; the browser may retain content for up to 30 seconds. Previously generated or deployed static HTML keeps its last built content until a new build replaces it. An unpublished post's old deployed HTML also requires a fresh deployment to remove it. A slug change does not create an automatic redirect; coordinate an HTTP redirect in the hosting configuration for public URLs that change.
 
-## Publishing workflow
+The refresh action runs the fixed website build command. It rebuilds authored website pages alongside published blog pages and the sitemap; it does not make the rest of the site CMS-editable. Only one CMS-triggered build runs at a time. The admin displays progress and completion without exposing server logs or environment values. Avoid running a separate build at the same time. With CMS blog mode enabled, a blog API failure stops the build rather than generating an incomplete blog snapshot.
 
-- Save drafts and preview their Markdown inside `/admin`. Published records can be opened from the editor. Only published records are readable through the public API.
-- A publish, unpublish, slug, or SEO change takes effect in the client rendered site, subject to a 30 second in-memory content cache. **Previously deployed prerendered HTML remains accessible until a fresh build is deployed.** For an urgent unpublish, rebuild and deploy immediately; without a rebuild hook or server-side rendering, a static host cannot remove its previous HTML on its own. Arrange a rebuild in your hosting workflow when you decide to deploy; this repository does not trigger one automatically.
-- Changing a slug creates a client side redirect record for the old URL when the target is published. For search engine level HTTP 301 redirects, add the old and new paths to your hosting redirects configuration before deploying.
-- Existing Home, About, Products, Industries, and service layouts remain coded in React. Their hero copy/images, SEO, and optional extra Markdown sections can be managed in the CMS. Product detail hero/content, industry hero/content, solutions, and blog are connected. Some deeply bespoke text inside existing sections remains authored in code; converting every sentence to CMS fields would alter the current component structure.
-- Images under `/cms-seed/` are copies of authored assets used by seed records. They can later be replaced with uploaded media URLs through `/admin/media`.
+Saving posts and refreshing the local build do not commit, push, or deploy anything. Deployment is a separate technical workflow.
 
-## Validation and recovery
+## Team and media
 
-- Run `npm run lint`, `npx tsc -b --pretty false`, and `npm run build` with the CMS off to check the existing site.
-- Run `npm run test:cms-mock` for a local published/draft and sitemap check. It writes a temporary CMS-enabled `dist`; run `npm run build` afterward to restore the normal build. Run `npm run test:smoke` against the restored build.
-- Before enabling the CMS, confirm login, unauthorized access denial, create/edit/publish/unpublish/delete for each type, media upload, SEO metadata, sitemap, and mobile layout against your new Supabase project.
-- To return to authored content, set `VITE_CMS_ENABLED=false` and rebuild. The migration does not delete existing source content. Export or back up CMS rows and Storage files before destructive database changes.
+Editors can create, edit, and publish blog posts, update blog SEO, and upload images. Administrators also control deletion, team access, and build refresh. Use **Team** to create an editor or administrator account and to disable access. Share new account credentials securely.
 
-## Environment variables
+Uploaded media is public at `/api/cms/media/files` and stored in ignored `.cms-data/uploads`. Back up that directory alongside MongoDB and use durable storage in production. MongoDB stores entries in `cms_entries`, accounts in `cms_users`, sessions in `cms_sessions`, image metadata in `cms_media`, and existing settings in `cms_settings`. Global website title and Open Graph defaults are not editable through this blog workspace.
 
-| Variable | Used where | Purpose |
-| --- | --- | --- |
-| `VITE_CMS_ENABLED` | Browser/build | `true` enables published CMS content; default `false`. |
-| `VITE_SUPABASE_URL` | Browser/build | Supabase project URL. |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Browser/build | Public project key, protected by RLS. |
-| `VITE_BASE_URL` | Build/SEO | Canonical website origin. |
-| `CMS_SUPABASE_URL` | Local import only | Project URL for `cms:import`. |
-| `CMS_SUPABASE_SECRET_KEY` | Local import only | Privileged seed import credential. Never place in frontend env. |
+## Hosting and troubleshooting
+
+A live MongoDB blog CMS requires a Node server or a reverse proxy routing `/api/cms` to the backend on the same origin as the website. A static host alone cannot connect to MongoDB. Configure `NODE_ENV=production`, HTTPS, and exact allowed origins in `CMS_ORIGINS`. If changing the API port, update the Vite proxy target as well. Configure MongoDB network access and credentials for the application server.
+
+Session cookies are HttpOnly and SameSite=Strict, and Secure in production. Write requests require an allowed Origin and the CMS request header. Passwords are salted and hashed with scrypt. Database sessions store token hashes and expire after eight hours. The API validates entries and image signatures and limits login attempts.
+
+If the editor says it cannot connect, check that `npm run dev` is still running and that the backend can reach MongoDB. The API checks database connectivity before listening. The main authored website and product pages continue to work without the blog API. Blog pages show a scoped error with a retry action instead of reverting to authored articles that may have been unpublished. Set `VITE_CMS_ENABLED=false` and restart/rebuild to deliberately use the authored blog content instead of CMS posts.
+
+## Verification
+
+- `npx tsc -b --pretty false` and `npm run lint` check the source.
+- `npm run test:cms-mongo` tests the API using a disposable local database at `127.0.0.1:27017`; it does not use the configured Atlas URI. It checks blog publishing, authentication, roles, input validation, media, and rejection of non-blog entry operations.
+- `npm run test:cms-browser` exercises the blog publishing workflow in the browser.
+- `npm run test:cms-build` tests the controlled build action.
+- `npm run build` refreshes the static site and blog metadata. `npm run test:smoke` checks the resulting site.
+
+## Optional legacy Supabase provider
+
+The Supabase adapter remains available when `VITE_CMS_PROVIDER=supabase` is selected, with `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. The admin UI and public CMS integration remain scoped to blog posts. MongoDB-only Team and build controls are not shown.
+
+For a new Supabase project, review and apply `supabase/migrations/202609290001_cms.sql`, create an Auth user, and add their UUID to `public.cms_admins`. Database RLS policies are controlled by that migration and your project's configuration; this UI restriction is not a replacement for reviewing those policies. Privileged import credentials belong only in the local `CMS_SUPABASE_URL` and `CMS_SUPABASE_SECRET_KEY` variables, never frontend configuration. The main website continues to use its authored content with either provider.

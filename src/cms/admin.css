@@ -1,0 +1,34 @@
+.admin-workspace { color-scheme: dark; }
+.admin-workspace button, .admin-workspace input, .admin-workspace select, .admin-workspace textarea { font: inherit; }
+.admin-workspace button, .admin-workspace a { touch-action: manipulation; }
+.admin-workspace :is(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid #93c5fd; outline-offset: 4px; }
+.admin-workspace button:disabled { cursor: wait; }
+.admin-workspace input, .admin-workspace select, .admin-workspace textarea { max-width: 100%; }
+.admin-workspace textarea { resize: vertical; min-height: 100px; }
+.admin-eyebrow { color: #8bc5ff; font-size: .75rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.admin-workflow { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; padding: 1.5rem; border: 1px solid #28537c; border-radius: .75rem; background: linear-gradient(120deg, #122e48, #101c32); }
+.admin-workflow > div { flex: 1 1 320px; }
+.admin-workflow h2 { font-size: 1.25rem; font-weight: 700; }
+.admin-workflow p { margin-top: .5rem; max-width: 50rem; color: #b8cee3; line-height: 1.6; }
+.admin-primary, .admin-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: .7rem 1rem; border-radius: .5rem; font-size: .875rem; font-weight: 600; }
+.admin-primary { background: #2563eb; color: white; }
+.admin-primary:hover { background: #3b82f6; }
+.admin-secondary { border: 1px solid #50708d; color: #d8eaff; }
+.admin-secondary:hover { background: #ffffff0d; }
+.admin-previews { min-width: 0; }
+.admin-search-preview { margin-top: .75rem; padding: 1.25rem; border-radius: .65rem; background: #fff; color: #202124; overflow-wrap: anywhere; }
+.admin-search-site { font-size: .875rem; font-weight: 500; }
+.admin-search-url { margin-top: .2rem; font-size: .75rem; color: #4d5156; }
+.admin-search-title { margin-top: .65rem; color: #1a0dab; font-size: 1.2rem; line-height: 1.4; }
+.admin-search-description { margin-top: .35rem; color: #4d5156; font-size: .875rem; line-height: 1.6; }
+.admin-preview-note { margin-top: .5rem; font-size: .75rem; line-height: 1.5; color: #94a3b8; }
+.admin-social-preview { margin-top: 1rem; overflow: hidden; border: 1px solid #ffffff20; border-radius: .65rem; }
+.admin-social-preview summary { cursor: pointer; padding: 1rem; font-size: .875rem; color: #bddbff; }
+.admin-social-preview img { width: 100%; aspect-ratio: 1.91; object-fit: cover; }
+.admin-social-preview > div { padding: 1rem; }
+.admin-social-preview h3 { margin-top: .5rem; font-size: 1.15rem; font-weight: 600; }
+.admin-social-preview div > p:last-child { margin-top: .5rem; line-height: 1.6; color: #b6c8dc; }
+.admin-team-card { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; padding: 1.25rem; border-top: 1px solid #ffffff1a; }
+.admin-team-card > div:first-child { flex: 1 1 220px; min-width: 0; }
+.admin-team-card p { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .admin-workspace main { padding: 1.25rem; } .admin-workflow { padding: 1.25rem; } .admin-primary, .admin-secondary { flex: 1 1 auto; } }

@@ -68,6 +68,7 @@ export default defineConfig(({ mode }) => ({
 
   // Server configuration for development
   server: {
+    proxy: { "/api/cms": { target: process.env.CMS_API_TARGET || "http://127.0.0.1:4100", changeOrigin: false } },
     port: 5173,
     host: true,
     allowedHosts: ["f933e8531818.ngrok-free.app"],
@@ -75,6 +76,7 @@ export default defineConfig(({ mode }) => ({
 
   // Preview server configuration
   preview: {
+    proxy: { "/api/cms": { target: process.env.CMS_API_TARGET || "http://127.0.0.1:4100", changeOrigin: false } },
     port: 4173,
     host: true,
   },
