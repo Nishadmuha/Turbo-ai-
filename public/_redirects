@@ -1,9 +1,4 @@
 # Send obsolete search results to their current replacements.
-/products    /#our-products    301!
-/products/    /#our-products    301!
-/products/vigilorra-apex    /products/spectra-plus    301!
-/products/orchavon-pulse    /products/quantum-apex    301!
-/products/cirrava-orbit    /products/orbit-core    301!
 /index.php/    /    301!
 /offshore-development/    /ai-engineering-software-development    301!
 /index.php    /    301!

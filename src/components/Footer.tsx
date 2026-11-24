@@ -20,7 +20,7 @@ export function Footer() {
   // Company navigation items should only include actionable top-level links.
   const companyLinks = site.nav.items.filter(
     (item) =>
-      item.href !== "/" && item.href !== "#" && (!("dropdown" in item) || item.href === "/products"),
+      item.href !== "/" && item.href !== "#" && !("dropdown" in item),
   );
 
   return (
@@ -69,7 +69,7 @@ export function Footer() {
               {companyLinks.map((link) => (
                 <li key={link.href}>
                   <SectionLink
-                    href={link.href === "/products" ? "/#our-products" : link.href}
+                    href={link.href}
                     className="footer-link text-sm"
                     aria-label={`Navigate to ${link.label} section`}
                   >

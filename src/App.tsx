@@ -28,7 +28,7 @@ const CloudInfrastructureAICompute = lazy(() => import("./pages/CloudInfrastruct
 const IndustriesWeServe = lazy(() => import("./pages/IndustriesWeServe").then((module) => ({ default: module.IndustriesWeServe })));
 const IndustryDetail = lazy(() => import("./pages/IndustryDetail").then((module) => ({ default: module.IndustryDetail })));
 const EnterpriseAISolutions = lazy(() => import("./pages/EnterpriseAISolutions").then((module) => ({ default: module.EnterpriseAISolutions })));
-const LaunchProduct = lazy(() => import("./pages/LaunchProduct").then((module) => ({ default: module.LaunchProduct })));
+const ProductsIndex = lazy(() => import("./pages/ProductsIndex").then((module) => ({ default: module.ProductsIndex })));
 const ADRS = lazy(() => import("./pages/ADRS").then((module) => ({ default: module.ADRS })));
 const AboutTurboAI = lazy(() => import("./pages/AboutTurboAI").then((module) => ({ default: module.AboutTurboAI })));
 const BlogList = lazy(() => import("./pages/BlogList").then((module) => ({ default: module.BlogList })));
@@ -57,18 +57,17 @@ function RouteScroll() {
     if (hash) {
       const sectionId = hash.replace("#", "");
       const scrollToSection = () => {
-        const scrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
         if (sectionId === "hero") {
-          window.scrollTo({ top: 0, behavior: scrollBehavior });
+          window.scrollTo({ top: 0, behavior: "smooth" });
           return;
         }
         const element = document.getElementById(sectionId);
         if (element) {
           const headerHeight = tokens.layout.headerH;
-          const targetY = element.getBoundingClientRect().top + window.scrollY - headerHeight;
+          const targetY = element.offsetTop - headerHeight;
           window.scrollTo({
             top: targetY,
-            behavior: scrollBehavior,
+            behavior: "smooth",
           });
         }
       };
@@ -136,14 +135,7 @@ function App() {
           <Route path="/cloud-infrastructure-ai-compute" element={page("cloud-infrastructure-ai-compute", <CloudInfrastructureAICompute />)} />
           <Route path="/industries-we-serve" element={page("industries-we-serve", <IndustriesWeServe />)} />
           <Route path="/enterprise-ai-solutions" element={page("enterprise-ai-solutions", <EnterpriseAISolutions />)} />
-          <Route path="/products" element={<Navigate to="/#our-products" replace />} />
-          <Route path="/products/vigilorra-apex" element={<Navigate to="/products/spectra-plus" replace />} />
-          <Route path="/products/orchavon-pulse" element={<Navigate to="/products/quantum-apex" replace />} />
-          <Route path="/products/cirrava-orbit" element={<Navigate to="/products/orbit-core" replace />} />
-          <Route path="/products/interstellar-one" element={<LaunchProduct slug="interstellar-one" />} />
-          <Route path="/products/spectra-plus" element={<LaunchProduct slug="spectra-plus" />} />
-          <Route path="/products/quantum-apex" element={<LaunchProduct slug="quantum-apex" />} />
-          <Route path="/products/orbit-core" element={<LaunchProduct slug="orbit-core" />} />
+          <Route path="/products" element={page("products", <ProductsIndex />)} />
           <Route path="/products/adrs" element={<CmsProductRoute slug="adrs"><ADRS /></CmsProductRoute>} />
           <Route path="/products/:slug" element={<CmsContentPage kind="product" />} />
           <Route path="/about" element={page("about", <AboutTurboAI />)} />

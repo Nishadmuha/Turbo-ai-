@@ -4,20 +4,18 @@ import fs from 'fs';
 import path from 'path';
 import { loadEnv } from 'vite';
 import { createClient } from '@supabase/supabase-js';
+import { isRetiredProduct } from '../src/content/retiredProducts.mjs';
 
 const env = loadEnv('production', process.cwd(), 'VITE_');
 const cmsEnabled = env.VITE_CMS_ENABLED === 'true';
 const baseUrl = (env.VITE_BASE_URL || 'https://turbo-ai.ca').replace(/\/$/, '');
-const cmsPath = (entry) => `/blog/${entry.slug}`;
+const cmsPath = (entry) => entry.kind === 'page'
+    ? entry.slug === 'home' ? '/' : `/${entry.slug}`
+    : entry.kind === 'solution' ? `/solutions/${entry.slug}`
+    : `/${entry.kind === 'industry' ? 'industries' : entry.kind === 'product' ? 'products' : 'blog'}/${entry.slug}`;
 const xmlEscape = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&apos;');
 const publicDocuments = [{ route: '/image-credits', file: 'image-credits.html' }];
 const analyticsDomains = ['googletagmanager.com', 'google-analytics.com'];
-const launchProductRoutes = [
-    '/products/interstellar-one',
-    '/products/spectra-plus',
-    '/products/quantum-apex',
-    '/products/orbit-core',
-];
 
 async function renderedHtml(page) {
     // Runtime loaders belong to the visitor's session, not the static snapshot.
@@ -48,12 +46,6 @@ function knownModificationDates() {
 }
 
 async function publishedCmsRoutes() {
-    if (env.VITE_CMS_PROVIDER === 'mongodb') {
-        const api = process.env.CMS_PRERENDER_API_URL || 'http://127.0.0.1:4100/api/cms';
-        const response = await fetch(`${api}/entries?kind=blog&limit=500`, { signal: AbortSignal.timeout(15000) });
-        if (!response.ok) throw new Error(`Blog CMS is unavailable (${response.status}). Start npm run dev or npm run cms:server before building.`);
-        return response.json();
-    }
     if (!env.VITE_SUPABASE_URL || !env.VITE_SUPABASE_PUBLISHABLE_KEY) {
         throw new Error('CMS is enabled but Supabase URL or publishable key is missing.');
     }
@@ -62,12 +54,13 @@ async function publishedCmsRoutes() {
     const entries = [];
     for (let offset = 0; ; offset += 500) {
         const { data, error } = await client.from('cms_entries')
-            .select('kind,slug,robots,updated_at').eq('status', 'published').eq('kind', 'blog')
+            .select('kind,slug,robots,updated_at').eq('status', 'published')
             .order('kind').order('slug').range(offset, offset + 499);
         if (error) throw error;
-        entries.push(...(data || []));
+        entries.push(...(data || []).filter((entry) => !isRetiredProduct(entry.kind, entry.slug)));
         if (!data || data.length < 500) break;
     }
+    if (!entries.length) throw new Error('CMS is enabled but no published content exists. Import and review the seed first.');
     return entries;
 }
 
@@ -156,7 +149,7 @@ async function prerender() {
         '/cloud-infrastructure-ai-compute',
         '/industries-we-serve',
         '/enterprise-ai-solutions',
-        ...launchProductRoutes,
+        '/products',
         '/products/adrs',
         '/about',
         '/industries/financial-services',
@@ -198,9 +191,9 @@ async function prerender() {
         console.warn('Could not auto-discover blog posts:', e);
     }
 
-    // Website routes always use authored content. Only published blog articles
-    // come from the CMS; an empty blog is valid and must not remove the website.
-    const routes = [...new Set([...staticRoutes, ...(cmsEnabled ? cmsEntries.map(cmsPath) : blogRoutes)])];
+    const routes = cmsEnabled
+        ? [...new Set(cmsEntries.map(cmsPath))]
+        : [...new Set([...staticRoutes, ...blogRoutes])];
     const cmsByPath = new Map(cmsEntries.map((entry) => [cmsPath(entry), entry]));
     const knownDates = knownModificationDates();
     const sitemapEntries = new Map();

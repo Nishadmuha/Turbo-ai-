@@ -69,7 +69,7 @@ export function Hero() {
           </p>
 
           {/* CTA */}
-          <div className="pt-2 sm:pt-4 flex flex-wrap items-center justify-center gap-3">
+          <div className="pt-2 sm:pt-4">
             <SectionLink
               href={cms?.cta_url || copy.hero.cta.href}
               className="cta-link text-base sm:text-lg lg:text-xl inline-block px-6 py-3"

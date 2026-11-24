@@ -2,11 +2,10 @@ import { EnterprisePage } from "../components/EnterprisePage";
 import { enterprisePages } from "../content/enterprisePages";
 import { Container, Section } from "../components/Container";
 import { SectionLink } from "../components/SectionLink";
-import { cmsEnabledFor } from "../cms/client";
+import { cmsPublicEnabled } from "../cms/client";
 import { usePublishedEntries } from "../cms/hooks";
 
 export function EnterpriseAISolutions() {
-  const cmsPublicEnabled = cmsEnabledFor("solution");
   const { entries, loading, failed } = usePublishedEntries("solution");
   return <>
     {cmsPublicEnabled && loading && <span hidden data-cms-loading />}

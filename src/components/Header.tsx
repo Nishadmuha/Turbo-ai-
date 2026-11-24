@@ -4,35 +4,23 @@ import { SectionLink } from "./SectionLink";
 import { Dropdown } from "./Dropdown";
 import { MobileDropdown } from "./MobileDropdown";
 import { IndustryMegaMenu } from "./IndustryMegaMenu";
-import { industryNavigation, launchProductNavigation, site, tokens } from "../content/turboai";
+import { industryNavigation, site, tokens } from "../content/turboai";
 import turboAiLogo from "../assets/turbo-ai-logo-removebg-preview.png";
-import { cmsEnabledFor, mongodbEnabled } from "../cms/client";
+import { cmsPublicEnabled } from "../cms/client";
 import { usePublishedEntries } from "../cms/hooks";
 
 export function Header() {
-  const cmsPublicEnabled = cmsEnabledFor("product");
   const { entries: cmsProducts, loading: productsLoading, failed: productsFailed } = usePublishedEntries("product");
   const navItems = site.nav.items.map((item) => {
     if (!cmsPublicEnabled || item.label !== "Products" || !("dropdown" in item)) return item;
-    // MongoDB publication controls the menu; authored pages remain the Supabase fallback.
-    const staticLinks = (item.dropdown ?? []).filter((link) =>
-      link.external || (!mongodbEnabled && launchProductNavigation.some((product) => product.href === link.href))
-    );
-    const seenHrefs = new Set<string>();
     return {
       ...item,
       dropdown: [
-        ...staticLinks,
+        ...(item.dropdown ?? []).slice(0, 1),
         ...cmsProducts
+          .filter((entry) => item.dropdown?.some((link) => link.href === `/products/${entry.slug}`))
           .map((entry) => ({ label: entry.title, href: `/products/${entry.slug}` })),
-      ].filter((link) => {
-        if (seenHrefs.has(link.href)) return false;
-        seenHrefs.add(link.href);
-        return true;
-      }).sort((a, b) => {
-        const order = (href: string) => { const index = item.dropdown?.findIndex((link) => link.href === href) ?? -1; return index < 0 ? 100 : index; };
-        return order(a.href) - order(b.href);
-      }),
+      ],
     };
   });
   const { pathname } = useLocation();

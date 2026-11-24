@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { Container } from "../components/Container";
 import { SectionLink } from "../components/SectionLink";
-import { cmsPublicEnabled, cmsEnabledFor } from "./client";
+import { cmsPublicEnabled } from "./client";
 import { usePublishedEntry } from "./hooks";
 import { CmsSEO } from "./CmsSEO";
 import type { CmsEntry, ContentKind } from "./types";
@@ -31,22 +31,22 @@ export function CmsContentPage({ kind }: { kind: ContentKind }) {
   const { slug } = useParams();
   const { entry, loading, failed } = usePublishedEntry(kind, slug);
   if (slug && isRetiredProduct(kind, slug)) return <CmsNotFound resolveRedirects={false} />;
-  if (!cmsEnabledFor(kind)) return <CmsNotFound resolveRedirects={false} />;
+  if (!cmsPublicEnabled) return <CmsNotFound />;
   if (loading) return <main data-cms-loading className="min-h-screen bg-[#020617] pt-40 text-center text-slate-300">Loading…</main>;
   if (failed) return <CmsUnavailable />;
   if (!entry) return <CmsNotFound />;
   return <CmsContent entry={entry} />;
 }
 
-export function CmsUnavailable({ retry = () => window.location.reload() }: { retry?: () => void }) {
-  return <main data-cms-error className="flex min-h-screen items-center justify-center bg-[#020617] px-4 text-center text-white"><Helmet><title>Blog temporarily unavailable | Turbo AI</title><meta name="robots" content="noindex,nofollow" /></Helmet><div><h1 className="text-4xl font-bold">We couldn't load this article</h1><p className="mt-4 text-slate-300">Please try again in a moment.</p><button onClick={retry} className="mt-6 rounded-lg bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300">Try again</button></div></main>;
+export function CmsUnavailable() {
+  return <main data-cms-error className="flex min-h-screen items-center justify-center bg-[#020617] px-4 text-center text-white"><Helmet><title>Content unavailable | Turbo AI</title><meta name="robots" content="noindex,nofollow" /></Helmet><div><h1 className="text-4xl font-bold">Content temporarily unavailable</h1><p className="mt-4 text-slate-300">Please try again shortly.</p></div></main>;
 }
 
 export function CmsNotFound({ resolveRedirects = true }: { resolveRedirects?: boolean }) {
   const { pathname } = useLocation();
   const [redirect, setRedirect] = useState<{ from: string; to: string } | null>(null);
   useEffect(() => {
-    if (!pathname.startsWith('/blog/') || !resolveRedirects || isRetiredProductPath(pathname) || !cmsPublicEnabled || !cmsClient) return;
+    if (!resolveRedirects || isRetiredProductPath(pathname) || !cmsPublicEnabled || !cmsClient) return;
     let active = true;
     cmsClient.from("cms_redirects").select("target_path").eq("old_path", pathname).maybeSingle()
       .then(({ data }) => { if (active && data?.target_path && data.target_path !== pathname && !isRetiredProductPath(data.target_path)) setRedirect({ from: pathname, to: data.target_path }); });
