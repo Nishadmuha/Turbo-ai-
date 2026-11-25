@@ -104,9 +104,9 @@ try {
   console.log('MongoDB blog CMS integration passed: blog-only scope, preserved non-blog records and retired settings, persistence, draft isolation, publish/SEO edits, validation, unique slugs, authentication, CSRF, roles, team revocation, media, and logout.');
 } finally {
   await new Promise(resolve => server.close(resolve));
-  if (!db.databaseName.startsWith('turbo_ai_cms_test_')) throw new Error('Refusing to drop a non-test database.');
+  assert.ok(db.databaseName.startsWith('turbo_ai_cms_test_'), 'Refusing to drop a non-test database.');
   await db.dropDatabase();
   await client.close();
-  if (!path.resolve(uploadDir).startsWith(path.resolve(os.tmpdir()) + path.sep) || !path.basename(uploadDir).startsWith('turbo-cms-test-')) throw new Error('Unexpected test upload directory.');
+  assert.ok(path.resolve(uploadDir).startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(uploadDir).startsWith('turbo-cms-test-'), 'Unexpected test upload directory.');
   await rm(uploadDir, { recursive: true, force: true });
 }

@@ -8,7 +8,7 @@ export function text(value, max = 1000) {
 export function url(value, { canonical = false } = {}) {
   value = text(value || '', 2048);
   if (!value) return value;
-  if (/[\x00-\x20\\]/.test(value)) bad('URLs cannot contain whitespace or backslashes.');
+  if ([...value].some(character => character.charCodeAt(0) <= 32 || character === '\\')) bad('URLs cannot contain whitespace or backslashes.');
   if (/^https?:\/\//i.test(value)) { try { const u = new URL(value); if (u.username || u.password) bad('URLs cannot contain credentials.'); return value; } catch { bad('Invalid URL.'); } }
   if (!canonical && (/^\/(?!\/)/.test(value) || /^#[a-z0-9_-]+$/i.test(value))) return value;
   bad(canonical ? 'Canonical URLs must use HTTP or HTTPS.' : 'Use HTTP(S), a site-relative path, or an anchor URL.');

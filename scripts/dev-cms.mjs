@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 import { connectDatabase } from '../server/db.mjs';
 import { createApp } from '../server/app.mjs';
+import { resolveCmsBuildConfig } from './cms-build-config.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const args = process.argv.slice(2);
@@ -31,7 +32,7 @@ async function stop(code = 0) {
 process.on('SIGINT', () => { void stop(); });
 process.on('SIGTERM', () => { void stop(); });
 
-if (env.VITE_CMS_PROVIDER === 'mongodb') {
+if (resolveCmsBuildConfig(env).provider === 'mongodb') {
   const apiUrl = `http://127.0.0.1:${apiPort}`;
   let existing = false;
   try {

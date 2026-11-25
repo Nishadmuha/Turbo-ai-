@@ -119,12 +119,12 @@ export function mediaUrl(path: string) {
 }
 
 export async function uploadMedia(file: File, alt: string, category: string): Promise<CmsMedia> {
+  if (!['image/png', 'image/jpeg', 'image/webp', 'image/avif', 'image/gif'].includes(file.type)) throw new Error("Choose a PNG, JPEG, WebP, AVIF, or GIF image.");
+  if (file.size > 4 * 1024 * 1024) throw new Error("Images must be 4 MB or smaller.");
   if (mongodbEnabled) {
     const body = new FormData(); body.append("file", file); body.append("alt", alt); body.append("category", category);
     return cmsRequest<CmsMedia>("/admin/media", { method: "POST", body });
   }
-  if (!["image/png", "image/jpeg", "image/webp", "image/avif", "image/gif"].includes(file.type)) throw new Error("Choose a PNG, JPEG, WebP, AVIF, or GIF image.");
-  if (file.size > 8 * 1024 * 1024) throw new Error("Images must be 8 MB or smaller.");
   const ext = file.name.split(".").pop()?.toLowerCase() || "img";
   const path = `${crypto.randomUUID()}.${ext}`;
   const client = requireClient();

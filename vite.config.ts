@@ -1,10 +1,13 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+import { resolveCmsBuildConfig } from "./scripts/cms-build-config.mjs";
 
 import { resolve } from "path";
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  const cms = resolveCmsBuildConfig({ ...loadEnv(mode, process.cwd(), ""), ...process.env });
+  return ({
   plugins: [
     react(),
   ],
@@ -64,6 +67,8 @@ export default defineConfig(({ mode }) => ({
   define: {
     __DEV__: mode === "development",
     __PROD__: mode === "production",
+    "import.meta.env.VITE_CMS_PROVIDER": JSON.stringify(cms.provider),
+    "import.meta.env.VITE_CMS_ENABLED": JSON.stringify(String(cms.enabled)),
   },
 
   // Server configuration for development
@@ -80,4 +85,5 @@ export default defineConfig(({ mode }) => ({
     port: 4173,
     host: true,
   },
-}));
+  });
+});

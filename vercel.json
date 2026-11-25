@@ -5,6 +5,14 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
+  "env": {
+    "NODEJS_HELPERS": "0"
+  },
+  "functions": {
+    "api/cms.mjs": {
+      "maxDuration": 30
+    }
+  },
   "redirects": [
     { "source": "/products", "destination": "/#our-products", "permanent": true },
     { "source": "/products/vigilorra-apex", "destination": "/products/spectra-plus", "permanent": true },
@@ -91,8 +99,20 @@
   ],
   "rewrites": [
     {
+      "source": "/api/cms/:path*",
+      "destination": "/api/cms?__cms_path=:path*"
+    },
+    {
+      "source": "/admin",
+      "destination": "/"
+    },
+    {
       "source": "/admin/:path*",
-      "destination": "/index.html"
+      "destination": "/"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/"
     }
   ]
 }

@@ -1,12 +1,13 @@
 import puppeteer from 'puppeteer';
-import { spawn, spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { loadEnv } from 'vite';
+import { loadEnv, preview as startPreview } from 'vite';
 import { createClient } from '@supabase/supabase-js';
+import { resolveCmsBuildConfig } from './cms-build-config.mjs';
+import { loadMongoBlogSnapshot, snapshotResponse } from './cms-build-snapshot.mjs';
 
-const env = loadEnv('production', process.cwd(), 'VITE_');
-const cmsEnabled = env.VITE_CMS_ENABLED === 'true';
+const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
+const { provider: cmsProvider, enabled: cmsEnabled } = resolveCmsBuildConfig(env);
 const baseUrl = (env.VITE_BASE_URL || 'https://turbo-ai.ca').replace(/\/$/, '');
 const cmsPath = (entry) => `/blog/${entry.slug}`;
 const xmlEscape = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&apos;');
@@ -48,12 +49,7 @@ function knownModificationDates() {
 }
 
 async function publishedCmsRoutes() {
-    if (env.VITE_CMS_PROVIDER === 'mongodb') {
-        const api = process.env.CMS_PRERENDER_API_URL || 'http://127.0.0.1:4100/api/cms';
-        const response = await fetch(`${api}/entries?kind=blog&limit=500`, { signal: AbortSignal.timeout(15000) });
-        if (!response.ok) throw new Error(`Blog CMS is unavailable (${response.status}). Start npm run dev or npm run cms:server before building.`);
-        return response.json();
-    }
+    if (cmsProvider === 'mongodb') return loadMongoBlogSnapshot(env);
     if (!env.VITE_SUPABASE_URL || !env.VITE_SUPABASE_PUBLISHABLE_KEY) {
         throw new Error('CMS is enabled but Supabase URL or publishable key is missing.');
     }
@@ -73,41 +69,18 @@ async function publishedCmsRoutes() {
 
 async function prerender() {
     console.log('Starting pre-rendering...');
+    let preview;
+    let browser;
+    try {
     const cmsEntries = cmsEnabled ? await publishedCmsRoutes() : [];
 
-    // Start the preview server
-    const preview = spawn('npm', ['run', 'preview'], {
-        stdio: 'pipe',
-        shell: true,
-    });
-
-    let port = 0;
-
-    // Wait for the server to start and get the port
-    const serverUrl = await new Promise((resolve) => {
-        preview.stdout.on('data', (data) => {
-            const output = data.toString();
-            // Strip ANSI codes
-            const cleanOutput = output.replace(/\u001b\[.*?m/g, '');
-            console.log(`[Preview] ${cleanOutput.trim()}`);
-
-            // Match "Local: http://localhost:PORT" or just "http://localhost:PORT"
-            const match = cleanOutput.match(/(?:Local:\s+)?(http:\/\/localhost:(\d+))/);
-            if (match) {
-                port = parseInt(match[2]);
-                resolve(match[1]);
-            }
-        });
-
-        preview.stderr.on('data', (data) => {
-            console.error(`[Preview Error] ${data}`);
-        });
-    });
-
+    // Own an ephemeral preview listener instead of depending on an already
+    // running website/API or accidentally reusing another developer's port.
+    preview = await startPreview({ preview: { host: '127.0.0.1', port: 0, strictPort: true } });
+    const serverUrl = `http://127.0.0.1:${preview.httpServer.address().port}`;
     console.log(`Preview server running at ${serverUrl}`);
 
     // Launch Puppeteer
-    let browser;
     if (process.env.VERCEL) {
         console.log('Running on Vercel, using @sparticuz/chromium');
         const chromium = await import('@sparticuz/chromium').then(m => m.default);
@@ -127,12 +100,18 @@ async function prerender() {
         });
     }
     const page = await browser.newPage();
+    const cmsApi = new URL(env.VITE_CMS_API_URL || '/api/cms', serverUrl);
+    const cmsApiPath = cmsApi.pathname.replace(/\/$/, '');
     // Avoid recording build visits or serializing scripts injected by analytics.
     await page.setRequestInterception(true);
     page.on('request', async (request) => {
-        const hostname = new URL(request.url()).hostname;
+        const url = new URL(request.url());
+        const hostname = url.hostname;
         if (analyticsDomains.some(domain => hostname === domain || hostname.endsWith(`.${domain}`))) {
             await request.abort();
+        } else if (cmsEnabled && cmsProvider === 'mongodb' && url.origin === cmsApi.origin && (url.pathname === `${cmsApiPath}/entries` || url.pathname.startsWith(`${cmsApiPath}/entries/`))) {
+            const result = snapshotResponse(cmsEntries, url.pathname, url.searchParams, cmsApiPath);
+            await request.respond({ status: result.status, contentType: 'application/json', body: JSON.stringify(result.body) });
         } else {
             await request.continue();
         }
@@ -205,7 +184,6 @@ async function prerender() {
     const knownDates = knownModificationDates();
     const sitemapEntries = new Map();
 
-    try {
         for (const route of routes) {
             console.log(`Pre-rendering ${route}...`);
 
@@ -306,11 +284,12 @@ ${[...sitemapEntries].map(([url, modified]) => `  <url>
         console.error('Error during pre-rendering:', err);
         process.exitCode = 1;
     } finally {
-        await browser.close();
-        if (process.platform === 'win32' && preview.pid) {
-            spawnSync('taskkill', ['/pid', preview.pid.toString(), '/f', '/t']);
-        } else {
-            preview.kill();
+        try { await browser?.close(); }
+        finally {
+            if (preview) {
+                preview.httpServer.closeAllConnections();
+                await new Promise(resolve => preview.httpServer.close(resolve));
+            }
         }
     }
 }

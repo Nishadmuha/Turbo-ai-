@@ -5,9 +5,16 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default [
-  { ignores: ['dist', 'dev-dist', 'node_modules', 'scripts'] },
+  { ignores: ['dist', 'dev-dist', 'node_modules', 'scripts', '.cms-data', '.cms-test-data', '.codex-backups', '.vercel'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    files: ['server/**/*.mjs', 'api/**/*.mjs'],
+    languageOptions: { globals: globals.node },
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {

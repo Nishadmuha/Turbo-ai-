@@ -15,6 +15,8 @@
     "test:cms-mongo": "node --env-file-if-exists=.env.local server/test.mjs",
     "test:cms-browser": "node scripts/test-cms-browser.mjs",
     "test:cms-build": "node --test server/rebuild.test.mjs",
+    "test:cms-deployment": "node --test server/serverless.test.mjs scripts/cms-build.test.mjs scripts/configure-vercel-cms.test.mjs",
+    "test:deployment": "node scripts/test-production-deployment.mjs",
     "build": "tsc -b && vite build && npm run prerender",
     "prerender": "node scripts/prerender.js",
     "cms:export": "node scripts/export-cms-seed.mjs",

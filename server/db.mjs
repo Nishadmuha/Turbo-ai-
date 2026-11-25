@@ -4,7 +4,7 @@ export async function connectDatabase(uri = process.env.MONGODB_URI || 'mongodb:
   if (!/^[a-zA-Z0-9_-]+$/.test(name)) throw new Error('Invalid MongoDB database name.');
   let client;
   try {
-    client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 });
+    client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000, maxPoolSize: 10, minPoolSize: 0, maxIdleTimeMS: 60000 });
     await client.connect();
   }
   catch (error) {
@@ -20,6 +20,8 @@ export async function connectDatabase(uri = process.env.MONGODB_URI || 'mongodb:
     db.collection('cms_sessions').createIndex({ tokenHash: 1 }, { unique: true }),
     db.collection('cms_sessions').createIndex({ expires: 1 }, { expireAfterSeconds: 0 }),
     db.collection('cms_settings').createIndex({ key: 1 }, { unique: true }),
+    db.collection('cms_media').createIndex({ path: 1 }),
+    db.collection('cms_rate_limits').createIndex({ resetTime: 1 }, { expireAfterSeconds: 0 }),
   ]); }
   catch { await client.close(); throw new Error('MongoDB schema initialization failed. Check database permissions and existing duplicate records. Connection details have been omitted.'); }
   return { client, db };

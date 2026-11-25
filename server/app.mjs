@@ -3,18 +3,20 @@ import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
 import multer from 'multer';
 import { randomBytes, randomUUID } from 'node:crypto';
-import { mkdir, writeFile, unlink } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
+import { Binary } from 'mongodb';
 import path from 'node:path';
 import { passwordHash, verifyPassword, tokenHash, publicUser, validEmail } from './security.mjs';
 import { validateEntry, kinds, text, bad } from './validation.mjs';
 import { createBuildController } from './rebuild.mjs';
+import { MongoRateLimitStore } from './rate-limit-store.mjs';
 
 const cookieName = 'turbo_cms_session';
 const publicProjection = { _id: 0 };
-export async function createApp({ db, uploadDir = path.resolve('.cms-data/uploads'), origins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:4173', 'http://127.0.0.1:4173'], secure = process.env.NODE_ENV === 'production', allowLocalBuild = process.env.CMS_ALLOW_LOCAL_BUILD === 'true', runBuild }) {
-  await mkdir(uploadDir, { recursive: true });
+export async function createApp({ db, uploadDir = path.resolve('.cms-data/uploads'), origins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:4173', 'http://127.0.0.1:4173'], secure = process.env.NODE_ENV === 'production', allowLocalBuild = process.env.CMS_ALLOW_LOCAL_BUILD === 'true', runBuild, trustProxy = false }) {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', trustProxy);
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
   app.use(express.json({ limit: '2mb' }));
   const api = express.Router();
@@ -45,7 +47,7 @@ export async function createApp({ db, uploadDir = path.resolve('.cms-data/upload
     next();
   }
   function admin(req, res, next) { if (req.cmsUser.role !== 'admin') return res.status(403).json({ error: 'Administrator access is required.' }); next(); }
-  const authLimit = rateLimit({ windowMs: 15 * 60 * 1000, limit: 15, standardHeaders: 'draft-8', legacyHeaders: false, message: { error: 'Too many login attempts. Try again in 15 minutes.' } });
+  const authLimit = rateLimit({ windowMs: 15 * 60 * 1000, limit: 15, store: new MongoRateLimitStore(db), standardHeaders: 'draft-8', legacyHeaders: false, message: { error: 'Too many login attempts. Try again in 15 minutes.' } });
   const dummyHash = await passwordHash(randomBytes(32).toString('hex'));
   api.get('/health', async (_req, res) => { await db.command({ ping: 1 }); res.json({ ok: true, database: 'mongodb', scope: 'blog' }); });
   api.get('/auth/me', async (req, res) => { const user = await currentUser(req); res.json(user ? publicUser(user) : null); });
@@ -69,7 +71,17 @@ export async function createApp({ db, uploadDir = path.resolve('.cms-data/upload
     if (!kinds.includes(req.params.kind)) return res.status(404).json({ error: 'This CMS manages blog posts only.' });
     res.json(await entries.findOne({ kind: 'blog', slug: req.params.slug, status: 'published' }, { projection: publicProjection }));
   });
-  api.use('/media/files', express.static(uploadDir, { dotfiles: 'deny', index: false, setHeaders: res => { res.set('Content-Security-Policy', "default-src 'none'"); res.set('X-Content-Type-Options', 'nosniff'); } }));
+  api.get('/media/files/:filename', async (req, res, next) => {
+    if (!/^[a-f0-9-]+\.(png|jpg|webp|gif|avif)$/.test(req.params.filename)) return res.status(404).json({ error: 'Image was not found.' });
+    const image = await media.findOne({ path: `/api/cms/media/files/${req.params.filename}` }, { projection: { data: 1, content_type: 1 } });
+    if (!image?.data) return next();
+    res.set('Content-Security-Policy', "default-src 'none'");
+    res.set('X-Content-Type-Options', 'nosniff');
+    res.type(image.content_type).send(Buffer.from(image.data.buffer));
+  });
+  // Read older disk uploads during local development. New uploads always persist in MongoDB.
+  // Serverless deployments explicitly disable this fallback and never write to disk.
+  if (uploadDir) api.use('/media/files', express.static(uploadDir, { dotfiles: 'deny', index: false, setHeaders: res => { res.set('Content-Security-Policy', "default-src 'none'"); res.set('X-Content-Type-Options', 'nosniff'); } }));
   api.use('/admin', authenticated);
   api.get('/admin/rebuild', admin, (_req, res) => res.json(builds.getStatus()));
   api.post('/admin/rebuild', admin, (req, res) => {
@@ -92,8 +104,9 @@ export async function createApp({ db, uploadDir = path.resolve('.cms-data/upload
   api.post('/admin/entries', async (req, res) => { const now = new Date().toISOString(); const row = { ...validateEntry(req.body), id: randomUUID(), created_at: now, updated_at: now }; await entries.insertOne(row); delete row._id; res.status(201).json(row); });
   api.put('/admin/entries/:id', async (req, res) => { const row = await entries.findOneAndUpdate({ id: req.params.id, kind: 'blog' }, { $set: { ...validateEntry(req.body), updated_at: new Date().toISOString() } }, { returnDocument: 'after', projection: publicProjection }); if (!row) return res.status(404).json({ error: 'Blog post was not found.' }); res.json(row); });
   api.delete('/admin/entries/:id', admin, async (req, res) => { const result = await entries.deleteOne({ id: req.params.id, kind: 'blog' }); if (!result.deletedCount) return res.status(404).json({ error: 'Blog post was not found.' }); res.json({ ok: true }); });
-  api.get('/admin/media', async (_req, res) => res.json(await media.find({}, { projection: publicProjection }).sort({ created_at: -1 }).limit(1000).toArray()));
-  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024, files: 1, fields: 3 } });
+  api.get('/admin/media', async (_req, res) => res.json(await media.find({}, { projection: { ...publicProjection, data: 0 } }).sort({ created_at: -1 }).limit(1000).toArray()));
+  // Leave room for multipart metadata under Vercel's 4.5 MB request limit.
+  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4 * 1024 * 1024, files: 1, fields: 3, fieldSize: 2048 } });
   api.post('/admin/media', upload.single('file'), async (req, res) => {
     const file = req.file; if (!file) bad('Choose an image.');
     const b = file.buffer;
@@ -108,11 +121,12 @@ export async function createApp({ db, uploadDir = path.resolve('.cms-data/upload
     const alt = text(req.body.alt, 500); if (!alt) bad('Alt text is required.');
     const filename = `${randomUUID()}.${ext}`;
     const record = { id: randomUUID(), name: text(file.originalname, 255), path: `/api/cms/media/files/${filename}`, alt, category: text(req.body.category || 'General', 100), created_at: new Date().toISOString() };
-    await writeFile(path.join(uploadDir, filename), b, { flag: 'wx' });
-    try { await media.insertOne(record); } catch (error) { await unlink(path.join(uploadDir, filename)); throw error; }
-    delete record._id; res.status(201).json(record);
+    const contentType = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp', gif: 'image/gif', avif: 'image/avif' }[ext];
+    // Metadata and bytes are one atomic document, so a cold start or redeploy cannot lose an image.
+    await media.insertOne({ ...record, content_type: contentType, data: new Binary(b) });
+    res.status(201).json(record);
   });
-  api.delete('/admin/media/:id', admin, async (req, res) => { const row = await media.findOne({ id: req.params.id }); if (row) { const filename = path.basename(row.path); if (!/^[a-f0-9-]+\.(png|jpg|webp|gif|avif)$/.test(filename)) bad('Invalid media path.'); await unlink(path.join(uploadDir, filename)).catch(error => { if (error.code !== 'ENOENT') throw error; }); await media.deleteOne({ id: row.id }); } res.json({ ok: true }); });
+  api.delete('/admin/media/:id', admin, async (req, res) => { const row = await media.findOne({ id: req.params.id }, { projection: { data: 0 } }); if (row) { const filename = path.basename(row.path); if (!/^[a-f0-9-]+\.(png|jpg|webp|gif|avif)$/.test(filename)) bad('Invalid media path.'); if (uploadDir) await unlink(path.join(uploadDir, filename)).catch(error => { if (error.code !== 'ENOENT') throw error; }); await media.deleteOne({ id: row.id }); } res.json({ ok: true }); });
   api.get('/admin/team', admin, async (_req, res) => res.json((await users.find({}).toArray()).map(publicUser)));
   api.post('/admin/team', admin, async (req, res) => { const role = req.body.role; if (!['admin', 'editor'].includes(role)) bad('Invalid role.'); const user = { id: randomUUID(), email: validEmail(req.body.email), role, passwordHash: await passwordHash(req.body.password), created_at: new Date().toISOString(), disabled: false }; await users.insertOne(user); res.status(201).json(publicUser(user)); });
   api.put('/admin/team/:id', admin, async (req, res) => {
@@ -129,7 +143,7 @@ export async function createApp({ db, uploadDir = path.resolve('.cms-data/upload
   api.use((_req, res) => res.status(404).json({ error: 'CMS endpoint was not found.' }));
   app.use((error, _req, res, _next) => {
     if (error.code === 11000) return res.status(409).json({ error: 'This email or content slug already exists.' });
-    if (error instanceof multer.MulterError) return res.status(400).json({ error: 'Upload failed. Images must be 8 MB or smaller.' });
+    if (error instanceof multer.MulterError) return res.status(400).json({ error: 'Upload failed. Images must be 4 MB or smaller, with short image details.' });
     const status = error.status || 500;
     res.status(status).json({ error: status < 500 ? error.message : 'CMS request failed. Check the server and database connection.' });
   });
