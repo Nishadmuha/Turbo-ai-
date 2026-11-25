@@ -5,12 +5,12 @@ import { Container } from "../components/Container";
 import { Connect } from "../components/Connect";
 import { SectionLink } from "../components/SectionLink";
 import { SEO } from "../components/SEO";
-import { MotionToggle } from "../components/LaunchProductCollection";
 import { launchProducts, solutionScopeNote } from "../content/launchProducts";
 import { CmsNotFound, CmsUnavailable } from "../cms/CmsContentPage";
 import { usePublishedEntry } from "../cms/hooks";
 import { cmsEnabledFor, mongodbEnabled } from "../cms/client";
 import { CmsSEO } from "../cms/CmsSEO";
+import "../components/launch-products.css";
 import "../components/product-hero.css";
 
 const seoKeys = { "interstellar-one": "interstellarOne", "spectra-plus": "spectraPlus", "quantum-apex": "quantumApex", "orbit-core": "orbitCore" } as const;
@@ -37,7 +37,6 @@ function HeroMotion({ theme }: { theme: string }) {
 
 export function LaunchProduct({ slug }: { slug: string }) {
   const cmsPublicEnabled = cmsEnabledFor("product");
-  const [paused, setPaused] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const { entry, loading, failed } = usePublishedEntry("product", slug);
   const product = launchProducts.find((item) => item.slug === slug);
@@ -55,7 +54,7 @@ export function LaunchProduct({ slug }: { slug: string }) {
     { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
     { "@type": "ListItem", position: 2, name, item: canonical },
   ] };
-  return <main id="main" data-cms-ready="true" className={`lp-surface lp-detail lp-theme-${product.theme} ${paused ? "lp-paused" : ""}`}>
+  return <main id="main" data-cms-ready="true" className={`lp-surface lp-detail lp-theme-${product.theme}`}>
     {entry ? <CmsSEO entry={entry} /> : <SEO pageKey={seoKeys[product.slug as keyof typeof seoKeys]} url={canonical} image={product.image} />}
     <Helmet defer={false}><script type="application/ld+json">{JSON.stringify(schema)}</script></Helmet>
     <section className="lp-photo-hero" aria-labelledby="product-title">
@@ -64,7 +63,7 @@ export function LaunchProduct({ slug }: { slug: string }) {
       <HeroMotion theme={product.theme} />
       <Container className="lp-hero-content">
         <div className="lp-hero-copy"><p className="lp-category">{entry?.category || product.category}</p><h1 id="product-title">{name}</h1><p className="lp-photo-tagline">{entry?.hero_title || product.tagline}</p><p className="lp-photo-summary">{entry?.hero_description || product.summary}</p><div className="lp-actions"><SectionLink href={entry?.cta_url || "#connect"} className="lp-button">{entry?.cta_text || product.cta}</SectionLink><SectionLink href="#capabilities" className="lp-text-link">Explore capabilities</SectionLink></div></div>
-        <div className="lp-hero-foot"><div className="lp-hero-signature"><span className="lp-signature-line" aria-hidden="true" /><p>{product.shortLabel}<span>Designed around your enterprise.</span></p></div><MotionToggle paused={paused} onToggle={() => setPaused(!paused)} /></div>
+        <div className="lp-hero-foot"><div className="lp-hero-signature"><span className="lp-signature-line" aria-hidden="true" /><p>{product.shortLabel}<span>Designed around your enterprise.</span></p></div></div>
       </Container>
     </section>
     <Container>

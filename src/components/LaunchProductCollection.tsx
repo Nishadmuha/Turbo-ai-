@@ -1,15 +1,9 @@
-import { PauseIcon, PlayIcon } from "@heroicons/react/24/outline";
 import { launchProducts } from "../content/launchProducts";
 import { SectionLink } from "./SectionLink";
 import { LaunchProductVisual } from "./LaunchProductVisual";
 import "./launch-products.css";
 import { usePublishedEntries } from "../cms/hooks";
 import { cmsEnabledFor, mongodbEnabled } from "../cms/client";
-
-export function MotionToggle({ paused, onToggle }: { paused: boolean; onToggle: () => void }) {
-  const Icon = paused ? PlayIcon : PauseIcon;
-  return <button type="button" className="lp-motion-toggle" aria-pressed={paused} onClick={onToggle}><Icon aria-hidden="true" />{paused ? "Resume animations" : "Pause animations"}</button>;
-}
 
 export function LaunchProductCards() {
   const cmsPublicEnabled = cmsEnabledFor("product");

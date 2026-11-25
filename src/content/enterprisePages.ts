@@ -692,23 +692,6 @@ export const industriesWeServe: IndustryCard[] = [
 
 export const productCards: ProductCard[] = [
   {
-    name: "Seismic AI",
-    purpose:
-      "A Turbo AI product presence focused on applying intelligence to seismic and energy-domain data workflows.",
-    problem:
-      "Energy teams need better ways to interpret complex technical signals and support decisions across exploration and operations.",
-    capabilities: [
-      "Energy-domain AI positioning",
-      "Signal and data interpretation workflows",
-      "Decision-support context for technical teams",
-    ],
-    diagram: {
-      title: "Seismic AI Conceptual Architecture",
-      steps: ["Domain Data", "Signal Processing", "AI Analysis", "Expert Review", "Decision Support"],
-    },
-    ctaHref: "https://seismicai.ca",
-  },
-  {
     name: "ADRS",
     purpose:
       "Autonomous Detection & Response System, presented conservatively as a detection-to-response workflow capability.",
@@ -724,6 +707,23 @@ export const productCards: ProductCard[] = [
       steps: ["Detection", "Analysis", "Risk Identification", "Alert", "Response"],
     },
     ctaHref: "/#connect",
+  },
+  {
+    name: "SEISMIC AI",
+    purpose:
+      "A Turbo AI product presence focused on applying intelligence to seismic and energy-domain data workflows.",
+    problem:
+      "Energy teams need better ways to interpret complex technical signals and support decisions across exploration and operations.",
+    capabilities: [
+      "Energy-domain AI positioning",
+      "Signal and data interpretation workflows",
+      "Decision-support context for technical teams",
+    ],
+    diagram: {
+      title: "SEISMIC AI Conceptual Architecture",
+      steps: ["Domain Data", "Signal Processing", "AI Analysis", "Expert Review", "Decision Support"],
+    },
+    ctaHref: "https://seismicai.ca",
   },
 ];
 

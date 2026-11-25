@@ -142,7 +142,7 @@ export const seoConfig: Record<string, PageSEO> = {
         description: "Explore INTERSTELLAR ONE, SPECTRA PLUS, QUANTUM APEX and ORBIT CORE: configurable solutions for enterprise data, security, automation and cloud operations.",
         image: `${baseUrl}/enterprise/semiconductors.jpg`,
         url: `${baseUrl}/products`,
-        keywords: "Turbo AI products, INTERSTELLAR ONE, SPECTRA PLUS, QUANTUM APEX, ORBIT CORE, enterprise data intelligence, cybersecurity, workflow automation, cloud operations, Seismic AI, ADRS",
+        keywords: "Turbo AI products, INTERSTELLAR ONE, SPECTRA PLUS, QUANTUM APEX, ORBIT CORE, enterprise data intelligence, cybersecurity, workflow automation, cloud operations, ADRS, SEISMIC AI",
     },
     interstellarOne: {
         title: "INTERSTELLAR ONE | Enterprise AI & Data Intelligence | Turbo AI",

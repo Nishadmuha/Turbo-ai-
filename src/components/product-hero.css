@@ -32,7 +32,6 @@
 .lp-signature-line { width: 46px; height: 2px; background: var(--lp-accent); box-shadow: 0 0 22px rgba(var(--lp-rgb), .5); }
 .lp-hero-signature p { color: #e9f2ff; font-size: .9375rem; }
 .lp-hero-signature p span { display: block; color: #a9bed4; font-size: .875rem; margin-top: 5px; }
-.lp-photo-hero .lp-motion-toggle { background: #06101e80; color: #e8f1ff; backdrop-filter: blur(10px); }
 
 /* Each product carries its own motion language, kept behind the content. */
 .lp-hero-effect { position: absolute; z-index: -1; pointer-events: none; color: var(--lp-accent); width: min(50vw, 720px); height: min(50vw, 720px); right: -2%; top: 50%; transform: translateY(-42%); opacity: .48; }
@@ -108,14 +107,12 @@
   .lp-signature-line { display: none; }
   .lp-hero-signature p { font-size: .875rem; }
   .lp-hero-signature p span { max-width: 175px; font-size: .8125rem; line-height: 1.6; }
-  .lp-photo-hero .lp-motion-toggle { font-size: .8125rem; padding: 10px 13px; }
 }
 @media (max-width: 430px) {
   .lp-photo-hero .lp-hero-copy h1 { font-size: clamp(2.2rem, 8.5vw, 2.7rem); }
   .lp-photo-hero .lp-actions { align-items: flex-start; flex-direction: column; gap: 24px; }
   .lp-photo-hero .lp-button { max-width: 100%; font-size: .875rem; padding: 14px 18px; text-align: center; }
   .lp-photo-hero .lp-hero-foot { gap: 15px; }
-  .lp-photo-hero .lp-motion-toggle { gap: 6px; padding: 9px 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .lp-photo-hero .lp-hero-photo { transform: none; }

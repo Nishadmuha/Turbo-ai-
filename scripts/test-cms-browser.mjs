@@ -190,9 +190,15 @@ try {
     assert.equal(new URL(await visitor.$eval('link[rel="canonical"]', node => node.href)).pathname, route, `${route} must retain its canonical URL.`);
     if (route === '/') {
       assert.equal(await visitor.$$eval('#our-products .product-ecosystem-card', nodes => nodes.length), 6);
+      assert.equal(await visitor.$eval('#our-products .product-ecosystem-card:last-child .product-ecosystem-name', node => node.textContent.trim()), 'SEISMIC AI');
       await visitor.click('nav[aria-label="Main navigation"] button[aria-label="Products menu"]');
       for (const slug of ['interstellar-one', 'spectra-plus', 'quantum-apex', 'orbit-core', 'adrs']) assert.ok(await visitor.$(`nav[aria-label="Main navigation"] a[href="/products/${slug}"]`), `${slug} must stay in navigation during a CMS outage.`);
       assert.equal(await visitor.$('nav[aria-label="Main navigation"] a[href="/products"]'), null);
+      const finalProduct = await visitor.$eval('nav[aria-label="Main navigation"] button[aria-label="Products menu"]', button => {
+        const link = [...button.parentElement.querySelectorAll('a')].at(-1);
+        return { name: link.textContent.trim(), href: link.getAttribute('href') };
+      });
+      assert.deepEqual(finalProduct, { name: 'SEISMIC AI', href: 'https://seismicai.ca' }, 'SEISMIC AI must remain the final product during a CMS outage.');
     }
   }
   assert.deepEqual(publicCmsRequests, [], 'Non-blog website routes must not depend on any CMS API request.');

@@ -1,7 +1,9 @@
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { mkdtemp, rm } from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import puppeteer from 'puppeteer';
 import { loadEnv } from 'vite';
@@ -19,8 +21,8 @@ const launchProducts = [
 const launchRoutes = launchProducts.map(({ slug }) => `/products/${slug}`);
 const showcaseProducts = [
   ...launchProducts.map(({ name, slug }) => ({ name, href: `/products/${slug}` })),
-  { name: 'Seismic AI', href: 'https://seismicai.ca' },
   { name: 'ADRS', href: '/products/adrs' },
+  { name: 'SEISMIC AI', href: 'https://seismicai.ca' },
 ];
 const renamedRoutes = [
   ['/products/vigilorra-apex', '/products/spectra-plus'],
@@ -57,6 +59,8 @@ const industryLinks = industries.map(({ label, slug }) => ({ label, href: `/indu
 const preview = spawn('npm', ['run', 'preview', '--', '--host', '127.0.0.1', '--port', String(port), '--strictPort'],
   { shell: true, stdio: 'ignore' });
 let browser;
+let profileDirectory;
+let testFailure;
 try {
   let ready = false;
   for (let attempt = 0; attempt < 40; attempt++) {
@@ -65,7 +69,10 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   if (!ready) throw new Error('Preview server did not start.');
-  browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  // Own the isolated profile so Windows can retry transient locked-file cleanup
+  // after Chromium exits instead of masking an assertion inside browser.close().
+  profileDirectory = await mkdtemp(path.join(os.tmpdir(), 'turbo-ai-smoke-'));
+  browser = await puppeteer.launch({ headless: true, userDataDir: profileDirectory, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
@@ -97,6 +104,10 @@ try {
     if (!heading) throw new Error(`${route} has no heading.`);
     assert.equal(await page.$('nav[aria-label*="breadcrumb" i], .lp-breadcrumb, [data-breadcrumb]'), null,
       `${route} must not show a breadcrumb trail.`);
+    assert.equal(await page.$('.lp-motion-toggle'), null, `${route} must not show an animation pause control.`);
+    assert.equal(await page.$$eval('button, [role="button"]', nodes => nodes.some(node =>
+      /\b(?:pause|resume)\s+animations?\b/i.test(`${node.textContent} ${node.getAttribute('aria-label') || ''}`))), false,
+    `${route} must not expose pause/resume animation controls.`);
     assert.equal(await page.$$eval('head title', nodes => nodes.length), 1, `${route} must have exactly one title.`);
     assert.equal(await page.$$eval('head meta[name="description"]', nodes => nodes.length), 1, `${route} must retain one current SEO description.`);
     assert.equal(await page.$$eval('head link[rel="canonical"]', nodes => nodes.length), 1, `${route} must retain one current canonical URL.`);
@@ -129,15 +140,9 @@ try {
         .map(animation => animation.animationName))].sort());
       assert.ok(animationNames.length, `${route} needs a continuous product animation.`);
       heroAnimationSignatures.push(animationNames.join(','));
-      const motionToggle = '.lp-photo-hero .lp-motion-toggle';
-      await clickControl(motionToggle);
-      await page.waitForFunction(() => document.querySelector('.lp-motion-toggle')?.getAttribute('aria-pressed') === 'true' &&
-        document.querySelector('.lp-photo-hero').getAnimations({ subtree: true })
-          .filter(animation => animation instanceof CSSAnimation).every(animation => animation.playState === 'paused'));
-      await clickControl(motionToggle);
-      await page.waitForFunction(() => document.querySelector('.lp-motion-toggle')?.getAttribute('aria-pressed') === 'false' &&
-        document.querySelector('.lp-photo-hero').getAnimations({ subtree: true })
-          .some(animation => animation instanceof CSSAnimation && animation.playState === 'running'));
+      assert.ok(await page.$eval('.lp-photo-hero', hero => hero.getAnimations({ subtree: true })
+        .some(animation => animation instanceof CSSAnimation && animation.effect.getTiming().iterations === Infinity && animation.playState === 'running')),
+      `${route} must keep its product animations running without pause controls.`);
       const tab = '.lp-workflow-track [role="tab"]';
       assert.equal(await page.$$eval(tab, (nodes) => nodes.length), 4, `${route} needs four implementation stages.`);
       await page.focus(`${tab}[aria-selected="true"]`);
@@ -171,7 +176,7 @@ try {
   await waitForRoute('/');
   assert.deepEqual(await page.$$eval('#our-products .product-ecosystem-card', (links) => links.map((link) => ({
     name: link.querySelector('.product-ecosystem-name').textContent.trim(), href: link.getAttribute('href'),
-  }))), showcaseProducts, 'The homepage ecosystem must link to all six products.');
+  }))), showcaseProducts, 'The homepage ecosystem must list all six products with uppercase SEISMIC AI last.');
   assert.equal(await page.$('#our-products .lp-card, #our-products .lp-motion-toggle'), null, 'The former large product showcase must be removed.');
   assert.equal(await page.$$eval('#hero a', links => links.some(link => link.textContent.includes('Explore Our New Products'))), false,
     'The highlighted new-products button must be removed from the home hero.');
@@ -200,6 +205,20 @@ try {
   }
 
   // Check the actual dropdown content and one navigation action at both breakpoints.
+  const checkProductMenu = async (navigation) => {
+    const trigger = `nav[aria-label="${navigation}"] button[aria-label="Products menu"]`;
+    await page.waitForSelector(trigger, { visible: true });
+    if (navigation === 'Main navigation') await page.hover(trigger);
+    else await page.click(trigger);
+    await page.waitForSelector(`${trigger}[aria-expanded="true"]`);
+    const links = await page.$eval(trigger, button => [...button.parentElement.querySelectorAll('a')]
+      .map(link => ({ name: link.textContent.trim(), href: link.getAttribute('href') })));
+    assert.deepEqual(links, showcaseProducts, `${navigation} must list all six products with uppercase SEISMIC AI last.`);
+    if (navigation === 'Mobile navigation') {
+      await page.click(trigger);
+      await page.waitForSelector(`${trigger}[aria-expanded="false"]`);
+    }
+  };
   const checkIndustryMenu = async (navigation) => {
     const trigger = `nav[aria-label="${navigation}"] button[aria-label="Industries We Serve menu"]`;
     await page.waitForSelector(trigger, { visible: true });
@@ -214,7 +233,7 @@ try {
   };
   await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'domcontentloaded' });
   await waitForRoute('/');
-  await page.click('nav[aria-label="Main navigation"] button[aria-label="Products menu"]');
+  await checkProductMenu('Main navigation');
   assert.equal(await page.$$eval('nav[aria-label="Main navigation"] a', (links) => links.some((link) => link.textContent.trim() === 'All Products')), false,
     'The Products menu must no longer include All Products.');
   assert.equal(await page.$('nav[aria-label="Main navigation"] a[href="/products"]'), null,
@@ -368,6 +387,7 @@ try {
   await page.waitForSelector('button[aria-label="Open menu"]');
   await page.click('button[aria-label="Open menu"]');
   await page.waitForSelector('nav[aria-label="Mobile navigation"]');
+  await checkProductMenu('Mobile navigation');
   await checkIndustryMenu('Mobile navigation');
   const mobile = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, viewport: innerWidth }));
   if (mobile.width > mobile.viewport + 2) throw new Error(`Mobile horizontal overflow: ${mobile.width}px > ${mobile.viewport}px`);
@@ -383,11 +403,36 @@ try {
   await page.click(finalLink);
   await page.waitForFunction(() => location.pathname === '/industries/data-centres' && document.querySelector('main h1')?.textContent === 'AI for Data Centres');
   await page.waitForSelector('nav[aria-label="Mobile navigation"]', { hidden: true });
-  console.log(`Smoke passed: ${routes.length} public routes without breadcrumbs, six-product homepage ecosystem and removed hero button, four full-background product photographs with distinct animations, keyboard workflow tabs and collapsible capabilities, static product content, pause/resume and reduced motion, narrow layouts, removed overview and renamed-product redirects, four retired product URLs return branded noindex errors, clean public/generated HTML and sitemaps, three prerendered industry pages with SEO metadata, ${sitemapUrls.length} sitemap URLs, 18 desktop/mobile industry links, branded 404, admin setup, and small-screen mobile navigation.`);
+  console.log(`Smoke passed: ${routes.length} public routes without breadcrumbs or animation pause controls, six-product homepage ecosystem and desktop/mobile menus with uppercase SEISMIC AI last, removed hero button, four full-background product photographs with distinct running animations and reduced-motion support, keyboard workflow tabs and collapsible capabilities, static product content, narrow layouts, removed overview and renamed-product redirects, four retired product URLs return branded noindex errors, clean public/generated HTML and sitemaps, three prerendered industry pages with SEO metadata, ${sitemapUrls.length} sitemap URLs, 18 desktop/mobile industry links, branded 404, admin setup, and small-screen mobile navigation.`);
+} catch (error) {
+  testFailure = error;
+  console.error('Smoke assertion failed:', error);
+  throw error;
 } finally {
-  if (browser) await browser.close();
-  if (process.platform === 'win32' && preview.pid) {
-    const { spawnSync } = await import('node:child_process');
-    spawnSync('taskkill', ['/pid', String(preview.pid), '/f', '/t']);
-  } else preview.kill();
+  const cleanupFailures = [];
+  try {
+    if (browser) await browser.close();
+  } catch (error) {
+    cleanupFailures.push(error);
+    const browserProcess = browser?.process();
+    if (browserProcess?.pid && browserProcess.exitCode === null) {
+      if (process.platform === 'win32') spawnSync('taskkill', ['/pid', String(browserProcess.pid), '/f', '/t'], { windowsHide: true, stdio: 'ignore' });
+      else browserProcess.kill('SIGTERM');
+    }
+  } finally {
+    // Always tear down the preview this test started, even if Chromium cleanup fails.
+    if (process.platform === 'win32' && preview.pid) spawnSync('taskkill', ['/pid', String(preview.pid), '/f', '/t'], { windowsHide: true, stdio: 'ignore' });
+    else preview.kill();
+  }
+  if (profileDirectory) {
+    try {
+      const resolved = path.resolve(profileDirectory);
+      if (!resolved.startsWith(path.resolve(os.tmpdir()) + path.sep) || !path.basename(resolved).startsWith('turbo-ai-smoke-')) throw new Error('Unexpected smoke-test profile directory.');
+      await rm(resolved, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch (error) { cleanupFailures.push(error); }
+  }
+  if (cleanupFailures.length) {
+    if (testFailure) console.warn('Additional smoke cleanup failure:', cleanupFailures.map(error => error.message).join('; '));
+    else throw new AggregateError(cleanupFailures, 'Smoke passed, but test cleanup failed.');
+  }
 }

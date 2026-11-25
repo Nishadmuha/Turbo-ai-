@@ -77,7 +77,7 @@ export function ProductDetail({
             <div className="mt-10 flex flex-wrap gap-4">
               {externalHref && (
                 <a href={externalHref} target="_blank" rel="noopener noreferrer" className={`inline-flex min-h-12 items-center border px-5 py-3 font-bold transition hover:bg-white/10 ${accentClass.text} ${accentClass.border} ${accentClass.surface}`}>
-                  Visit Seismic AI site
+                  Visit SEISMIC AI site
                 </a>
               )}
               <SectionLink href="/#connect" className="inline-flex min-h-12 items-center border border-white/30 px-5 py-3 font-bold text-white transition hover:border-white">
