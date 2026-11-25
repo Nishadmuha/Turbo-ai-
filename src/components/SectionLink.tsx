@@ -23,7 +23,10 @@ export function SectionLink({
   const location = useLocation();
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    // Preserve native open-in-new-tab/window behavior for ordinary links.
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    const scrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
     // Check if it's an external link
     if (href.startsWith("http")) {
@@ -38,7 +41,7 @@ export function SectionLink({
       const targetElement = document.getElementById(sectionId);
       if (targetElement) {
         const headerHeight = tokens.layout.headerH;
-        window.scrollTo({ top: targetElement.offsetTop - headerHeight, behavior: "smooth" });
+        window.scrollTo({ top: targetElement.getBoundingClientRect().top + window.scrollY - headerHeight, behavior: scrollBehavior });
         setTimeout(() => history.pushState(null, "", `${location.pathname}#${sectionId}`), 100);
       } else if (location.pathname !== "/") {
         navigate(`/#${sectionId}`);
@@ -56,11 +59,11 @@ export function SectionLink({
         const targetElement = document.getElementById(sectionId);
         if (targetElement) {
           const headerHeight = tokens.layout.headerH;
-          const targetY = targetElement.offsetTop - headerHeight;
+          const targetY = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
 
           window.scrollTo({
             top: targetY,
-            behavior: "smooth",
+            behavior: scrollBehavior,
           });
 
           // Update URL hash without triggering scroll
@@ -70,7 +73,7 @@ export function SectionLink({
         } else if (sectionId === "hero") {
           window.scrollTo({
             top: 0,
-            behavior: "smooth",
+            behavior: scrollBehavior,
           });
           setTimeout(() => {
             history.pushState(null, "", window.location.pathname);

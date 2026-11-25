@@ -10,7 +10,7 @@ import type { BlogPost } from "../content/blog";
 
 export function BlogList() {
     const [visibleCount, setVisibleCount] = useState(12);
-    const { entries, loading, failed } = usePublishedEntries("blog", visibleCount + 1);
+    const { entries, loading, failed, retry } = usePublishedEntries("blog", visibleCount + 1);
     const posts: BlogPost[] = cmsPublicEnabled
         ? entries.map((entry) => ({ slug: entry.slug, title: entry.title, excerpt: entry.summary,
             date: entry.published_at || entry.created_at, author: entry.author, image: entry.hero_image,
@@ -48,7 +48,7 @@ export function BlogList() {
                         </div>
 
                         {loading && <p data-cms-loading className="mt-8 text-center text-slate-400">Loading posts…</p>}
-                        {failed && <p data-cms-error role="alert" className="mt-8 text-center text-rose-300">Posts are temporarily unavailable.</p>}
+                        {failed && <div data-cms-error className="mt-8 text-center"><p role="alert" className="text-slate-300">We couldn't load the blog posts. Please try again.</p><button onClick={retry} className="mt-5 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300">Try again</button></div>}
                         {cmsPublicEnabled && visibleCount < sortedPosts.length && <div className="mt-10 text-center"><button onClick={() => setVisibleCount((count) => count + 12)} className="rounded-lg border border-blue-300/40 px-6 py-3 font-semibold text-blue-200 hover:bg-white/5">Load more posts</button></div>}
                         {!loading && !failed && posts.length === 0 && (
                             <div className="text-center py-20">

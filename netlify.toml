@@ -66,6 +66,30 @@
   status = 200
 
 [[redirects]]
+  from = "/products"
+  to = "/#our-products"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/products/vigilorra-apex"
+  to = "/products/spectra-plus"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/products/orchavon-pulse"
+  to = "/products/quantum-apex"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/products/cirrava-orbit"
+  to = "/products/orbit-core"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404

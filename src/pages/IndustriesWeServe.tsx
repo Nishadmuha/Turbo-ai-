@@ -5,10 +5,11 @@ import { Connect } from "../components/Connect";
 import { LatestPerspectives } from "../components/EnterprisePage";
 import { industriesHero, industriesWeServe } from "../content/enterprisePages";
 import { useReveal } from "../hooks/useReveal";
-import { cmsPublicEnabled } from "../cms/client";
+import { cmsEnabledFor } from "../cms/client";
 import { usePublishedEntries, useCmsPage } from "../cms/hooks";
 
 export function IndustriesWeServe() {
+  const cmsPublicEnabled = cmsEnabledFor("industry");
   const { addElement } = useReveal(35);
   const cms = useCmsPage();
   const { entries, loading, failed } = usePublishedEntries("industry");

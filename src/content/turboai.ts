@@ -22,6 +22,13 @@ export interface DropdownItem {
   external?: boolean;
 }
 
+export const launchProductNavigation: DropdownItem[] = [
+  { label: "INTERSTELLAR ONE", href: "/products/interstellar-one" },
+  { label: "SPECTRA PLUS", href: "/products/spectra-plus" },
+  { label: "QUANTUM APEX", href: "/products/quantum-apex" },
+  { label: "ORBIT CORE", href: "/products/orbit-core" },
+];
+
 const industryLinks: DropdownItem[] = industriesWeServe.map(({ name, href }) => ({ label: name, href }));
 
 export const industryNavigation = {
@@ -70,6 +77,7 @@ export const site = {
         label: "Products",
         href: "/products",
         dropdown: [
+          ...launchProductNavigation,
           { label: "Seismic AI", href: "https://seismicai.ca", external: true },
           { label: "ADRS", href: "/products/adrs" },
         ],

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://turbo-ai.ca</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://turbo-ai.ca/ai-transformation</loc>
@@ -65,8 +65,20 @@
     <lastmod>2026-11-03</lastmod>
   </url>
   <url>
-    <loc>https://turbo-ai.ca/products</loc>
-    <lastmod>2026-11-03</lastmod>
+    <loc>https://turbo-ai.ca/products/interstellar-one</loc>
+    <lastmod>2026-11-17</lastmod>
+  </url>
+  <url>
+    <loc>https://turbo-ai.ca/products/spectra-plus</loc>
+    <lastmod>2026-11-17</lastmod>
+  </url>
+  <url>
+    <loc>https://turbo-ai.ca/products/quantum-apex</loc>
+    <lastmod>2026-11-17</lastmod>
+  </url>
+  <url>
+    <loc>https://turbo-ai.ca/products/orbit-core</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://turbo-ai.ca/products/adrs</loc>

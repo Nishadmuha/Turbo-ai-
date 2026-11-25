@@ -23,7 +23,6 @@ export function Home() {
                 <Expertise />
                 <CertificationsShowcase />
                 <Impact />
-                <ProductShowcase />
                 <div className="hidden md:block">
                     <Partners />
                 </div>
@@ -31,6 +30,7 @@ export function Home() {
                     <PartnersMarqueeMobile />
                 </div>
                 <TechnologyEcosystem />
+                <ProductShowcase />
                 <Perspectives />
                 <Connect />
             </main>

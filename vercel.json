@@ -6,6 +6,10 @@
   "installCommand": "npm install",
   "devCommand": "npm run dev",
   "redirects": [
+    { "source": "/products", "destination": "/#our-products", "permanent": true },
+    { "source": "/products/vigilorra-apex", "destination": "/products/spectra-plus", "permanent": true },
+    { "source": "/products/orchavon-pulse", "destination": "/products/quantum-apex", "permanent": true },
+    { "source": "/products/cirrava-orbit", "destination": "/products/orbit-core", "permanent": true },
     {
       "source": "/index.php/",
       "destination": "/",

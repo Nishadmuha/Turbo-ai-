@@ -32,3 +32,8 @@ dist-ssr
 
 # Local Codex safety snapshots
 .codex-backups/
+
+# Local MongoDB CMS media and runtime data
+.cms-data/
+.cms-test-data/
+!.env.example
