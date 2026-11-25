@@ -178,7 +178,7 @@ export function Header() {
                 {item.href === industryNavigation.href ? (
                   <IndustryMegaMenu />
                 ) : item.dropdown ? (
-                  <Dropdown label={item.label} items={item.dropdown} openOnHover={item.label === "Services"} />
+                  <Dropdown label={item.label} items={item.dropdown} openOnHover={item.label === "Services" || item.label === "Products"} />
                 ) : (
                   <SectionLink
                     href={item.href}

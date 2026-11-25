@@ -14,8 +14,8 @@ const products = [
   { name: "SPECTRA PLUS", descriptor: "Cybersecurity & risk", href: "/products/spectra-plus", Icon: ShieldCheckIcon, color: "text-emerald-300" },
   { name: "QUANTUM APEX", descriptor: "Agentic AI & automation", href: "/products/quantum-apex", Icon: SparklesIcon, color: "text-violet-300" },
   { name: "ORBIT CORE", descriptor: "Cloud & cost optimization", href: "/products/orbit-core", Icon: CloudIcon, color: "text-cyan-300" },
-  { name: "Seismic AI", descriptor: "Visit Seismic AI", href: "https://seismicai.ca", Icon: SignalIcon, color: "text-amber-300" },
   { name: "ADRS", descriptor: "Detection & response", href: "/products/adrs", Icon: BoltIcon, color: "text-blue-300" },
+  { name: "SEISMIC AI", descriptor: "Visit SEISMIC AI", href: "https://seismicai.ca", Icon: SignalIcon, color: "text-amber-300" },
 ];
 
 export function ProductShowcase() {
