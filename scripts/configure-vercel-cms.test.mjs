@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { configureCms, createVercelClient } from './configure-vercel-cms.mjs';
+import { configureCms, createVercelClient, SetupError } from './configure-vercel-cms.mjs';
 
 const env = { CMS_SETUP_MODE: 'apply', VERCEL_PROJECT_ID: 'prj_test', GITHUB_REPOSITORY: 'owner/repo', GITHUB_REPOSITORY_ID: '123', GITHUB_SHA: 'a'.repeat(40), GITHUB_REF: 'refs/heads/main', MONGODB_URI: 'mongodb://secret:password@database.invalid' };
 function fixture({ domains = [{ name: 'turbo-ai.ca', verified: true }], entries = [], link = { type: 'github', org: 'owner', repo: 'repo' }, projects = [] } = {}) {
@@ -67,4 +67,34 @@ test('API failures never expose tokens, response bodies, or raw exceptions', asy
   await assert.rejects(client('GET', '/v9/projects/test'), error => !/private/.test(error.message) && /HTTP 403/.test(error.message));
   const unreachable = createVercelClient({ VERCEL_TOKEN: 'private-token' }, async () => { throw new Error('private-token'); });
   await assert.rejects(unreachable('GET', '/v9/projects/test'), error => !/private-token/.test(error.message));
+});
+test('an inaccessible historical project can resolve to a verified project in the same context', async () => {
+  const calls = [];
+  const project = { id: 'prj_current', name: 'turbo-current', link: { type: 'github', org: 'owner', repo: 'repo' } };
+  const api = async (method, route) => {
+    calls.push({ method, route });
+    if (route === '/v9/projects/prj_test') throw new SetupError('Unavailable', { status: 404, code: 'not_found' });
+    if (route === '/v10/projects') return { projects: [project] };
+    if (route.endsWith('/domains')) return { domains: [{ name: 'turbo-ai.ca', verified: true }] };
+    return { envs: [] };
+  };
+  const result = await configureCms({ env: { ...env, CMS_SETUP_MODE: 'inspect' }, api, report() {} });
+  assert.equal(result.project, 'turbo-current');
+  assert.ok(calls.every(call => call.method === 'GET'));
+});
+test('a forbidden team context is diagnosed without exposing account data and may use default access', async () => {
+  const calls = []; const output = [];
+  const api = async (method, route, _body, query = {}) => {
+    calls.push({ method, route, query });
+    if (query.teamId !== null) throw new SetupError('Forbidden', { status: 403, code: 'forbidden' });
+    if (route === '/v2/user') return { user: { email: 'private-account@example.test' } };
+    if (route.endsWith('/domains')) return { domains: [{ name: 'turbo-ai.ca', verified: true }] };
+    if (route.endsWith('/env')) return { envs: [] };
+    return { id: 'prj_test', name: 'turbo-test', link: { type: 'github', org: 'owner', repo: 'repo' } };
+  };
+  const result = await configureCms({ env: { ...env, VERCEL_ORG_ID: 'team_stale', CMS_SETUP_MODE: 'inspect' }, api, report: line => output.push(line) });
+  assert.equal(result.project, 'turbo-test');
+  assert.ok(calls.every(call => call.method === 'GET'));
+  assert.ok(!output.join('').includes('private-account'));
+  assert.ok(calls.find(call => call.route.endsWith('/env')).query.teamId === null);
 });

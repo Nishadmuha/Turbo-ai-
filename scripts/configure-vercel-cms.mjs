@@ -8,7 +8,9 @@ const variables = {
   NODEJS_HELPERS: '0',
   CMS_ORIGINS: 'https://turbo-ai.ca,https://www.turbo-ai.ca',
 };
-export class SetupError extends Error {}
+export class SetupError extends Error {
+  constructor(message, details = {}) { super(message); this.status = details.status; this.code = details.code; }
+}
 
 export function createVercelClient(env, fetcher = fetch) {
   if (!env.VERCEL_TOKEN) throw new SetupError('The VERCEL_TOKEN repository secret is missing.');
@@ -16,12 +18,21 @@ export function createVercelClient(env, fetcher = fetch) {
     const url = new URL(pathname, 'https://api.vercel.com');
     if (url.origin !== 'https://api.vercel.com') throw new SetupError('Unexpected API destination.');
     if (env.VERCEL_ORG_ID?.startsWith('team_')) url.searchParams.set('teamId', env.VERCEL_ORG_ID);
-    for (const [key, value] of Object.entries(query)) if (value !== undefined) url.searchParams.set(key, String(value));
+    for (const [key, value] of Object.entries(query)) {
+      if (value === null) url.searchParams.delete(key);
+      else if (value !== undefined) url.searchParams.set(key, String(value));
+    }
     let response;
     try {
       response = await fetcher(url, { method, headers: { Authorization: `Bearer ${env.VERCEL_TOKEN}`, 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }), redirect: 'error', signal: AbortSignal.timeout(60000) });
     } catch { throw new SetupError('The Vercel API could not be reached. No request details were logged.'); }
-    if (!response.ok) throw new SetupError(`Vercel API request failed (HTTP ${response.status}). Check the token permissions and project configuration.`);
+    if (!response.ok) {
+      // Only known API codes are safe diagnostic output; messages and arbitrary
+      // response bodies can contain environment values and are never logged.
+      const payload = await response.json().catch(() => null);
+      const code = ['forbidden', 'not_found', 'unauthorized', 'invalid_token', 'missing_scope', 'project_not_found', 'team_not_found'].includes(payload?.error?.code) ? payload.error.code : 'unclassified';
+      throw new SetupError(`Vercel API request failed (HTTP ${response.status}, ${code}). Check the token permissions and project configuration.`, { status: response.status, code });
+    }
     try { return await response.json(); }
     catch { throw new SetupError('Vercel returned an invalid response.'); }
   };
@@ -45,25 +56,57 @@ function hasProductionDomain(domains) {
   return domains.some(item => item.name === domain && item.verified === true && !item.gitBranch && !item.customEnvironmentId);
 }
 
-export async function selectProject(api, env) {
+export async function selectProject(api, env, report = () => {}) {
   if (!env.VERCEL_PROJECT_ID || !env.GITHUB_REPOSITORY) throw new SetupError('Project and repository identifiers are required.');
   const expectedRepository = env.GITHUB_REPOSITORY.toLowerCase();
-  const configured = await api('GET', `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}`);
-  if (hasProductionDomain(await domainsFor(api, configured.id))) return configured;
-  // A historical secret can point to an old project. Only search projects linked
-  // to this same repository and accept a unique, verified production domain.
-  const candidates = [];
-  let until;
-  do {
-    const page = await api('GET', '/v10/projects', undefined, { limit: 100, until });
-    for (const project of page.projects || []) {
-      if (project.id === configured.id || linkedRepository(project) !== expectedRepository) continue;
-      if (hasProductionDomain(await domainsFor(api, project.id))) candidates.push(project);
+  const diagnose = (stage, error) => report(JSON.stringify({ diagnostic: stage, status: error.status || 'unavailable', code: error.code || 'unclassified' }));
+  async function findInContext(client, context) {
+    let configured;
+    try {
+      configured = await client('GET', `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}`);
+      if (hasProductionDomain(await domainsFor(client, configured.id))) return configured;
+    } catch (error) {
+      diagnose(`${context}-configured-project`, error);
+      if (![403, 404].includes(error.status)) throw error;
     }
-    until = page.pagination?.next || undefined;
-  } while (until);
-  if (candidates.length !== 1) throw new SetupError('No unique project linked to this repository has the verified turbo-ai.ca production domain. No changes were made.');
-  return candidates[0];
+    // Historical IDs can be stale. Listing accessible projects is read-only;
+    // candidates must still match this repository and the verified live domain.
+    const candidates = [];
+    let until;
+    do {
+      const page = await client('GET', '/v10/projects', undefined, { limit: 100, until });
+      for (const project of page.projects || []) {
+        if (project.id === configured?.id || linkedRepository(project) !== expectedRepository) continue;
+        if (hasProductionDomain(await domainsFor(client, project.id))) candidates.push(project);
+      }
+      until = page.pagination?.next || undefined;
+    } while (until);
+    return candidates.length === 1 ? candidates[0] : null;
+  }
+  try {
+    const project = await findInContext(api, 'configured-context');
+    if (project) return { project, api };
+  } catch (error) {
+    diagnose('configured-context-project-list', error);
+    if (![401, 403, 404].includes(error.status)) throw error;
+  }
+  // Verify the existing token without the potentially stale team ID. Never
+  // print user information, create credentials, or request broader permissions.
+  const defaultApi = (method, pathname, body, query = {}) => api(method, pathname, body, { ...query, teamId: null });
+  try {
+    await defaultApi('GET', '/v2/user');
+    report(JSON.stringify({ diagnostic: 'token-authentication', authenticated: true }));
+  } catch (error) {
+    diagnose('token-authentication', error);
+    throw new SetupError('The existing Vercel token could not authenticate in its default context. No changes were made.');
+  }
+  if (env.VERCEL_ORG_ID?.startsWith('team_')) {
+    try {
+      const project = await findInContext(defaultApi, 'default-context');
+      if (project) return { project, api: defaultApi };
+    } catch (error) { diagnose('default-context-project-list', error); }
+  }
+  throw new SetupError('No unique accessible project linked to this repository has the verified turbo-ai.ca production domain. No changes were made.');
 }
 
 async function createVariable(api, projectId, key, value, type = 'plain') {
@@ -88,7 +131,9 @@ async function setProductionVariable(api, projectId, entries, key, value) {
 export async function configureCms({ env = process.env, api = createVercelClient(env), report = console.log } = {}) {
   const mode = env.CMS_SETUP_MODE || 'inspect';
   if (!['inspect', 'apply'].includes(mode)) throw new SetupError('Choose inspect or apply mode.');
-  const project = await selectProject(api, env);
+  const selection = await selectProject(api, env, report);
+  const project = selection.project;
+  api = selection.api;
   const response = await api('GET', `/v10/projects/${encodeURIComponent(project.id)}/env`, undefined, { decrypt: 'false' });
   const entries = response.envs || [];
   const keys = [...new Set(entries.filter(production).map(item => item.key))].sort();
